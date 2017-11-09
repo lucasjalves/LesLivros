@@ -6,13 +6,14 @@
 <html>
 	<%
 		Resultado resultado = (Resultado) session.getAttribute("resultadoConsultaLivroCompra");
-		session.removeAttribute("resultadoConsultaLivro");
+		
 		if(resultado == null)
 		{
 			pageContext.forward("Home.jsp");
 		}
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		Livro l = (Livro)entidades.get(0);
+		
 	%>
 	
 <head>
@@ -75,8 +76,7 @@
               <h3 class="card-title"><%out.print(l.getNome()); %></h3>
               <h4>$24.99</h4>
               <p class="card-text"><%out.print(l.getSinopse()); %></p>
-              <a href="Carrinho.jsp" class="btn btn-success">Adicionar ao carrinho</a>
-              
+			<a href="SalvarCarrinho?operacao=VERIFICAR" class="btn btn-success">Adicionar ao carrinho</a>
             </div>
           </div>
           <!-- /.card -->

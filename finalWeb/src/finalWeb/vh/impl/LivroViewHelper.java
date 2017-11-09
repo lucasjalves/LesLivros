@@ -129,7 +129,6 @@ public class LivroViewHelper implements IViewHelper{
 		}
 		
 		if(operacao.equals("CONSULTARLIVRO")){
-			System.out.println(request.getRequestURI());
 			request.getSession().setAttribute("resultadoConsultaLivro", resultado);
 			d= request.getRequestDispatcher("FormLivro.jsp");  
 		}
@@ -138,7 +137,6 @@ public class LivroViewHelper implements IViewHelper{
 			request.getSession().setAttribute("resultadoConsultaLivro", resultado);
 			d= request.getRequestDispatcher("Home.jsp");  
 		}
-		
 		if(operacao.equals("INFORMACOESLIVRO")){
 			request.getSession().setAttribute("resultadoConsultaLivroCompra", resultado);
 			d= request.getRequestDispatcher("Livro.jsp");  

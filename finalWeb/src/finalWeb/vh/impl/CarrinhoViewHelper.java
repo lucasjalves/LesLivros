@@ -21,7 +21,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		Resultado resultado = (Resultado) request.getAttribute("resultadoConsultaLivroCompra");
-		Resultado carrinho = (Resultado) request.getAttribute("carrinho");
+		Resultado carrinho = (Resultado) request.getAttribute("carrinho"); 
 		List<Item> itens;
 		List<EntidadeDominio> livros = resultado.getEntidades();
 		Livro livro = (Livro) livros.get(0);
@@ -52,7 +52,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 		RequestDispatcher d = null;
 		String operacao = (String)request.getAttribute("operacao");
 		if(operacao.equals("INFORMACOESLIVRO")){
-			request.getSession().setAttribute("carrinho", resultado);
+			request.getSession().setAttribute("resultadoLivro", resultado);
 			d= request.getRequestDispatcher("Carrinho.jsp");  
 		}			
 		

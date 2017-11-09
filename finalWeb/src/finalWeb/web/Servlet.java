@@ -90,6 +90,7 @@ public class Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
     		IOException {
     	doProcessRequest(request, response);
+
     }
 
 	/**
@@ -102,7 +103,7 @@ public class Servlet extends HttpServlet {
 	
 	protected void doProcessRequest(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException {
-	
+		
 		//Obtêm a uri que invocou esta servlet (O que foi definido no methdo do form html)
 		
 		String uri = request.getRequestURI();
