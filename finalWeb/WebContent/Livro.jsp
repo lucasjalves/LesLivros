@@ -6,6 +6,7 @@
 <html>
 	<%
 		Resultado resultado = (Resultado) session.getAttribute("resultadoConsultaLivroCompra");
+		session.removeAttribute("resultadoConsultaLivro");
 		if(resultado == null)
 		{
 			pageContext.forward("Home.jsp");

@@ -19,8 +19,10 @@ import finalWeb.command.ICommand;
 import finalWeb.command.impl.AlterarCommand;
 import finalWeb.command.impl.ConsultarCommand;
 import finalWeb.command.impl.SalvarCommand;
+import finalWeb.command.impl.VerificarCarrinhoCommand;
 import finalWeb.command.impl.VisualizarCommand;
 import finalWeb.vh.IViewHelper;
+import finalWeb.vh.impl.CarrinhoViewHelper;
 import finalWeb.vh.impl.CartaoViewHelper;
 import finalWeb.vh.impl.CategoriaViewHelper;
 import finalWeb.vh.impl.ClienteViewHelper;
@@ -55,7 +57,7 @@ public class Servlet extends HttpServlet {
     	commands.put("INFORMACOESLIVRO", new ConsultarCommand());
     	commands.put("LOGIN", new ConsultarCommand());
     	commands.put("VISUALIZAR", new VisualizarCommand());
-    	
+    	commands.put("VERIFICAR", new VerificarCarrinhoCommand());
     	
     	/* Utilizando o ViewHelper para tratar especificações de qualquer tela e indexando 
     	 * cada viewhelper pela url em que esta servlet é chamada no form
@@ -72,6 +74,7 @@ public class Servlet extends HttpServlet {
     	vhs.put("/finalWeb/SalvarCategoria", new CategoriaViewHelper());
     	vhs.put("/finalWeb/SalvarSubCategoria", new SubCategoriaViewHelper());
     	vhs.put("/finalWeb/SalvarGrupos", new GrupoPrecificacaoViewHelper());
+    	vhs.put("/finalWeb/SalvarCarrinho", new CarrinhoViewHelper());
     }
     
     

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +48,15 @@ public class CarrinhoViewHelper implements IViewHelper {
 	@Override
 	public void setView(Resultado resultadoConsulta, Resultado resultado, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
-		// TODO Auto-generated method stub
+		
+		RequestDispatcher d = null;
+		String operacao = (String)request.getAttribute("operacao");
+		if(operacao.equals("INFORMACOESLIVRO")){
+			request.getSession().setAttribute("carrinho", resultado);
+			d= request.getRequestDispatcher("Carrinho.jsp");  
+		}			
+		
+		d.forward(request,response);
 		
 	}
 	

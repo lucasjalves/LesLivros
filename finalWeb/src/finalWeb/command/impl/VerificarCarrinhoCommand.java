@@ -7,8 +7,8 @@ public class VerificarCarrinhoCommand extends AbstractCommand{
 
 	@Override
 	public Resultado execute(EntidadeDominio entidade) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return fachada.verificarCarrinho(entidade);
 	}
 
 }

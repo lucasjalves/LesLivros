@@ -6,6 +6,7 @@
 <html>
 	<%
 		Resultado resultado = (Resultado) session.getAttribute("resultadoConsultaLivro");
+	    
 		if(resultado == null)
 		{
 			pageContext.forward("SalvarLivro?operacao=CONSULTARLIVROHOME");
