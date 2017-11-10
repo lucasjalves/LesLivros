@@ -126,6 +126,8 @@ public class LivroDAO extends AbstractJdbcDAO{
 				l.setPeso(rs.getString("peso"));
 				l.setProfundidade(rs.getString("profundidade"));
 				l.setId(rs.getInt("id"));
+				l.setPreco(rs.getDouble("preco_livro"));
+				l.setQtdeEstoque(rs.getInt("qtde_estoque"));
 				
 				l.getCategoria().setNome(rs.getString("nome_categoria"));
 				l.getSubcategoria().setNome(rs.getString("nome_subcategoria"));

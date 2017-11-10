@@ -77,7 +77,7 @@
             <img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt="">
             <div class="card-body">
               <h3 class="card-title"><%out.print(l.getNome()); %></h3>
-              <h4>$24.99</h4>
+              <h4><%out.print(l.getPreco().toString()); %></h4>
               <p class="card-text"><%out.print(l.getSinopse()); %></p>
 			<a href="SalvarCarrinho?operacao=VERIFICAR" class="btn btn-success">Adicionar ao carrinho</a>
             </div>

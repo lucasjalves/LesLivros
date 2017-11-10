@@ -6,7 +6,6 @@
 <html>
 	<%
 		List<Item> itensCarrinho = (List<Item>)request.getSession().getAttribute("carrinho");
-		
 	%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -26,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home
+              <a class="nav-link" href="Home.jsp">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
@@ -61,10 +60,43 @@
 							<td>Quantidade</td>
 							<td>Subtotal</td>
 						</tr>
-						<tr>
-							<td><%if(itensCarrinho != null) out.print(itensCarrinho.get(0).getLivro().getNome());%>
-							</td>
-						</tr>																																					
+						<%
+						if(itensCarrinho != null)
+						{
+							Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+							StringBuilder sb = new StringBuilder();
+							Item itm = itensCarrinho.get(0);
+							Livro li = itm.getLivro();
+							
+							for(int i = 0; i < itensCarrinho.size(); i++)	
+							{
+								sb.setLength(0);
+								Item item = itensCarrinho.get(i);
+								Livro l = item.getLivro();
+								
+								if(map.containsKey(l.getId()))
+								{
+									map.put(l.getId(), map.get(l.getId()) + 1);
+								}
+								sb.append("<tr>");
+								sb.append("<td>");
+								sb.append(l.getNome());
+								sb.append("</td>");
+								sb.append("<td>");
+								sb.append(l.getPreco().toString());
+								sb.append("</td>");
+								sb.append("<td id='qtde'>");
+								sb.append(map.get(l.getId()));
+								sb.append("</td>");								
+								sb.append("</tr>");	
+								out.print(sb.toString());
+							}
+						}
+						else
+						{
+							out.print("<tr><td>Não há itens no seu carrinho</td></tr>");
+						}
+						%>																																				
 					</tbody>
 				</table>
 			</div>

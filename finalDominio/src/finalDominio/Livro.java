@@ -6,6 +6,8 @@ public class Livro extends EntidadeDominio{
 	private Categoria categoria;
 	private SubCategoria subcategoria;
 	private GrupoPrecificacao gp;
+	private Integer qtdeEstoque;
+	private Double preco;
 	
 	public String getAutor() {
 		return autor;
@@ -125,6 +127,22 @@ public class Livro extends EntidadeDominio{
 
 	public void setProfundidade(String profundidade) {
 		this.profundidade = profundidade;
+	}
+
+	public Integer getQtdeEstoque() {
+		return qtdeEstoque;
+	}
+
+	public void setQtdeEstoque(Integer qtdeEstoque) {
+		this.qtdeEstoque = qtdeEstoque;
+	}
+
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
 	}
 
 }

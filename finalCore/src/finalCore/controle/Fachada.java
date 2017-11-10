@@ -44,7 +44,7 @@ public class Fachada implements IFachada{
 	
 	private Resultado resultado;
 	
-	
+
 	public Fachada(){
 		/* Intânciando o Map de DAOS */
 		daos = new HashMap<String, IDAO>();
@@ -94,6 +94,7 @@ public class Fachada implements IFachada{
 		 * pelo nome da entidade
 		 */
 		rns.put(Livro.class.getName(), rnsLivro);
+	
 	}
 	
 	
