@@ -5,15 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<%
-		List<Item> itensCarrinho = (List<Item>)request.getAttribute("carrinho");
-		if(itensCarrinho == null)
-		{
-			out.print("Seu carrinho está vazio");
-		}
-		else
-		{
-			out.print("Há itens no seu carrinho");
-		}
+		List<Item> itensCarrinho = (List<Item>)request.getSession().getAttribute("carrinho");
+		
 	%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -67,9 +60,11 @@
 							<td>Preço</td>
 							<td>Quantidade</td>
 							<td>Subtotal</td>
-						</tr>			
+						</tr>
 						<tr>
-						</tr>																																		
+							<td><%if(itensCarrinho != null) out.print(itensCarrinho.get(0).getLivro().getNome());%>
+							</td>
+						</tr>																																					
 					</tbody>
 				</table>
 			</div>

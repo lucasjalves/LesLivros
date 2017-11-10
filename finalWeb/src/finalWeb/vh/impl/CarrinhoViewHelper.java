@@ -20,27 +20,24 @@ public class CarrinhoViewHelper implements IViewHelper {
 	@Override
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		// TODO Auto-generated method stub
-		Resultado resultado = (Resultado) request.getAttribute("resultadoConsultaLivroCompra");
-		Resultado carrinho = (Resultado) request.getAttribute("carrinho"); 
+		Livro l = (Livro) request.getSession().getAttribute("livro");
+		List<Item> carrinho = (List<Item>) request.getSession().getAttribute("carrinho"); 
 		List<Item> itens;
-		List<EntidadeDominio> livros = resultado.getEntidades();
-		Livro livro = (Livro) livros.get(0);
-		
 		if(carrinho == null)
 		{
 			itens = new ArrayList<Item>();
 			Item i = new Item();
-			i.setLivro(livro);
+			i.setLivro(l);
 			itens.add(i);
 			request.getSession().setAttribute("carrinho", itens);
+			
 			return i;
 		}
 		else
 		{
-			List<Item> entidadesCarrinho =  (List<Item>) request.getAttribute("carrinho");
 			Item i = new Item();
-			i.setLivro(livro);
-			entidadesCarrinho.add(i);		
+			i.setLivro(l);
+			carrinho.add(i);		
 			return i;
 		}
 	}
@@ -50,8 +47,8 @@ public class CarrinhoViewHelper implements IViewHelper {
 			HttpServletResponse response) throws IOException, ServletException {
 		
 		RequestDispatcher d = null;
-		String operacao = (String)request.getAttribute("operacao");
-		if(operacao.equals("INFORMACOESLIVRO")){
+		String operacao = request.getParameter("operacao");
+		if(operacao.equals("VERIFICAR")){
 			request.getSession().setAttribute("resultadoLivro", resultado);
 			d= request.getRequestDispatcher("Carrinho.jsp");  
 		}			

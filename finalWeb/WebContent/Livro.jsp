@@ -13,6 +13,9 @@
 		}
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		Livro l = (Livro)entidades.get(0);
+	
+		request.getSession().setAttribute("livro", l);
+		
 		
 	%>
 	

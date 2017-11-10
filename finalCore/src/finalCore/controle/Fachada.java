@@ -236,7 +236,6 @@ public class Fachada implements IFachada{
 		Resultado resultado = new Resultado();
 		String msg = executarRegras(entidade, "VERIFICAR");
 		resultado.setMsg(msg);
-		
 		return resultado;
 	}
 }
