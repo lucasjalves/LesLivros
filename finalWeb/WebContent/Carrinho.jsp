@@ -65,9 +65,6 @@
 						{
 							Map<Integer, Integer> map = new HashMap<Integer, Integer>();
 							StringBuilder sb = new StringBuilder();
-							Item itm = itensCarrinho.get(0);
-							Livro li = itm.getLivro();
-							
 							for(int i = 0; i < itensCarrinho.size(); i++)	
 							{
 								sb.setLength(0);
@@ -75,9 +72,11 @@
 								Livro l = item.getLivro();
 								
 								if(map.containsKey(l.getId()))
-								{
+								{								
 									map.put(l.getId(), map.get(l.getId()) + 1);
 								}
+								
+								map.put(l.getId(), 1);	
 								sb.append("<tr>");
 								sb.append("<td>");
 								sb.append(l.getNome());
@@ -90,6 +89,7 @@
 								sb.append("</td>");								
 								sb.append("</tr>");	
 								out.print(sb.toString());
+
 							}
 						}
 						else
