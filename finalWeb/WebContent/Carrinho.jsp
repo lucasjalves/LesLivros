@@ -70,25 +70,29 @@
 								sb.setLength(0);
 								Item item = itensCarrinho.get(i);
 								Livro l = item.getLivro();
-								
+								if(!map.containsKey(l.getId()))
+								{
+									map.put(l.getId(), 0);									
+								}
 								if(map.containsKey(l.getId()))
-								{								
+								{
 									map.put(l.getId(), map.get(l.getId()) + 1);
 								}
-								
-								map.put(l.getId(), 1);	
-								sb.append("<tr>");
-								sb.append("<td>");
-								sb.append(l.getNome());
-								sb.append("</td>");
-								sb.append("<td>");
-								sb.append(l.getPreco().toString());
-								sb.append("</td>");
-								sb.append("<td id='qtde'>");
-								sb.append(map.get(l.getId()));
-								sb.append("</td>");								
-								sb.append("</tr>");	
-								out.print(sb.toString());
+								if(i == itensCarrinho.size() - 1)
+								{
+									sb.append("<tr>");
+									sb.append("<td>");
+									sb.append(l.getNome());
+									sb.append("</td>");
+									sb.append("<td>");
+									sb.append(l.getPreco().toString());
+									sb.append("</td>");
+									sb.append("<td id='qtde'>");
+									sb.append(map.get(l.getId()));
+									sb.append("</td>");								
+									sb.append("</tr>");	
+									out.print(sb.toString());									
+								}
 
 							}
 						}
