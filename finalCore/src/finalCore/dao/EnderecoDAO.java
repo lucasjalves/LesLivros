@@ -2,12 +2,12 @@ package finalCore.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+
 import java.util.List;
 
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
-import finalDominio.PessoaFisica;
+
 
 public class EnderecoDAO extends AbstractJdbcDAO{
 	public EnderecoDAO() {

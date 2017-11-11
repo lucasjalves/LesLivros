@@ -8,9 +8,7 @@ import java.util.List;
 
 import finalDominio.Categoria;
 import finalDominio.EntidadeDominio;
-import finalDominio.Livro;
-import finalDominio.PessoaFisica;
-import finalDominio.SubCategoria;
+
 
 public class CategoriaDAO extends AbstractJdbcDAO{
 

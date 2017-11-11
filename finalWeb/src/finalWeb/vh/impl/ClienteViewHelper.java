@@ -2,13 +2,12 @@ package finalWeb.vh.impl;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import finalCore.aplicacao.Resultado;
 import finalCore.util.ConverteDate;
@@ -119,7 +118,7 @@ public class ClienteViewHelper implements IViewHelper{
 			String cpf = request.getParameter("txtCpf");
 			String email = request.getParameter("txtEmail");
 			String senha = request.getParameter("txtSenha");
-			String cnpj = request.getParameter("txtCnpj");
+			//String cnpj = request.getParameter("txtCnpj");
 			
 			String ddd = request.getParameter("txtDdd");
 			String numeroTel = request.getParameter("txtNumeroTel");

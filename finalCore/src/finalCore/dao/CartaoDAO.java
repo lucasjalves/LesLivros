@@ -9,7 +9,7 @@ import java.util.List;
 
 import finalDominio.Cartao;
 import finalDominio.EntidadeDominio;
-import finalDominio.PessoaFisica;
+
 
 public class CartaoDAO extends AbstractJdbcDAO{
 

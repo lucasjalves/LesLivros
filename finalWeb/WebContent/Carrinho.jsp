@@ -36,7 +36,7 @@
               <a class="nav-link" href="#">Services</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
+              <a class="nav-link" href="Index.jsp">Login</a>
             </li>
           </ul>
         </div>
@@ -64,6 +64,7 @@
 						if(itensCarrinho != null)
 						{
 							Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+							List<Livro> livros = new ArrayList<Livro>();
 							StringBuilder sb = new StringBuilder();
 							for(int i = 0; i < itensCarrinho.size(); i++)	
 							{
@@ -72,28 +73,37 @@
 								Livro l = item.getLivro();
 								if(!map.containsKey(l.getId()))
 								{
-									map.put(l.getId(), 0);									
+									map.put(l.getId(), 0);
+									livros.add(l);
 								}
 								if(map.containsKey(l.getId()))
 								{
 									map.put(l.getId(), map.get(l.getId()) + 1);
 								}
-								if(i == itensCarrinho.size() - 1)
-								{
-									sb.append("<tr>");
-									sb.append("<td>");
-									sb.append(l.getNome());
-									sb.append("</td>");
-									sb.append("<td>");
-									sb.append(l.getPreco().toString());
-									sb.append("</td>");
-									sb.append("<td id='qtde'>");
-									sb.append(map.get(l.getId()));
-									sb.append("</td>");								
-									sb.append("</tr>");	
-									out.print(sb.toString());									
-								}
-
+								
+														
+							}
+							
+							for(int i = 0; i < livros.size(); i ++)
+							{
+								sb.setLength(0);
+								Livro l = livros.get(i);
+								System.out.println(livros.size());
+								sb.append("<tr>");
+								sb.append("<td>");
+								sb.append(l.getNome());
+								sb.append("</td>");
+								sb.append("<td>");
+								sb.append(l.getPreco().toString());
+								sb.append("</td>");
+								sb.append("<td>");
+								sb.append(map.get(l.getId()));
+								sb.append("</td>");
+								sb.append("<td>");
+								sb.append(map.get(l.getId()) * l.getPreco());
+								sb.append("</td>");
+								sb.append("</tr>");	
+								out.print(sb.toString());										
 							}
 						}
 						else

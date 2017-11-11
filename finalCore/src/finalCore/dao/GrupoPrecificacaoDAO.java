@@ -8,7 +8,7 @@ import java.util.List;
 
 import finalDominio.EntidadeDominio;
 import finalDominio.GrupoPrecificacao;
-import finalDominio.Livro;
+
 
 public class GrupoPrecificacaoDAO extends AbstractJdbcDAO{
 

@@ -137,14 +137,6 @@ public class Fachada implements IFachada{
 			try {
 				
 				resultado.setEntidades(dao.consultar(entidade));
-				if(resultado.getEntidades().isEmpty())
-				{
-					resultado.setMsg("Nenhum registro encontrado!");
-				}
-				else
-				{
-					resultado.setMsg("Registro encontrado com sucesso!");
-				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 				resultado.setMsg("Não foi possível realizar a consulta!");

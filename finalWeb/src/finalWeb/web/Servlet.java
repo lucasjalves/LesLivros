@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import finalCore.aplicacao.Resultado;
 import finalDominio.EntidadeDominio;
-import finalDominio.GrupoPrecificacao;
 import finalDominio.PessoaFisica;
 import finalWeb.command.ICommand;
 import finalWeb.command.impl.AlterarCommand;
