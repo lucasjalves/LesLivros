@@ -14,6 +14,21 @@
 	<link rel="stylesheet" href="css/shop-item.css">
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
 	<script src="bootstrap/bootstrap.bundle.min.js"></script>
+	<script>
+		function validarQtde(qtde, max, preco)
+		{
+			if(parseInt(qtde) > parseInt(max))
+			{
+				alert("O seu pedido ultrapassou a quantidade de itens no estoque!");
+				 document.getElementById('qtde').value = max;
+				$('#subtotal').html(parseInt(qtde) * parseFloat(preco));
+			}
+			else
+			{
+				$('#subtotal').html(parseInt(qtde) * parseFloat(preco));
+			}
+		}
+	</script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -88,7 +103,7 @@
 							{
 								sb.setLength(0);
 								Livro l = livros.get(i);
-								System.out.println(livros.size());
+								Integer qtdeEstoque = l.getQtdeEstoque() - map.get(l.getId());
 								sb.append("<tr>");
 								sb.append("<td>");
 								sb.append(l.getNome());
@@ -96,11 +111,11 @@
 								sb.append("<td>");
 								sb.append(l.getPreco().toString());
 								sb.append("</td>");
-								sb.append("<td>");
+								sb.append("<td><input type='number' max='" + qtdeEstoque.toString() + "'value='");
 								sb.append(map.get(l.getId()));
-								sb.append("</td>");
-								sb.append("<td>");
-								sb.append(map.get(l.getId()) * l.getPreco());
+								sb.append("' id='qtde' onchange='validarQtde(this.value, this.max,"+ l.getPreco().toString() +")'></td>");
+								sb.append("<td id='subtotal'>");
+								sb.append("<script>$('#subtotal').html('" + map.get(l.getId()) * l.getPreco() + "');</script>");
 								sb.append("</td>");
 								sb.append("</tr>");	
 								out.print(sb.toString());										

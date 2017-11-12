@@ -24,6 +24,7 @@
 	<title>Livro: <%out.print(l.getNome()); %></title>
 	<link rel="stylesheet" href="bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="css/shop-item.css">
+	
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
     <script src="bootstrap/bootstrap.bundle.min.js"></script>
 </head>

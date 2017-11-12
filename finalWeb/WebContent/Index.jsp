@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="css/shop-item.css">
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
     <script src="bootstrap/bootstrap.bundle.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	<title>Login</title>
 </head>
 <body>
@@ -43,34 +44,35 @@
         </div>
       </div>
     </nav>
-    	
-	<form action="SalvarCliente" method="post" id="frmSalvarLivro">
-		<table>
-			<tr>
-				<td>E-mail: </td>
-				<td><input type="text" name="txtEmail">
-			</tr>
-			<tr>
-				<td>Senha: </td>
-				<td><input type="password" name="txtPwd">
-			</tr>
-			<tr>
-				<td><input type="submit" id="operacao" name="operacao" value="LOGIN"  /></td>
-			</tr>			
-		</table>
-	</form>
-	<%
-		if(resultado != null)
-		{
-			if(resultado.getMsg() != null)
+    <div class="container">
+    	<form action="SalvarCliente" method="post" id="frmSalvarLivro" class="form-signin" style="max-width: 500px; position: relative; left: 20%;">
+    		<h2 style="position: relative; left: 20%;">Login ou <a href="" >Cadastre-se</a></h2>
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-user"></i></span>
+					<input type="text" name="txtEmail" class="form-control" placeholder="Digite seu Email">
+				</div>
+				
+				<br>
+				
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+					<input type="password" name="txtPwd" class="form-control"  placeholder="Digite sua senha">			
+				</div>
+				
+				<br>
+				<input type="submit" id="operacao" name="operacao" value="LOGIN" class="btn btn-lg btn-primary btn-block" />
+			</form>
+		</div>
+		
+		<%
+			if(resultado != null)
 			{
-				out.print(resultado.getMsg());
+				if(resultado.getMsg() != null)
+				{
+					out.print(resultado.getMsg());
+				}
 			}
-			
-		}
-	%>
-	<form action="SalvarCategoria" method="post" id="frmSalvarLivro">
-		<input type="submit" id="operacao" name="operacao" value="CONSULTAR"  />
-	</form>	
+		%>
+
 </body>
 </html>

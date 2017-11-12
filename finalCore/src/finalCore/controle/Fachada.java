@@ -43,7 +43,6 @@ public class Fachada implements IFachada{
 	private Map<String, Map<String, List<IStrategy>>> rns;
 	
 	private Resultado resultado;
-	
 
 	public Fachada(){
 		/* Intânciando o Map de DAOS */

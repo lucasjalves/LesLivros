@@ -204,9 +204,9 @@
 						sbRegistro.append(p.getCartao().getCodSeg());			
 						sbRegistro.append("</TD>");				
 						
-						sbRegistro.append("<td><form action=\"SalvarCliente\"method=\"post\"> "+
-						"<input type=\"hidden\" name=\"txtId\" value=\""+ p.getId() + "\"> " +
-						"<input type=\"submit\" id=\"operacao\" name=\"operacao\" value=\"VISUALIZAR\"/></form></td>");
+						sbRegistro.append("<td><form action='SalvarCliente'method='post'> "+
+						"<input type='hidden' name='txtId' value='"+ p.getId() + "'> " +
+						"<input type='submit' id='operacao' name='operacao' value='VISUALIZAR'/></form></td>");
 						
 						sbRegistro.append("</TR>");
 						
@@ -323,9 +323,9 @@
 					sbRegistro.append(p.getCartao().getCodSeg());			
 					sbRegistro.append("</TD>");				
 					
-					sbRegistro.append("<td><form action=\"SalvarCliente\"method=\"post\"> "+
-					"<input type=\"hidden\" name=\"txtId\" value=\""+ p.getId() + "\"> " +
-					"<input type=\"submit\" id=\"operacao\" name=\"operacao\" value=\"VISUALIZAR\"/></form></td>");
+					sbRegistro.append("<td><form action='SalvarCliente'method='post'> "+
+					"<input type='hidden' name='txtId' value='"+ p.getId() + "'> " +
+					"<input type='submit' id='operacao' name='operacao' value='VISUALIZAR'/></form></td>");
 					
 					sbRegistro.append("</TR>");
 					

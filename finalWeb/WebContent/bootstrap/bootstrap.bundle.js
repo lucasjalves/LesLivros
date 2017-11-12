@@ -141,7 +141,7 @@ var Util = function () {
           var valueType = value && Util.isElement(value) ? 'element' : toType(value);
 
           if (!new RegExp(expectedTypes).test(valueType)) {
-            throw new Error(componentName.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
+            throw new Error(componentName.toUpperCase() + ": " + ("Option '" + property + "' provided type '" + valueType + "' ") + ("but expected type '" + expectedTypes + "'."));
           }
         }
       }
@@ -927,7 +927,7 @@ var Carousel = function () {
           data.to(config);
         } else if (typeof action === 'string') {
           if (typeof data[action] === 'undefined') {
-            throw new Error("No method named \"" + action + "\"");
+            throw new Error("No method named '" + action + "'");
           }
 
           data[action]();
@@ -1075,7 +1075,7 @@ var Collapse = function () {
       this._isTransitioning = false;
       this._element = element;
       this._config = this._getConfig(config);
-      this._triggerArray = $.makeArray($("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
+      this._triggerArray = $.makeArray($("[data-toggle='collapse'][href='#" + element.id + "']," + ("[data-toggle='collapse'][data-target='#" + element.id + "']")));
       var tabToggles = $(Selector.DATA_TOGGLE);
 
       for (var i = 0; i < tabToggles.length; i++) {
@@ -1277,7 +1277,7 @@ var Collapse = function () {
         parent = $(this._config.parent)[0];
       }
 
-      var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
+      var selector = "[data-toggle='collapse'][data-parent='" + this._config.parent + "']";
       $(parent).find(selector).each(function (i, element) {
         _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
       });
@@ -1318,7 +1318,7 @@ var Collapse = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new Error("No method named '" + config + "'");
           }
 
           data[config]();
@@ -4088,7 +4088,7 @@ var Dropdown = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new Error("No method named '" + config + "'");
           }
 
           data[config]();
@@ -4754,7 +4754,7 @@ var Modal = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new Error("No method named '" + config + "'");
           }
 
           data[config](relatedTarget);
@@ -5429,7 +5429,7 @@ var Tooltip = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new Error("No method named '" + config + "'");
           }
 
           data[config]();
@@ -5614,7 +5614,7 @@ var Popover = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new Error("No method named '" + config + "'");
           }
 
           data[config]();
@@ -5896,7 +5896,7 @@ var ScrollSpy = function () {
 
 
       queries = queries.map(function (selector) {
-        return selector + "[data-target=\"" + target + "\"]," + (selector + "[href=\"" + target + "\"]");
+        return selector + "[data-target='" + target + "']," + (selector + "[href='" + target + "']");
       });
       var $link = $(queries.join(','));
 
@@ -5936,7 +5936,7 @@ var ScrollSpy = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new Error("No method named '" + config + "'");
           }
 
           data[config]();
@@ -6200,7 +6200,7 @@ var Tab = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new Error("No method named '" + config + "'");
           }
 
           data[config]();
