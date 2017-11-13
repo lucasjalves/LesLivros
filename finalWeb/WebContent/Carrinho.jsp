@@ -15,18 +15,25 @@
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
 	<script src="bootstrap/bootstrap.bundle.min.js"></script>
 	<script>
-		function validarQtde(qtde, max, preco)
+		function validarQtde(qtde, max, preco, i)
 		{
 			if(parseInt(qtde) > parseInt(max))
 			{
 				alert("O seu pedido ultrapassou a quantidade de itens no estoque!");
-				 document.getElementById('qtde').value = max;
-				$('#subtotal').html(parseInt(qtde) * parseFloat(preco));
+				 document.getElementById('qtde' + i).value = max;
+				$('#subtotal' + i).html(parseInt(qtde) * parseFloat(preco));
 			}
 			else
 			{
-				$('#subtotal').html(parseInt(qtde) * parseFloat(preco));
+				$('#subtotal' + i).html(parseInt(qtde) * parseFloat(preco));
 			}
+		}
+		
+		function atualizarCarrinho(id)
+		{
+			$(".form1").append("<input type='text' name='id' value='" + id + "'>");
+			$(".form1").append("<input type='text' name='operacao' value='adicionarItemCarrinho'>");
+			document.getElementById('form1').submit();
 		}
 	</script>
 </head>
@@ -64,6 +71,7 @@
         </div>
         <div class="card-body">
 			<div class="table-responsive">
+				<form action="SalvarCarrinho" method="POST" id="form1">
 				<table class="table table-striped">
 					<thead>
 						<th><h3>Meu carrinho</h3></th>
@@ -78,12 +86,15 @@
 						<%
 						if(itensCarrinho != null)
 						{
-							Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+							Map<Integer, Integer> map = (HashMap<Integer,Integer>)request.getAttribute("mapaCarrinho");
+							if(map == null)
+							{
+								map = new HashMap<Integer, Integer>();
+							}
 							List<Livro> livros = new ArrayList<Livro>();
 							StringBuilder sb = new StringBuilder();
 							for(int i = 0; i < itensCarrinho.size(); i++)	
 							{
-								sb.setLength(0);
 								Item item = itensCarrinho.get(i);
 								Livro l = item.getLivro();
 								if(!map.containsKey(l.getId()))
@@ -96,10 +107,8 @@
 									map.put(l.getId(), map.get(l.getId()) + 1);
 								}
 								
-														
 							}
-							
-							for(int i = 0; i < livros.size(); i ++)
+							for(int i = 0; i < map.size(); i ++)
 							{
 								sb.setLength(0);
 								Livro l = livros.get(i);
@@ -113,13 +122,17 @@
 								sb.append("</td>");
 								sb.append("<td><input type='number' max='" + qtdeEstoque.toString() + "'value='");
 								sb.append(map.get(l.getId()));
-								sb.append("' id='qtde' onchange='validarQtde(this.value, this.max,"+ l.getPreco().toString() +")'></td>");
-								sb.append("<td id='subtotal'>");
-								sb.append("<script>$('#subtotal').html('" + map.get(l.getId()) * l.getPreco() + "');</script>");
+								sb.append("' id='qtde" + i + "' onchange='atualizarCarrinho(" + l.getId() +")'></td>");
+								sb.append("<td id='subtotal" + i +"'>");
+								//sb.append("' id='qtde" + i + "' onchange='validarQtde(this.value, this.max,"+ l.getPreco().toString() +", " + i +")'></td>");
+								//sb.append("<td id='subtotal" + i +"'>");
+								sb.append("<script>$('#subtotal" + i + "').html('" + map.get(l.getId()) * l.getPreco() + "');</script>");
 								sb.append("</td>");
 								sb.append("</tr>");	
-								out.print(sb.toString());										
+								out.print(sb.toString());			
+								
 							}
+							request.getSession().setAttribute("mapaCarrinho", map);
 						}
 						else
 						{
@@ -128,6 +141,7 @@
 						%>																																				
 					</tbody>
 				</table>
+				</form>
 			</div>
          </div>
      </div>  

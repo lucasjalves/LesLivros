@@ -2,7 +2,9 @@ package finalWeb.vh.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,6 +25,20 @@ public class CarrinhoViewHelper implements IViewHelper {
 		Livro l = (Livro) request.getSession().getAttribute("livro");
 		List<Item> carrinho = (List<Item>) request.getSession().getAttribute("carrinho"); 
 		List<Item> itens;
+
+		if(request.getSession().getAttribute("mapaCarrinho") != null)
+		{
+			Map<Integer, Integer> m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
+			String txtId = (String) request.getAttribute("id");
+			Integer id = Integer.parseInt(txtId);
+			if(m.containsKey(id))
+			{
+				Integer qtde = m.get(id);
+				m.replace(id, qtde + 1);
+				
+				return null;
+			}
+		}
 		if(carrinho == null)
 		{
 			itens = new ArrayList<Item>();
@@ -40,6 +56,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 			carrinho.add(i);		
 			return i;
 		}
+		
 	}
 
 	@Override
@@ -53,6 +70,10 @@ public class CarrinhoViewHelper implements IViewHelper {
 			d= request.getRequestDispatcher("Carrinho.jsp");  
 		}			
 		
+		if(operacao.equals("adicionarItemCarrinho"))
+		{
+			d = request.getRequestDispatcher("Carrinho.jsp");
+		}
 		d.forward(request,response);
 		
 	}
