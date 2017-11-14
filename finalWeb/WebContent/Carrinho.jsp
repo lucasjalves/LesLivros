@@ -31,9 +31,9 @@
 		
 		function atualizarCarrinho(id)
 		{
-			$(".form1").append("<input type='text' name='id' value='" + id + "'>");
-			$(".form1").append("<input type='text' name='operacao' value='adicionarItemCarrinho'>");
-			document.getElementById('form1').submit();
+
+			window.location.replace("SalvarCarrinho?id=" + id + "&operacao=ADICIONARITEM");
+			
 		}
 	</script>
 </head>

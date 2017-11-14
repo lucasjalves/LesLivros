@@ -57,6 +57,7 @@ public class Servlet extends HttpServlet {
     	commands.put("LOGIN", new ConsultarCommand());
     	commands.put("VISUALIZAR", new VisualizarCommand());
     	commands.put("VERIFICAR", new VerificarCarrinhoCommand());
+    	commands.put("ADICIONARITEM", new VerificarCarrinhoCommand());
     	
     	/* Utilizando o ViewHelper para tratar especificações de qualquer tela e indexando 
     	 * cada viewhelper pela url em que esta servlet é chamada no form
@@ -116,6 +117,10 @@ public class Servlet extends HttpServlet {
 		//O viewhelper retorna a entidade especifica para a tela que chamou esta servlet
 		
 		EntidadeDominio entidade =  vh.getEntidade(request);
+		if(entidade == null)
+		{
+			System.out.println("to nulo");
+		}
 		//Obtêm o command para executar a respectiva operação
 		ICommand command = commands.get(operacao);
 		

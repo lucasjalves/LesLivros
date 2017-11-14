@@ -26,7 +26,12 @@ public class CarrinhoViewHelper implements IViewHelper {
 		List<Item> carrinho = (List<Item>) request.getSession().getAttribute("carrinho"); 
 		List<Item> itens;
 
-		if(request.getSession().getAttribute("mapaCarrinho") != null)
+		String operacao = (String)request.getAttribute("operacao");
+		if(operacao == null)
+		{
+			operacao = "";
+		}
+		if(request.getSession().getAttribute("mapaCarrinho") != null && operacao.equals("ADICIONARITEM"))
 		{
 			Map<Integer, Integer> m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
 			String txtId = (String) request.getAttribute("id");
@@ -35,8 +40,8 @@ public class CarrinhoViewHelper implements IViewHelper {
 			{
 				Integer qtde = m.get(id);
 				m.replace(id, qtde + 1);
-				
-				return null;
+				Item i = new Item();
+				return i;
 			}
 		}
 		if(carrinho == null)
@@ -71,6 +76,10 @@ public class CarrinhoViewHelper implements IViewHelper {
 		}			
 		
 		if(operacao.equals("adicionarItemCarrinho"))
+		{
+			d = request.getRequestDispatcher("Carrinho.jsp");
+		}
+		if(operacao.equals("ADICIONARITEM"))
 		{
 			d = request.getRequestDispatcher("Carrinho.jsp");
 		}
