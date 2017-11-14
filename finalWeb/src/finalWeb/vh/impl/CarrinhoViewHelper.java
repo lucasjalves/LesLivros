@@ -81,6 +81,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 	public void setView(Resultado resultadoConsulta, Resultado resultado, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		
+	
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
 		if(operacao.equals("VERIFICAR")){
