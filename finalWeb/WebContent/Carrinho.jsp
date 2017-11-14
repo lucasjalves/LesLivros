@@ -10,6 +10,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Meu Carrinho</title>
+	<link rel="stylesheet" href="css/reset.css">
 	<link rel="stylesheet" href="bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="css/shop-item.css">
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
@@ -31,9 +32,7 @@
 		
 		function atualizarCarrinho(id)
 		{
-
-			window.location.replace("SalvarCarrinho?id=" + id + "&operacao=ADICIONARITEM");
-			
+			//window.location.replace("SalvarCarrinho?id=" + id + "&operacao=ADICIONARITEM");			
 		}
 	</script>
 </head>
@@ -84,30 +83,47 @@
 							<td>Subtotal</td>
 						</tr>
 						<%
+						
 						if(itensCarrinho != null)
 						{
-							Map<Integer, Integer> map = (HashMap<Integer,Integer>)request.getAttribute("mapaCarrinho");
+							List<Livro> livros;
+							Map<Integer, Integer> map = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
+							StringBuilder sb = new StringBuilder();
 							if(map == null)
 							{
 								map = new HashMap<Integer, Integer>();
+								livros = new ArrayList<Livro>();
+								for(int i = 0; i < itensCarrinho.size(); i++)	
+								{
+									Item item = itensCarrinho.get(i);
+									Livro l = item.getLivro();
+									if(!map.containsKey(l.getId()))
+									{
+										map.put(l.getId(), 1);
+										livros.add(l);
+									}
+									
+								}
+								request.getSession().setAttribute("livros", livros);
+								request.getSession().setAttribute("mapaCarrinho", map);
 							}
-							List<Livro> livros = new ArrayList<Livro>();
-							StringBuilder sb = new StringBuilder();
-							for(int i = 0; i < itensCarrinho.size(); i++)	
+							else
 							{
-								Item item = itensCarrinho.get(i);
-								Livro l = item.getLivro();
-								if(!map.containsKey(l.getId()))
+								livros = (List<Livro>)request.getSession().getAttribute("livros");
+								for(int i = 0; i < itensCarrinho.size(); i++)	
 								{
-									map.put(l.getId(), 0);
-									livros.add(l);
+									Item item = itensCarrinho.get(i);
+									Livro l = item.getLivro();
+									if(!map.containsKey(l.getId()))
+									{
+										map.put(l.getId(), 1);
+										livros.add(l);
+									}
+
 								}
-								if(map.containsKey(l.getId()))
-								{
-									map.put(l.getId(), map.get(l.getId()) + 1);
-								}
-								
+								request.getSession().setAttribute("livros", livros);
 							}
+							livros = (List<Livro>)request.getSession().getAttribute("livros");
 							for(int i = 0; i < map.size(); i ++)
 							{
 								sb.setLength(0);
@@ -117,16 +133,39 @@
 								sb.append("<td>");
 								sb.append(l.getNome());
 								sb.append("</td>");
+								
 								sb.append("<td>");
 								sb.append(l.getPreco().toString());
 								sb.append("</td>");
-								sb.append("<td><input type='number' max='" + qtdeEstoque.toString() + "'value='");
+	
+								
+								sb.append("<td>");
+								
+								sb.append("<form action='SalvarCarrinho' method='POST'>");
+								sb.append("<button type='submit' name='operacao' value='removerItem'>");
+								sb.append("<span>-</span>");
+								sb.append("</button>");
+								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");        
+								sb.append("</form><div>");			
+								
 								sb.append(map.get(l.getId()));
-								sb.append("' id='qtde" + i + "' onchange='atualizarCarrinho(" + l.getId() +")'></td>");
+								
+								sb.append("</div><form action='SalvarCarrinho' method='POST'>");
+								sb.append("<button type='submit' name='operacao' value='AdicionarItem'> ");
+								sb.append("<span>+</span>");
+								sb.append("</button>");   
+								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");             
+								sb.append("</form>");
+								
+								sb.append("</td>");
+								
+
+	
+
+								
 								sb.append("<td id='subtotal" + i +"'>");
-								//sb.append("' id='qtde" + i + "' onchange='validarQtde(this.value, this.max,"+ l.getPreco().toString() +", " + i +")'></td>");
-								//sb.append("<td id='subtotal" + i +"'>");
 								sb.append("<script>$('#subtotal" + i + "').html('" + map.get(l.getId()) * l.getPreco() + "');</script>");
+								
 								sb.append("</td>");
 								sb.append("</tr>");	
 								out.print(sb.toString());			

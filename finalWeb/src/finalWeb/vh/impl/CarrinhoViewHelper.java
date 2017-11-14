@@ -26,24 +26,37 @@ public class CarrinhoViewHelper implements IViewHelper {
 		List<Item> carrinho = (List<Item>) request.getSession().getAttribute("carrinho"); 
 		List<Item> itens;
 
-		String operacao = (String)request.getAttribute("operacao");
-		if(operacao == null)
+		String operacao = (String)request.getParameter("operacao");
+
+		if(request.getSession().getAttribute("mapaCarrinho") != null && operacao.equals("AdicionarItem"))
 		{
-			operacao = "";
-		}
-		if(request.getSession().getAttribute("mapaCarrinho") != null && operacao.equals("ADICIONARITEM"))
-		{
+			
 			Map<Integer, Integer> m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
-			String txtId = (String) request.getAttribute("id");
+			String txtId = (String) request.getParameter("txtId");
 			Integer id = Integer.parseInt(txtId);
 			if(m.containsKey(id))
 			{
-				Integer qtde = m.get(id);
-				m.replace(id, qtde + 1);
+				m.replace(id, m.get(id) + 1);
 				Item i = new Item();
 				return i;
 			}
 		}
+		
+		if(request.getSession().getAttribute("mapaCarrinho") != null && operacao.equals("removerItem"))
+		{
+			Map<Integer, Integer> m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
+			String txtId = (String) request.getParameter("txtId");
+			Integer id = Integer.parseInt(txtId);
+			if(m.containsKey(id))
+			{
+				
+				Integer qtde = m.get(id) - 1;
+				m.replace(id, qtde);
+				
+				Item i = new Item();
+				return i;
+			}
+		}		
 		if(carrinho == null)
 		{
 			itens = new ArrayList<Item>();
@@ -79,7 +92,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 		{
 			d = request.getRequestDispatcher("Carrinho.jsp");
 		}
-		if(operacao.equals("ADICIONARITEM"))
+		if(operacao.equals("removerItem") || operacao.equals("AdicionarItem"))
 		{
 			d = request.getRequestDispatcher("Carrinho.jsp");
 		}
