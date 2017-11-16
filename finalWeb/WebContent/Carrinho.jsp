@@ -5,7 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<%
-		List<Item> itensCarrinho = (List<Item>)request.getSession().getAttribute("carrinho");	
+		List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");	
+		Map<Integer, Integer> map = (Map<Integer, Integer>) request.getSession().getAttribute("mapaCarrinho");
 	%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -81,49 +82,16 @@
 							<td>Preço</td>
 							<td>Quantidade</td>
 							<td>Subtotal</td>
+							<td>Operação</td>
 						</tr>
 						<%
-						
-						if(itensCarrinho != null)
+						double precoTotal = 0;
+						double precoFrete = 0;
+						if(livros != null)
 						{
-							List<Livro> livros;
-							Map<Integer, Integer> map = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
+							
 							StringBuilder sb = new StringBuilder();
-							if(map == null)
-							{
-								map = new HashMap<Integer, Integer>();
-								livros = new ArrayList<Livro>();
-								for(int i = 0; i < itensCarrinho.size(); i++)	
-								{
-									Item item = itensCarrinho.get(i);
-									Livro l = item.getLivro();
-									if(!map.containsKey(l.getId()))
-									{
-										map.put(l.getId(), 1);
-										livros.add(l);
-									}
-									
-								}
-								request.getSession().setAttribute("livros", livros);
-								request.getSession().setAttribute("mapaCarrinho", map);
-							}
-							else
-							{
-								livros = (List<Livro>)request.getSession().getAttribute("livros");
-								for(int i = 0; i < itensCarrinho.size(); i++)	
-								{
-									Item item = itensCarrinho.get(i);
-									Livro l = item.getLivro();
-									if(!map.containsKey(l.getId()))
-									{
-										map.put(l.getId(), 1);
-										livros.add(l);
-									}
-
-								}
-								request.getSession().setAttribute("livros", livros);
-							}
-							livros = (List<Livro>)request.getSession().getAttribute("livros");
+							
 							for(int i = 0; i < map.size(); i ++)
 							{
 								sb.setLength(0);
@@ -140,9 +108,8 @@
 	
 								
 								sb.append("<td>");
-								
 								sb.append("<form action='SalvarCarrinho' method='POST'>");
-								sb.append("<button type='submit' name='operacao' value='removerItem'>");
+								sb.append("<button type='submit' name='operacao' value='subtrairItem'>");
 								sb.append("<span>-</span>");
 								sb.append("</button>");
 								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");        
@@ -166,15 +133,21 @@
 								sb.append("<td id='subtotal" + i +"'>");
 								sb.append("<script>$('#subtotal" + i + "').html('" + map.get(l.getId()) * l.getPreco() + "');</script>");
 								
+								precoTotal = precoTotal + map.get(l.getId()) * l.getPreco();
+								
 								sb.append("</td>");
+								
+								sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td>");
 								sb.append("</tr>");	
 								out.print(sb.toString());			
 								
 							}
 							request.getSession().setAttribute("mapaCarrinho", map);
+							
 						}
-						else
+						if(livros == null || livros.size() == 0)
 						{
+							precoTotal = 0;
 							out.print("<tr><td>Não há itens no seu carrinho</td></tr>");
 						}
 						%>																																				
@@ -183,7 +156,19 @@
 				</form>
 			</div>
          </div>
-     </div>  
+     </div>
+            <div class="col-lg-4 col-md-6 mb-4" style="position: relative; float: right;">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h4 class="card-title">
+                    Total da compra
+                  </h4>
+                  <h4></h4>
+                  <h5><%out.print(precoTotal); %>R$</h5>
+                  <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+                </div>
+              </div>
+            </div>  
      </div> 
 </body>
 </html>
