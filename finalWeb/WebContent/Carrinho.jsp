@@ -7,6 +7,7 @@
 	<%
 		List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");	
 		Map<Integer, Integer> map = (Map<Integer, Integer>) request.getSession().getAttribute("mapaCarrinho");
+		Resultado cupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
 	%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -16,26 +17,6 @@
 	<link rel="stylesheet" href="css/shop-item.css">
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
 	<script src="bootstrap/bootstrap.bundle.min.js"></script>
-	<script>
-		function validarQtde(qtde, max, preco, i)
-		{
-			if(parseInt(qtde) > parseInt(max))
-			{
-				alert("O seu pedido ultrapassou a quantidade de itens no estoque!");
-				 document.getElementById('qtde' + i).value = max;
-				$('#subtotal' + i).html(parseInt(qtde) * parseFloat(preco));
-			}
-			else
-			{
-				$('#subtotal' + i).html(parseInt(qtde) * parseFloat(preco));
-			}
-		}
-		
-		function atualizarCarrinho(id)
-		{
-			//window.location.replace("SalvarCarrinho?id=" + id + "&operacao=ADICIONARITEM");			
-		}
-	</script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -85,6 +66,7 @@
 							<td>Operação</td>
 						</tr>
 						<%
+						 double desconto = 0;
 						double precoTotal = 0;
 						double precoFrete = 0;
 						if(livros != null)
@@ -103,22 +85,26 @@
 								sb.append("</td>");
 								
 								sb.append("<td>");
-								sb.append(l.getPreco().toString());
-								sb.append("</td>");
-	
+								sb.append(String.format("%.2f", l.getPreco()));
+								sb.append("R$</td>");
 								
-								sb.append("<td>");
+								double freteLivro = (Double.parseDouble(l.getAltura()) * 
+										Double.parseDouble(l.getProfundidade()) * 
+										Double.parseDouble(l.getLargura())) / 200;
+								precoFrete = precoFrete + freteLivro;
+								
+								sb.append("<td style='text-align: center;'");
 								sb.append("<form action='SalvarCarrinho' method='POST'>");
-								sb.append("<button type='submit' name='operacao' value='subtrairItem'>");
+								sb.append("<button type='submit' name='operacao' value='subtrairItem' style='float: left;' class='btn btn-danger'>");
 								sb.append("<span>-</span>");
 								sb.append("</button>");
 								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");        
-								sb.append("</form><div>");			
+								sb.append("</form>");			
 								
 								sb.append(map.get(l.getId()));
 								
-								sb.append("</div><form action='SalvarCarrinho' method='POST'>");
-								sb.append("<button type='submit' name='operacao' value='AdicionarItem'> ");
+								sb.append("<form action='SalvarCarrinho' method='POST' style=' float: right;' >" );
+								sb.append("<button type='submit' name='operacao' value='AdicionarItem' style='float: left; size: 80%' class='btn btn-success' > ");
 								sb.append("<span>+</span>");
 								sb.append("</button>");   
 								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");             
@@ -131,7 +117,7 @@
 
 								
 								sb.append("<td id='subtotal" + i +"'>");
-								sb.append("<script>$('#subtotal" + i + "').html('" + map.get(l.getId()) * l.getPreco() + "');</script>");
+								sb.append("<script>$('#subtotal" + i + "').html('" + String.format("%.2f" , map.get(l.getId()) * l.getPreco()) + "R$');</script>");
 								
 								precoTotal = precoTotal + map.get(l.getId()) * l.getPreco();
 								
@@ -143,7 +129,7 @@
 								
 							}
 							request.getSession().setAttribute("mapaCarrinho", map);
-							
+							precoTotal = precoTotal + precoFrete;
 						}
 						if(livros == null || livros.size() == 0)
 						{
@@ -163,9 +149,41 @@
                   <h4 class="card-title">
                     Total da compra
                   </h4>
-                  <h4></h4>
-                  <h5><%out.print(precoTotal); %>R$</h5>
-                  <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+                  
+                  <%
+                 
+                  if(cupom != null) 
+                  {
+                	  if(cupom.getMsg() == null && cupom.getEntidades().size() != 0)
+                	  {
+                		  List<EntidadeDominio> listCupom = cupom.getEntidades();
+                		  Cupom c = (Cupom)listCupom.get(0);
+                		  desconto = (c.getDesconto()) / 100;
+                		  precoTotal = precoTotal - (precoTotal * desconto);
+                		  request.getSession().setAttribute("resultadoCupom", cupom);
+                	  }
+                  }
+                  %>
+                  <h6>Frete: <%out.print(String.format("%.2f", precoFrete)); %>R$ </h6>
+                  <h6 style="color: green"> <%
+                  if(cupom != null){
+                	  out.print("Desconto: -" + String.format("%.2f", (precoTotal * desconto)) + "R$" );
+                  }
+                  
+                  %></h6>
+                  <h5>Total: <%out.print(String.format("%.2f", precoTotal)); %>R$</h5>
+                  <form action="ValidarCupom" method="POST">
+                  	<input type="text" name="txtCodigo" placeholder="Código do cupom" maxlength="6">
+                  	<input type="submit" name="operacao" value="AdicionarCupom" class="btn btn-success" />	
+                  </form>
+                   <%if(cupom != null) 
+                   {
+                		if(cupom.getMsg() !=null)
+                		{
+                			out.print(cupom.getMsg());
+                		}
+                   }
+                  %>                 
                 </div>
               </div>
             </div>  

@@ -108,7 +108,7 @@
                   <h4 class="card-title">
                     <a href="SalvarLivro?operacao=INFORMACOESLIVRO&txtId=<%out.print(livro.getId());%>"><%out.print(livro.getTitulo());%></a>
                   </h4>
-                  <h5>$<%out.print(livro.getPreco().toString()); %></h5>
+                  <h5><%out.print(String.format("%.2f", livro.getPreco())); %>R$</h5>
                   <p class="card-text"><%out.print(livro.getSinopse());%></p>
                 </div>
                 <div class="card-footer">

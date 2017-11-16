@@ -78,8 +78,14 @@
             <img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt="">
             <div class="card-body">
               <h3 class="card-title"><%out.print(l.getNome()); %></h3>
-              <h4><%out.print(l.getPreco().toString()); %></h4>
+              <h4><%out.print(String.format("%.2f", l.getPreco())); %>R$</h4>
               <p class="card-text"><%out.print(l.getSinopse()); %></p>
+              <%
+              	if(l.getQtdeEstoque() == 0)
+              	{
+              		
+              	}
+              %>
 			<a href="SalvarCarrinho?operacao=VERIFICAR" class="btn btn-success">Adicionar ao carrinho</a>
             </div>
           </div>
@@ -121,12 +127,15 @@
 							<td><%out.print(l.getAltura()); %></td>
 						</tr>
 						<tr>
-							<td>Peso</td>
-							<td><%out.print(l.getPeso()); %></td>
+							<td>Largura</td>
+							<td><%out.print(l.getLargura()); %></td>
 						</tr>
 						<tr>
 							<td>Profundidade</td>
 							<td><%out.print(l.getProfundidade()); %></td>
+						<tr>
+							<td>Peso</td>
+							<td><%out.print(l.getPeso()); %></td>
 						</tr>																																													
 					</tbody>
 					</table>

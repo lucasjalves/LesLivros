@@ -25,6 +25,7 @@ import finalWeb.vh.impl.CarrinhoViewHelper;
 import finalWeb.vh.impl.CartaoViewHelper;
 import finalWeb.vh.impl.CategoriaViewHelper;
 import finalWeb.vh.impl.ClienteViewHelper;
+import finalWeb.vh.impl.CupomViewHelper;
 import finalWeb.vh.impl.EnderecoViewHelper;
 import finalWeb.vh.impl.GrupoPrecificacaoViewHelper;
 import finalWeb.vh.impl.LivroViewHelper;
@@ -60,7 +61,7 @@ public class Servlet extends HttpServlet {
     	commands.put("AdicionarItem", new VerificarCarrinhoCommand());
     	commands.put("subtrairItem", new VerificarCarrinhoCommand());
     	commands.put("removerItem", new VerificarCarrinhoCommand());
-    	
+    	commands.put("AdicionarCupom", new ConsultarCommand());
     	/* Utilizando o ViewHelper para tratar especificações de qualquer tela e indexando 
     	 * cada viewhelper pela url em que esta servlet é chamada no form
     	 * garantimos que esta servelt atenderá qualquer entidade */
@@ -77,6 +78,7 @@ public class Servlet extends HttpServlet {
     	vhs.put("/finalWeb/SalvarSubCategoria", new SubCategoriaViewHelper());
     	vhs.put("/finalWeb/SalvarGrupos", new GrupoPrecificacaoViewHelper());
     	vhs.put("/finalWeb/SalvarCarrinho", new CarrinhoViewHelper());
+    	vhs.put("/finalWeb/ValidarCupom", new CupomViewHelper());
     }
     
     

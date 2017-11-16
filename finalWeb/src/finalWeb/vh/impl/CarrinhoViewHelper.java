@@ -37,7 +37,9 @@ public class CarrinhoViewHelper implements IViewHelper {
 			request.getSession().setAttribute("livros", livros);
 			mapLivros.put(l.getId(), 1);
 			request.getSession().setAttribute("mapaCarrinho", mapLivros);
-			return new Item();
+			Item i = new Item();
+			i.setLivro(l);
+			return i;
 		}
 		
 
@@ -53,6 +55,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 				m.replace(id, m.get(id) + 1);
 				request.getSession().setAttribute("mapaCarrinho", m);
 				Item i = new Item();
+				i.setLivro(l);
 				return i;
 			}
 		}

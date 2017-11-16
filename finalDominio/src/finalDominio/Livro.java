@@ -2,7 +2,7 @@ package finalDominio;
 
 public class Livro extends EntidadeDominio{
 	private String autor, ano, titulo, editora, edicao, 
-	ISBN, npaginas, sinopse, status, altura, peso, profundidade;
+	ISBN, npaginas, sinopse, status, altura, peso, profundidade, largura;
 	private Categoria categoria;
 	private SubCategoria subcategoria;
 	private GrupoPrecificacao gp;
@@ -143,6 +143,14 @@ public class Livro extends EntidadeDominio{
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public String getLargura() {
+		return largura;
+	}
+
+	public void setLargura(String largura) {
+		this.largura = largura;
 	}
 
 }
