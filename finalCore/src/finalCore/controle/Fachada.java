@@ -20,12 +20,14 @@ import finalCore.dao.LivroDAO;
 import finalCore.dao.SubCategoriaDAO;
 import finalCore.dao.TelefoneDAO;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
+import finalCore.negocio.VerificarQuantidadeLivroEstoque;
 import finalDominio.Cartao;
 import finalDominio.Categoria;
 import finalDominio.Cupom;
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalDominio.GrupoPrecificacao;
+import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.PessoaFisica;
 import finalDominio.SubCategoria;
@@ -76,7 +78,8 @@ public class Fachada implements IFachada{
 		
 		
 		/* Criando instâncias de regras de negócio a serem utilizados*/
-		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();		
+		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	
+		VerificarQuantidadeLivroEstoque vQtdeEstoque = new VerificarQuantidadeLivroEstoque();
 		/* Criando uma lista para conter as regras de negócio de fornencedor
 		 * quando a operação for salvar
 		 */
@@ -84,19 +87,25 @@ public class Fachada implements IFachada{
 		/* Adicionando as regras a serem utilizadas na operação salvar do fornecedor*/
 		rnsSalvarLivro.add(vdObrigatoriosLivro);
 		
+		List<IStrategy> rnsValidarCarrinho = new ArrayList<IStrategy>();
+		
+		rnsValidarCarrinho.add(vQtdeEstoque);
 		/* Cria o mapa que poderá conter todas as listas de regras de negócio específica 
 		 * por operação  do fornecedor
 		 */
 		Map<String, List<IStrategy>> rnsLivro = new HashMap<String, List<IStrategy>>();
+		Map<String, List<IStrategy>> rnsCarrinho= new HashMap<String, List<IStrategy>>();
 		/*
 		 * Adiciona a listra de regras na operação salvar no mapa do fornecedor (lista criada na linha 70)
 		 */
 		rnsLivro.put("SALVAR", rnsSalvarLivro);	
+		rnsCarrinho.put("VERIFICAR", rnsValidarCarrinho);
 		
 		/* Adiciona o mapa(criado na linha 79) com as regras indexadas pelas operações no mapa geral indexado 
 		 * pelo nome da entidade
 		 */
 		rns.put(Livro.class.getName(), rnsLivro);
+		rns.put(Item.class.getName(), rnsCarrinho);
 	
 	}
 	
@@ -229,8 +238,8 @@ public class Fachada implements IFachada{
 
 	@Override
 	public Resultado verificarCarrinho(EntidadeDominio entidade) {
-		Resultado resultado = new Resultado();
-		String msg = executarRegras(entidade, "VERIFICAR");
+		resultado = new Resultado();
+		String msg = executarRegras(entidade, "aaa");
 		resultado.setMsg(msg);
 		return resultado;
 	}

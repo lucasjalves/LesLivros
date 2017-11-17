@@ -24,6 +24,8 @@ public class VerificarQuantidadeLivroEstoque implements IStrategy {
 		{
 			return "Livro não disponível no estoque";
 		}
+		
+		
 
 		return null;
 	}

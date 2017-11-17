@@ -93,13 +93,13 @@
 										Double.parseDouble(l.getLargura())) / 200;
 								precoFrete = precoFrete + freteLivro;
 								
-								sb.append("<td style='text-align: center;'");
-								sb.append("<form action='SalvarCarrinho' method='POST'>");
+								sb.append("<td style='text-align: center;'>");
+								sb.append("<form action='SalvarCarrinho' method='POST' style=' float: left;' >" );
 								sb.append("<button type='submit' name='operacao' value='subtrairItem' style='float: left;' class='btn btn-danger'>");
 								sb.append("<span>-</span>");
-								sb.append("</button>");
-								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");        
-								sb.append("</form>");			
+								sb.append("</button>");   
+								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");             
+								sb.append("</form>");		
 								
 								sb.append(map.get(l.getId()));
 								
