@@ -117,7 +117,8 @@ public class CarrinhoViewHelper implements IViewHelper {
 			}
 			request.getSession().setAttribute("resultadoLivro", resultado);
 			d= request.getRequestDispatcher("Carrinho.jsp");  
-		}			
+		}
+		
 		if(operacao.equals("AdicionarItem"))
 		{
 			
@@ -138,9 +139,16 @@ public class CarrinhoViewHelper implements IViewHelper {
 			Map<Integer, Integer> m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
 			String txtId = (String) request.getParameter("txtId");
 			Integer id = Integer.parseInt(txtId);
-			m.replace(id, m.get(id) - 1);
-			request.getSession().setAttribute("mapaCarrinho", m);
-			
+			if(resultado.getMsg() == null)
+			{
+				m.replace(id, m.get(id) - 1);
+				request.getSession().setAttribute("mapaCarrinho", m);				
+			}
+			else
+			{
+				m.replace(id, 0);
+				request.getSession().setAttribute("mapaCarrinho", m);	
+			}
 			request.getSession().setAttribute("resultadoLivro", resultado);
 			d = request.getRequestDispatcher("Carrinho.jsp");			
 		}
