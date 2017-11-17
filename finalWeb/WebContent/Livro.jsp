@@ -83,10 +83,14 @@
               <%
               	if(l.getQtdeEstoque() == 0)
               	{
-              		
+              		out.print("<a href='' class='btn btn-danger' disabled>Esgotado</a>");
+              	}
+              	else
+              	{
+              		out.print("<a href='SalvarCarrinho?operacao=VERIFICAR' class='btn btn-success'>Adicionar ao carrinho</a>");
               	}
               %>
-			<a href="SalvarCarrinho?operacao=VERIFICAR" class="btn btn-success">Adicionar ao carrinho</a>
+			
             </div>
           </div>
           <!-- /.card -->

@@ -8,6 +8,7 @@
 		List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");	
 		Map<Integer, Integer> map = (Map<Integer, Integer>) request.getSession().getAttribute("mapaCarrinho");
 		Resultado cupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
+		Resultado res = (Resultado)request.getSession().getAttribute("resultadoLivro");
 	%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -66,7 +67,7 @@
 							<td>Operação</td>
 						</tr>
 						<%
-						 double desconto = 0;
+						double desconto = 0;
 						double precoTotal = 0;
 						double precoFrete = 0;
 						if(livros != null)
@@ -128,7 +129,6 @@
 								out.print(sb.toString());			
 								
 							}
-							request.getSession().setAttribute("mapaCarrinho", map);
 							precoTotal = precoTotal + precoFrete;
 						}
 						if(livros == null || livros.size() == 0)
@@ -136,6 +136,8 @@
 							precoTotal = 0;
 							out.print("<tr><td>Não há itens no seu carrinho</td></tr>");
 						}
+				
+						
 						%>																																				
 					</tbody>
 				</table>
@@ -187,6 +189,17 @@
                 </div>
               </div>
             </div>  
+            <%
+            
+			if( res != null)
+			{
+				if(res.getMsg() != null)
+				{
+					out.print("<tr><td><p style='color: red'>Item indisponível no estoque</p></td></tr>");
+				}
+			}
+            request.getSession().setAttribute("resultadoLivro", null);
+            %>
      </div> 
 </body>
 </html>

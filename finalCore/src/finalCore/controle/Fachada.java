@@ -239,7 +239,7 @@ public class Fachada implements IFachada{
 	@Override
 	public Resultado verificarCarrinho(EntidadeDominio entidade) {
 		resultado = new Resultado();
-		String msg = executarRegras(entidade, "aaa");
+		String msg = executarRegras(entidade, "VERIFICAR");
 		resultado.setMsg(msg);
 		return resultado;
 	}

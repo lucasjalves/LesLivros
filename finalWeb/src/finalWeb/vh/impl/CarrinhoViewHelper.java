@@ -26,52 +26,26 @@ public class CarrinhoViewHelper implements IViewHelper {
 		List<Livro> carrinhoLivros = (List<Livro>) request.getSession().getAttribute("livros"); 
 		Map<Integer, Integer> m = (Map<Integer, Integer>)request.getSession().getAttribute("mapaCarrinho");
 		
-		String operacao = (String)request.getParameter("operacao");
-
-			
+		String operacao = (String)request.getParameter("operacao");		
 		if(carrinhoLivros == null)
 		{
-			Map<Integer, Integer> mapLivros = new HashMap<Integer, Integer>();
-			List<Livro> livros = new ArrayList<Livro>();
-			livros.add(l);
-			request.getSession().setAttribute("livros", livros);
-			mapLivros.put(l.getId(), 1);
-			request.getSession().setAttribute("mapaCarrinho", mapLivros);
+			Item i = new Item();
+			i.setLivro(l);
+			return i;
+		}
+
+		if(operacao.equals("AdicionarItem"))
+		{
 			Item i = new Item();
 			i.setLivro(l);
 			return i;
 		}
 		
-
-		
-		if(m != null && operacao.equals("AdicionarItem"))
-		{
-			
-			m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
-			String txtId = (String) request.getParameter("txtId");
-			Integer id = Integer.parseInt(txtId);
-			if(m.containsKey(id))
-			{
-				m.replace(id, m.get(id) + 1);
-				request.getSession().setAttribute("mapaCarrinho", m);
-				Item i = new Item();
-				i.setLivro(l);
-				return i;
-			}
-		}
-		
 		if(m != null && operacao.equals("subtrairItem"))
 		{
-			m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
-			String txtId = (String) request.getParameter("txtId");
-			Integer id = Integer.parseInt(txtId);
-			if(m.containsKey(id))
-			{
-				m.replace(id, m.get(id) - 1);
-				request.getSession().setAttribute("mapaCarrinho", m);
-				Item i = new Item();
-				return i;
-			}
+			Item i = new Item();
+			i.setLivro(l);
+			return i;
 		}
 		
 		if(m != null && operacao.equals("removerItem"))
@@ -95,19 +69,9 @@ public class CarrinhoViewHelper implements IViewHelper {
 		
 		if(carrinhoLivros != null)
 		{
-			if(m.containsKey(l.getId()))
-			{
-				m.put(l.getId(), m.get(l.getId()) + 1);
-				request.getSession().setAttribute("mapaCarrinho", m);
-			}
-			if(!m.containsKey(l.getId()))
-			{
-				carrinhoLivros.add(l);
-				m.put(l.getId(), 1);
-				request.getSession().setAttribute("livros", carrinhoLivros);
-				request.getSession().setAttribute("mapaCarrinho", m);	
-			}
-			return new Item();
+			Item i = new Item();
+			i.setLivro(l);
+			return i;
 		}
 		
 		return new Item();
@@ -122,15 +86,65 @@ public class CarrinhoViewHelper implements IViewHelper {
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
 		if(operacao.equals("VERIFICAR")){
+			if(resultado != null)
+			{
+				List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");
+				Livro l = (Livro) request.getSession().getAttribute("livro");
+				Map<Integer, Integer> m = (Map<Integer, Integer>)request.getSession().getAttribute("mapaCarrinho");
+				if(m == null)
+				{
+					m = new HashMap<Integer, Integer>();
+				}
+				
+				if(request.getSession().getAttribute("livros") == null)
+				{
+					livros = new ArrayList<Livro>();
+				}	
+				if(resultado.getMsg() == null)
+				{
+					if(m.containsKey(l.getId()))
+					{
+						m.replace(l.getId(), m.get(l.getId()) + 1);
+					}
+					else
+					{
+						m.put(l.getId(), 1);
+					}
+					livros.add(l);
+					request.getSession().setAttribute("livros", livros);
+					request.getSession().setAttribute("mapaCarrinho", m);
+				}
+			}
 			request.getSession().setAttribute("resultadoLivro", resultado);
 			d= request.getRequestDispatcher("Carrinho.jsp");  
 		}			
-		
-		if(operacao.equals("adicionarItemCarrinho"))
+		if(operacao.equals("AdicionarItem"))
 		{
+			
+			if(resultado.getMsg() == null)
+			{
+				Map<Integer, Integer> m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
+				String txtId = (String) request.getParameter("txtId");
+				Integer id = Integer.parseInt(txtId);
+				m.replace(id, m.get(id) + 1);
+				request.getSession().setAttribute("mapaCarrinho", m);
+			}
+			request.getSession().setAttribute("resultadoLivro", resultado);
 			d = request.getRequestDispatcher("Carrinho.jsp");
 		}
-		if(operacao.equals("removerItem") || operacao.equals("AdicionarItem") || operacao.equals("subtrairItem"))
+		
+		if(operacao.equals("subtrairItem"))
+		{
+			Map<Integer, Integer> m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
+			String txtId = (String) request.getParameter("txtId");
+			Integer id = Integer.parseInt(txtId);
+			m.replace(id, m.get(id) - 1);
+			request.getSession().setAttribute("mapaCarrinho", m);
+			
+			request.getSession().setAttribute("resultadoLivro", resultado);
+			d = request.getRequestDispatcher("Carrinho.jsp");			
+		}
+		if( operacao.equals("subtrairItem"))
 		{
 			d = request.getRequestDispatcher("Carrinho.jsp");
 		}
