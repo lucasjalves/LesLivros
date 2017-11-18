@@ -4,7 +4,15 @@
 	import="finalCore.aplicacao.Resultado, finalDominio.*, java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<%
+	<% 
+    	if(request.getSession().getAttribute("redirecionar") != null)
+    	{
+    		request.getSession().setAttribute("redirecionar", null);
+    		response.sendRedirect("Carrinho.jsp");
+    		return;
+   		}
+		request.getSession().setAttribute("redirecionar", "redirecionar");
+		
 		List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");	
 		Map<Integer, Integer> map = (Map<Integer, Integer>) request.getSession().getAttribute("mapaCarrinho");
 		Resultado cupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
@@ -79,7 +87,6 @@
 							{
 								sb.setLength(0);
 								Livro l = livros.get(i);
-								Integer qtdeEstoque = l.getQtdeEstoque() - map.get(l.getId());
 								sb.append("<tr>");
 								sb.append("<td>");
 								sb.append(l.getNome());
@@ -96,7 +103,13 @@
 								
 								sb.append("<td style='text-align: center;'>");
 								sb.append("<form action='SalvarCarrinho' method='POST' style=' float: left;' >" );
-								sb.append("<button type='submit' name='operacao' value='subtrairItem' style='float: left;' class='btn btn-danger'>");
+								
+								if(map.get(l.getId()) <= 1){
+									sb.append("<button type='button' style='float: left;' class='btn btn-danger' disabled>");
+								}		
+								else{
+									sb.append("<button type='submit' name='operacao' value='subtrairItem' style='float: left;' class='btn btn-danger'>");
+								}
 								sb.append("<span>-</span>");
 								sb.append("</button>");   
 								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");             
@@ -105,7 +118,13 @@
 								sb.append(map.get(l.getId()));
 								
 								sb.append("<form action='SalvarCarrinho' method='POST' style=' float: right;' >" );
-								sb.append("<button type='submit' name='operacao' value='AdicionarItem' style='float: left; size: 80%' class='btn btn-success' > ");
+								if(map.get(l.getId()) == 0){
+									sb.append("<button type='button' style='float: left; size: 80%' class='btn btn-success' disabled> ");
+								}
+								else{
+									sb.append("<button type='submit' name='operacao' value='AdicionarItem' style='float: left; size: 80%' class='btn btn-success' > ");
+								}
+								
 								sb.append("<span>+</span>");
 								sb.append("</button>");   
 								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");             
@@ -114,7 +133,6 @@
 								sb.append("</td>");
 								
 
-	
 
 								
 								sb.append("<td id='subtotal" + i +"'>");
@@ -123,16 +141,27 @@
 								precoTotal = precoTotal + map.get(l.getId()) * l.getPreco();
 								
 								sb.append("</td>");
-								
-								sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td>");
+								if(map.get(l.getId()) == 0){
+									map.remove(l.getId());
+									livros.remove(i);
+									request.getSession().setAttribute("mapaCarrinho", map);
+									request.getSession().setAttribute("livros", livros);
+									sb.append("<td><p style='color: red'>Este item será removido por indisponibilidade no estoque!</p></td>");
+								}
+								else{
+									sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td>");
+								}
+					
 								sb.append("</tr>");	
-								out.print(sb.toString());			
+								out.print(sb.toString());	
 								
 							}
 							precoTotal = precoTotal + precoFrete;
+							
 						}
 						if(livros == null || livros.size() == 0)
 						{
+							precoFrete = 0;
 							precoTotal = 0;
 							out.print("<tr><td>Não há itens no seu carrinho</td></tr>");
 						}
@@ -195,10 +224,12 @@
 			{
 				if(res.getMsg() != null)
 				{
-					out.print("<tr><td><p style='color: red'>Item indisponível no estoque</p></td></tr>");
+					out.print("<tr><td><p style='color: red'>" + res.getMsg() +"</p></td></tr>");
 				}
 			}
-            request.getSession().setAttribute("resultadoLivro", null);
+            request.removeAttribute("resultadoCarrinho");
+            
+
             %>
      </div> 
 </body>

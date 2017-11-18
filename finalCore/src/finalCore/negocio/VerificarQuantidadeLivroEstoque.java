@@ -15,17 +15,16 @@ public class VerificarQuantidadeLivroEstoque implements IStrategy {
 		// TODO Auto-generated method stub
 		
 		Item itemCarrinho = (Item)entidade;
-		Livro livroCarrinho = itemCarrinho.getLivro();
-		LivroDAO dao = new LivroDAO();
-		List<EntidadeDominio> entidadeLivro = dao.consultar(livroCarrinho);
-		
-		Livro l = (Livro)entidadeLivro.get(0);
+		Livro l = itemCarrinho.getLivro();
+
 		if(l.getQtdeEstoque() == 0)
 		{
 			return "Livro não disponível no estoque";
 		}
-		
-		
+		if(itemCarrinho.getQtde() >= l.getQtdeEstoque())
+		{
+			return "Não há mais livros restantes no estoque";
+		}
 
 		return null;
 	}

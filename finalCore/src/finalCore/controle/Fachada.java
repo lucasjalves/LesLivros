@@ -239,8 +239,29 @@ public class Fachada implements IFachada{
 	@Override
 	public Resultado verificarCarrinho(EntidadeDominio entidade) {
 		resultado = new Resultado();
-		String msg = executarRegras(entidade, "VERIFICAR");
-		resultado.setMsg(msg);
+		Item itemCarrinho = (Item)entidade;
+		Livro livroCarrinho = itemCarrinho.getLivro();
+		if(livroCarrinho != null)
+		{
+			LivroDAO dao = new LivroDAO();
+			List<EntidadeDominio> entidadeLivro = dao.consultar(livroCarrinho);
+			
+			Livro l = (Livro)entidadeLivro.get(0);
+			itemCarrinho.setLivro(l);
+			
+			List<EntidadeDominio> itens = new ArrayList<EntidadeDominio>();
+			itens.add(itemCarrinho);
+			
+			resultado.setEntidades(itens);
+			
+			String msg = executarRegras(itemCarrinho, "VERIFICAR");
+			
+			resultado.setMsg(msg);
+			if(resultado.getMsg() != null)
+			{
+				itemCarrinho.setQtde(l.getQtdeEstoque());
+			}			
+		}	
 		return resultado;
 	}
 }
