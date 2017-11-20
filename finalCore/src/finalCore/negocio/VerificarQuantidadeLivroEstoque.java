@@ -19,11 +19,11 @@ public class VerificarQuantidadeLivroEstoque implements IStrategy {
 
 		if(l.getQtdeEstoque() == 0)
 		{
-			return "Livro não disponível no estoque";
+			return "Livro nao disponivel no estoque";
 		}
 		if(itemCarrinho.getQtde() >= l.getQtdeEstoque())
 		{
-			return "Não há mais livros restantes no estoque";
+			return "Nao ha mais livros restantes no estoque";
 		}
 
 		return null;

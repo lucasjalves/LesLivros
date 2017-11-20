@@ -19,6 +19,7 @@
 		Livro livro = (Livro)entidades.get(6);
 	%>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Compra de livros</title>
 	<link href="bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -133,7 +134,6 @@
 					
 					out.print(sb.toString());
 				}
-			
 			%>
 
           </div>

@@ -61,6 +61,7 @@ public class Servlet extends HttpServlet {
     	commands.put("AdicionarItem", new VerificarCarrinhoCommand());
     	commands.put("subtrairItem", new VerificarCarrinhoCommand());
     	commands.put("removerItem", new VerificarCarrinhoCommand());
+    	commands.put("validar", new VerificarCarrinhoCommand());
     	commands.put("AdicionarCupom", new ConsultarCommand());
     	/* Utilizando o ViewHelper para tratar especificações de qualquer tela e indexando 
     	 * cada viewhelper pela url em que esta servlet é chamada no form
@@ -121,10 +122,6 @@ public class Servlet extends HttpServlet {
 		//O viewhelper retorna a entidade especifica para a tela que chamou esta servlet
 		
 		EntidadeDominio entidade =  vh.getEntidade(request);
-		if(entidade == null)
-		{
-			System.out.println("to nulo");
-		}
 		//Obtêm o command para executar a respectiva operação
 		ICommand command = commands.get(operacao);
 		
@@ -148,10 +145,8 @@ public class Servlet extends HttpServlet {
 
 		if(operacao.equals("ALTERAR") || operacao.equals("LOGIN") || operacao.equals("SALVAR"))
 		{
-			//String user = (String)request.getSession().getAttribute("user");
-			//String senha = (String)request.getSession().getAttribute("senha");
+
 			String userid = (String)request.getSession().getAttribute("userid");
-			//System.out.println(user + " " + senha);
 			if(userid != null)
 			{
 				PessoaFisica p = new PessoaFisica();

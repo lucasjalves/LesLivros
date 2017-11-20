@@ -35,7 +35,7 @@
 		Integer idInicial = p.getEndereco().getId();
 		session.setAttribute("userid", txtId);
 		List<Endereco> end= new ArrayList<Endereco>();
-		
+
 		// List<Integer> idEnderecos = new ArrayList<Integer>();
 		// idEnderecos.add(p.getEndereco().getId());
 		Integer primeiroId = p.getEndereco().getId();

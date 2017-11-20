@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<% 
+		/*
     	if(request.getSession().getAttribute("redirecionar") != null)
     	{
     		request.getSession().setAttribute("redirecionar", null);
@@ -12,11 +13,29 @@
     		return;
    		}
 		request.getSession().setAttribute("redirecionar", "redirecionar");
-		
+		*/
 		List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");	
 		Map<Integer, Integer> map = (Map<Integer, Integer>) request.getSession().getAttribute("mapaCarrinho");
 		Resultado cupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
 		Resultado res = (Resultado)request.getSession().getAttribute("resultadoLivro");
+		if(map != null)
+		{
+			if(map.size() != 0)
+			{
+				Map<Integer, Resultado> mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
+				Set<Integer> chaves = mapaResultado.keySet();
+				for(Integer chave: chaves)
+				{
+					if(mapaResultado.get(chave) == null)
+					{
+						String url = "SalvarCarrinho?operacao=validar&idLivro="+chave;
+						pageContext.forward(url);
+						return;
+					}
+				}	
+			}
+				
+		}
 	%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -77,10 +96,10 @@
 						<%
 						double desconto = 0;
 						double precoTotal = 0;
-						double precoFrete = 0;
+						double precoFrete = 0;				
 						if(livros != null)
 						{
-							
+							Map<Integer, Resultado> mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
 							StringBuilder sb = new StringBuilder();
 							
 							for(int i = 0; i < map.size(); i ++)
@@ -151,9 +170,9 @@
 								else{
 									sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td>");
 								}
-					
 								sb.append("</tr>");	
 								out.print(sb.toString());	
+								mapaResultado.replace(l.getId(), null);
 								
 							}
 							precoTotal = precoTotal + precoFrete;
@@ -205,7 +224,15 @@
                   <h5>Total: <%out.print(String.format("%.2f", precoTotal)); %>R$</h5>
                   <form action="ValidarCupom" method="POST">
                   	<input type="text" name="txtCodigo" placeholder="Código do cupom" maxlength="6">
-                  	<input type="submit" name="operacao" value="AdicionarCupom" class="btn btn-success" />	
+                  	<button type="submit" name="operacao" value="AdicionarCupom" class="btn btn-success" />	
+                  			<span>Adicionar Cupom</span>
+                  	</button>
+                  </form>
+                  <br>
+                  <form action="ComprarItens" method="POST">
+                  	 <input type="hidden" name="txtValor" value="<% out.print(precoTotal);%>">
+                  	 <button type="submit" name="operacao" value="ComprarItens" class="btn btn-primary" />
+                  	 	<span>Finalizar Compra</span>	
                   </form>
                    <%if(cupom != null) 
                    {
@@ -228,8 +255,6 @@
 				}
 			}
             request.removeAttribute("resultadoCarrinho");
-            
-
             %>
      </div> 
 </body>
