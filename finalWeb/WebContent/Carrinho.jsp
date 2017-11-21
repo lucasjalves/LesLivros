@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<% 
-		/*
+		
     	if(request.getSession().getAttribute("redirecionar") != null)
     	{
     		request.getSession().setAttribute("redirecionar", null);
@@ -13,7 +13,7 @@
     		return;
    		}
 		request.getSession().setAttribute("redirecionar", "redirecionar");
-		*/
+		
 		List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");	
 		Map<Integer, Integer> map = (Map<Integer, Integer>) request.getSession().getAttribute("mapaCarrinho");
 		Resultado cupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
@@ -92,6 +92,16 @@
 							<td>Quantidade</td>
 							<td>Subtotal</td>
 							<td>Operação</td>
+							<%
+							if(res != null)
+							{
+								if(res.getMsg() != null)
+								{
+									out.print("<td> </td>");
+								}
+							}
+								
+							%>
 						</tr>
 						<%
 						double desconto = 0;
@@ -104,6 +114,7 @@
 							
 							for(int i = 0; i < map.size(); i ++)
 							{
+								System.out.println(map.size());
 								sb.setLength(0);
 								Livro l = livros.get(i);
 								sb.append("<tr>");
@@ -162,6 +173,7 @@
 								sb.append("</td>");
 								if(map.get(l.getId()) == 0){
 									map.remove(l.getId());
+									mapaResultado.remove(l.getId());
 									livros.remove(i);
 									request.getSession().setAttribute("mapaCarrinho", map);
 									request.getSession().setAttribute("livros", livros);
@@ -180,9 +192,10 @@
 						}
 						if(livros == null || livros.size() == 0)
 						{
+	
 							precoFrete = 0;
 							precoTotal = 0;
-							out.print("<tr><td>Não há itens no seu carrinho</td></tr>");
+							out.print("<tr><td>Não há itens no seu carrinho</td></tr>");									
 						}
 				
 						
@@ -247,13 +260,7 @@
             </div>  
             <%
             
-			if( res != null)
-			{
-				if(res.getMsg() != null)
-				{
-					out.print("<tr><td><p style='color: red'>" + res.getMsg() +"</p></td></tr>");
-				}
-			}
+
             request.removeAttribute("resultadoCarrinho");
             %>
      </div> 

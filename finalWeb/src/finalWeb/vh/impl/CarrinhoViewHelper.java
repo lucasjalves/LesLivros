@@ -86,7 +86,6 @@ public class CarrinhoViewHelper implements IViewHelper {
 		if(operacao.equals("validar"))
 		{
 			String txtId = request.getParameter("idLivro");
-			System.out.println(txtId);
 			int id = Integer.parseInt(txtId);
 			Livro liv = new Livro();
 			liv.setId(id);

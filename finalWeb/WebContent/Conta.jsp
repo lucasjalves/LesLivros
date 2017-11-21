@@ -51,11 +51,8 @@
 				{
 					primeiroId = pf.getEndereco().getId();
 					end.add(pf.getEndereco());					
-				}
-
-				
+				}			
 			}
-
 		}
 		
 	%>

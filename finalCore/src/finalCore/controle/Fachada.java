@@ -16,7 +16,9 @@ import finalCore.dao.ClienteDAO;
 import finalCore.dao.CupomDAO;
 import finalCore.dao.EnderecoDAO;
 import finalCore.dao.GrupoPrecificacaoDAO;
+import finalCore.dao.ItemPedidoDAO;
 import finalCore.dao.LivroDAO;
+import finalCore.dao.PedidoDAO;
 import finalCore.dao.SubCategoriaDAO;
 import finalCore.dao.TelefoneDAO;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
@@ -29,6 +31,7 @@ import finalDominio.EntidadeDominio;
 import finalDominio.GrupoPrecificacao;
 import finalDominio.Item;
 import finalDominio.Livro;
+import finalDominio.Pedido;
 import finalDominio.PessoaFisica;
 import finalDominio.SubCategoria;
 import finalDominio.Telefone;
@@ -64,6 +67,7 @@ public class Fachada implements IFachada{
 		SubCategoriaDAO subcatDAO = new SubCategoriaDAO();
 		GrupoPrecificacaoDAO gpDAO = new GrupoPrecificacaoDAO();
 		CupomDAO cupDAO = new CupomDAO();
+		PedidoDAO pedidoDAO = new PedidoDAO();
 		
 		/* Adicionando cada dao no MAP indexando pelo nome da classe */
 		daos.put(Livro.class.getName(), livroDAO);
@@ -75,7 +79,7 @@ public class Fachada implements IFachada{
 		daos.put(SubCategoria.class.getName(), subcatDAO);
 		daos.put(GrupoPrecificacao.class.getName(), gpDAO);
 		daos.put(Cupom.class.getName(), cupDAO);
-		
+		daos.put(Pedido.class.getName(),pedidoDAO);
 		
 		/* Criando instâncias de regras de negócio a serem utilizados*/
 		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	

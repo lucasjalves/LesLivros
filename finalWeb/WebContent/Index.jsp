@@ -16,6 +16,11 @@
 <body>
 	<%
 		Resultado resultado = (Resultado) session.getAttribute("resultado");
+		String msg = null;
+		if(request.getParameter("operacao") != null)
+		{
+			msg = "Você deve logar primeiro!";
+		}
 	%>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -71,6 +76,10 @@
 				{
 					out.print(resultado.getMsg());
 				}
+			}
+			if(msg != null)
+			{
+				out.print("<p style='color: red'>Você deve estar logado</p>");
 			}
 		%>
 
