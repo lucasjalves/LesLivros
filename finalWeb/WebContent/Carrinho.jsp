@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<% 
-		
+		/*
     	if(request.getSession().getAttribute("redirecionar") != null)
     	{
     		request.getSession().setAttribute("redirecionar", null);
@@ -13,11 +13,19 @@
     		return;
    		}
 		request.getSession().setAttribute("redirecionar", "redirecionar");
+		*/
 		
-		List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");	
-		Map<Integer, Integer> map = (Map<Integer, Integer>) request.getSession().getAttribute("mapaCarrinho");
+
+		if(request.getSession().getAttribute("userid") == null)
+		{
+			pageContext.forward("Index.jsp");
+			return;
+		}
+		
+		Map<Integer, Pedido> map = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
 		Resultado cupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
 		Resultado res = (Resultado)request.getSession().getAttribute("resultadoLivro");
+		/*
 		if(map != null)
 		{
 			if(map.size() != 0)
@@ -36,6 +44,7 @@
 			}
 				
 		}
+		*/
 	%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -107,16 +116,19 @@
 						double desconto = 0;
 						double precoTotal = 0;
 						double precoFrete = 0;				
-						if(livros != null)
+						if(map != null)
 						{
-							Map<Integer, Resultado> mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
+							String txtId = (String)request.getSession().getAttribute("userid");
+							int id = Integer.parseInt(txtId);
+							//Map<Integer, Resultado> mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
 							StringBuilder sb = new StringBuilder();
-							
-							for(int i = 0; i < map.size(); i ++)
+							Pedido p = map.get(id);
+							List<Item> item = p.getItem( );
+							for(int i = 0; i < item.size(); i ++)
 							{
-								System.out.println(map.size());
 								sb.setLength(0);
-								Livro l = livros.get(i);
+								Item it = item.get(i);
+								Livro l = it.getLivro();
 								sb.append("<tr>");
 								sb.append("<td>");
 								sb.append(l.getNome());
@@ -134,7 +146,7 @@
 								sb.append("<td style='text-align: center;'>");
 								sb.append("<form action='SalvarCarrinho' method='POST' style=' float: left;' >" );
 								
-								if(map.get(l.getId()) <= 1){
+								if(p.getItem().get(i).getQtde() <= 1){
 									sb.append("<button type='button' style='float: left;' class='btn btn-danger' disabled>");
 								}		
 								else{
@@ -145,10 +157,10 @@
 								sb.append("<input type='hidden' name='txtId' value='"+ l.getId() +"'>");             
 								sb.append("</form>");		
 								
-								sb.append(map.get(l.getId()));
+								sb.append(it.getQtde());
 								
 								sb.append("<form action='SalvarCarrinho' method='POST' style=' float: right;' >" );
-								if(map.get(l.getId()) == 0){
+								if(it.getQtde() == 0){
 									sb.append("<button type='button' style='float: left; size: 80%' class='btn btn-success' disabled> ");
 								}
 								else{
@@ -164,19 +176,20 @@
 								
 
 
-								
+								int qtdeLivro = it.getQtde();
+								double preco = it.getLivro().getPreco();
+
+								System.out.println(qtdeLivro);
+								System.out.println(preco);
 								sb.append("<td id='subtotal" + i +"'>");
-								sb.append("<script>$('#subtotal" + i + "').html('" + String.format("%.2f" , map.get(l.getId()) * l.getPreco()) + "R$');</script>");
+								sb.append(String.format("%.2f" , (qtdeLivro * preco)) + "R$");
 								
-								precoTotal = precoTotal + map.get(l.getId()) * l.getPreco();
+								precoTotal = precoTotal + (qtdeLivro * preco);
 								
 								sb.append("</td>");
-								if(map.get(l.getId()) == 0){
-									map.remove(l.getId());
-									mapaResultado.remove(l.getId());
-									livros.remove(i);
-									request.getSession().setAttribute("mapaCarrinho", map);
-									request.getSession().setAttribute("livros", livros);
+								if(qtdeLivro == 0){
+									item.remove(i);
+									p.setItem(item);
 									sb.append("<td><p style='color: red'>Este item será removido por indisponibilidade no estoque!</p></td>");
 								}
 								else{
@@ -184,13 +197,14 @@
 								}
 								sb.append("</tr>");	
 								out.print(sb.toString());	
-								mapaResultado.replace(l.getId(), null);
+								//mapaResultado.replace(l.getId(), null);
 								
 							}
 							precoTotal = precoTotal + precoFrete;
 							
 						}
-						if(livros == null || livros.size() == 0)
+					
+						if(map == null || map.size() == 0)
 						{
 	
 							precoFrete = 0;
