@@ -67,6 +67,33 @@
 		$('#myModal').on('shown.bs.modal', function () {
 			  $('#myInput').focus()
 			})
+			
+		function calcularCEP(radio, cep)
+		{
+			var cep = cep.slice(0,4);
+			
+			var numero = parseInt(cep);
+
+			var frete = document.getElementById("precoFrete").value;
+
+			frete = parseInt(frete);
+			if(numero <= 3000)
+			{
+				frete = frete + (numero / 85);
+			}
+			else
+			{
+				frete = frete + (numero / 150);
+			}
+			frete = frete.toFixed(2);
+
+			for(i = 0; i < (document.radio.ra.length); i++)
+			{
+				document.radio.ra[i].checked = false;
+			}
+			radio.checked = true;
+			document.getElementById("precoFrete").value = frete;
+		}
 	</script>
 </head>
 <body>
@@ -258,7 +285,8 @@
                 	  }
                   }
                   %>
-                  <h6>Frete: <%out.print(String.format("%.2f", precoFrete)); %>R$ </h6>
+                  <h6>Frete: <%out.print(String.format("%.2f", precoFrete)); %>R$</h6>
+                  <input type='hidden' value='<%out.print(String.format("%.2f", precoFrete)); %>' id='precoFrete'>
                   <h6 style="color: green"> <%
                   if(cupom != null){
                 	  out.print("Desconto: -" + String.format("%.2f", (precoTotal * desconto)) + "R$" );
@@ -324,7 +352,9 @@
     									"class='btn btn-primary' " +
     									"data-toggle='modal' "+
     									"data-target='#myModalEnderecos" + i + "'"+
-    									"id='btnEndereco'>Visualizar</button></td></tr>");
+    									"id='btnEndereco'>Visualizar</button></td>"); 
+    							out.print("<td><input type='radio'onclick='calcularCEP(this,  \""+ e.getCep() + "\")' name='ra'</td>");
+    							out.print("</tr>");
     						}
     						out.print("</table>");
     						

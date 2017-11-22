@@ -158,7 +158,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 				if(mapaUsuarios.containsKey(id)) //se o usuário já existe
 				{
 					List<EntidadeDominio> e = resultado.getEntidades();  //pegando o resultado que retorna da fachada
-														// cast da lista de entidade dominio para item(só é possível ter um item na lista
+													
 					Item item = (Item)e.get(0);//pega o único item que retornou da fachada
 					Pedido p = mapaUsuarios.get(id); //pega o pedido que está associado com a id do usuário
 					if(p.getItem().size() == 0)      //se não existe uma lista de itens no pedido
