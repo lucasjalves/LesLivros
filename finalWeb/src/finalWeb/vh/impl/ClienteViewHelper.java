@@ -33,7 +33,10 @@ public class ClienteViewHelper implements IViewHelper{
 			
 			p.setEmail(email);
 			p.setSenha(senha);
-			
+			if(request.getSession().getAttribute("userid") != null)
+			{
+				request.getSession().removeAttribute("userid");
+			}
 		
 			return p;
 		}

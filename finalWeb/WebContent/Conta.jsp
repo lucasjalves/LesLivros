@@ -25,6 +25,14 @@
 </head>
 <body>
 	<%
+		if(request.getSession().getAttribute("redirecionar") == null)
+		{
+			request.getSession().setAttribute("redirecionar", "redirecionar");
+			response.sendRedirect("Conta.jsp");
+			return;
+		}
+		request.getSession().setAttribute("redirecionar", null);
+		
 		Resultado resultado = (Resultado) session.getAttribute("resultado");
 
 		List<EntidadeDominio> entidades = resultado.getEntidades();
@@ -32,35 +40,46 @@
 		String txtId = String.valueOf(p.getId());
 		
 
-		Integer idInicial = p.getEndereco().getId();
 		session.setAttribute("userid", txtId);
 		List<Endereco> end= new ArrayList<Endereco>();
-
-		// List<Integer> idEnderecos = new ArrayList<Integer>();
-		// idEnderecos.add(p.getEndereco().getId());
-		Integer primeiroId = p.getEndereco().getId();
+		List<Cartao> cartoes = new ArrayList<Cartao>();
+		
+		Map<Integer, Object> mapaEndereco = new HashMap<Integer, Object>();
+		Map<Integer, Object> mapaCartao = new HashMap<Integer, Object>();
+		
+		mapaEndereco.put(p.getEndereco().getId(), null);
+		mapaCartao.put(p.getCartao().getId(), null);
+		
 		end.add(p.getEndereco());
+		cartoes.add(p.getCartao());
+		
 		for(int i = 0; i < entidades.size(); i ++)
 		{
 			
 			PessoaFisica pf = (PessoaFisica) entidades.get(i);
 			
-			if(pf.getEndereco().getId() != primeiroId)
+			if(!mapaEndereco.containsKey(pf.getEndereco().getId()))
 			{
-				if(primeiroId <= pf.getEndereco().getId())
-				{
-					primeiroId = pf.getEndereco().getId();
-					end.add(pf.getEndereco());					
-				}			
+				mapaEndereco.put(pf.getEndereco().getId(), null);
+				end.add(pf.getEndereco());
 			}
+			
+			if(!mapaCartao.containsKey(pf.getCartao().getId()))
+			{
+				mapaCartao.put(pf.getCartao().getId(), null);
+				cartoes.add(pf.getCartao());
+			}
+			
 		}
-		
 	%>
 	<%
 	for(int i = 0; i < end.size(); i ++)
 	{
-		System.out.println(end.size());
 		out.print("<script>$('#myModalEndereco"+ i + "').on('shown.bs.modal', function () {$('#myInput').focus()})</script>");
+	}
+	for(int i = 0; i < cartoes.size(); i ++)
+	{
+		out.print("<script>$('#myModalCartao"+ i + "').on('shown.bs.modal', function () {$('#myInput').focus()})</script>");
 	}
 	%>	
 	  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -160,6 +179,9 @@
 			   </div>
 			</div>
 		</div>            
+		    <!--                               MODAL DOS ENDERECOS                              -->
+      		<!--                               MODAL DOS ENDERECOS	                            -->
+      		<div class="row">
            <div class="col-lg-4 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
@@ -171,17 +193,18 @@
 					if(resultado != null)
 					{
 						entidades = resultado.getEntidades();
-						
+							
 						for(int i = 0; i < end.size(); i++)
 						{
+							
 							Endereco e = end.get(i);
 							out.print("<tr>");
 							out.print("<td><p class='card-text'>" + e.getNome() + "</p></td>");
-							out.print("<td><button type=\"button\" " +
-									"class=\"btn btn-primary\" " +
-									"data-toggle=\"modal\" "+
-									"data-target=\"#myModalEnderecos" + i + "\" "+
-									"id=\"btnEndereco\">Alterar</button></td>");
+							out.print("<td><button type='button' " +
+									"class='btn btn-primary' " +
+									"data-toggle='modal' "+
+									"data-target='#myModalEnderecos" + i + "'"+
+									"id='btnEndereco'>Alterar</button></td>");
 							out.print("<tr>");
 						}
 						out.print("</table>");
@@ -191,34 +214,34 @@
 						{
 							Endereco e = end.get(i);			
 							modals.setLength(0);
-							modals.append("<form action=\"SalvarEndereco\" method=\"post\" id=\"frmSalvarLivro\">");
-							modals.append("<div class=\"modal fade\" id=\"myModalEnderecos" + i + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">");
-							modals.append("<div class=\"modal-dialog\" role=\"document\">");
-							modals.append("<div class=\"modal-content\">");
-							modals.append("<div class=\"modal-header\">");
-							modals.append("<h5 class=\"modal-title\" id=\"myModalLabel\">Endereços</h5>");
-							modals.append("<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">");
-							modals.append("<span aria-hidden=\"true\">&times;</span>");
+							modals.append("<form action='SalvarEndereco' method='post' id='frmSalvarLivro'>");
+							modals.append("<div class='modal fade' id='myModalEnderecos" + i + "' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>");
+							modals.append("<div class='modal-dialog'role='document'>");
+							modals.append("<div class='modal-content'>");
+							modals.append("<div class='modal-header'>");
+							modals.append("<h5 class='modal-title' id='myModalLabel'>Endereços</h5>");
+							modals.append("<button type='button' class='close' data-dismiss='modal' aria-label='Close'>");
+							modals.append("<span aria-hidden='true'>&times;</span>");
 							modals.append("</button>");
 							modals.append("</div>");
-							modals.append("<div class=\"modal-body\" id=\"detalhesCartao\">");
+							modals.append("<div class='modal-body' id='detalhesEnderecos'>");
 							modals.append("<table>");
-							modals.append("<tr><td><input type=\"hidden\" id=\"txtIdEndereco\" name=\"txtIdEndereco\" value=\"" + String.valueOf(e.getId())+ "\"/></td></tr>");
-							modals.append("<tr><td>Apelido Endereco: </td><td><input type=\"text\" id=\"txtNome\" name=\"txtNome\" value=\"" + e.getNome() + "\"/></td></tr>");
-							modals.append("<tr><td>Tipo Residencia: </td><td><input type=\"text\" id=\"txtTipoRes\" name=\"txtTipoRes\" value=\"" + e.getTipoRes() + "\"/></td></tr>");
-							modals.append("<tr><td>Logradouro: </td><td><input type=\"text\" id=\"txtLogradouro\" name=\"txtLogradouro\" value=\"" + e.getLogradouro() + "\"/></td></tr>");
-							modals.append("<tr><td>Tipo Logradouro: </td><td><input type=\"text\" id=\"txtTipoLog\" name=\"txtTipoLog\" value=\"" + e.getTipoLog() + "\"/></td></tr>");
-							modals.append("<tr><td>Número da Casa: </td><td><input type=\"text\" id=\"txtNumCasa\" name=\"txtNumCasa\" value=\"" + e.getNumCasa() + "\"/></td></tr>");
-							modals.append("<tr><td>Bairro: </td><td><input type=\"text\" id=\"txtBairro\" name=\"txtBairro\" value=\"" + e.getBairro() + "\"/></td></tr>");
-							modals.append("<tr><td>CEP: </td><td><input type=\"text\" id=\"txtCep\" name=\"txtCep\" value=\"" + e.getCep() + "\"/></td></tr>");
-							modals.append("<tr><td>Cidade: </td><td><input type=\"text\" id=\"txtCidade\" name=\"txtCidade\" value=\"" + e.getCidade() + "\"/></td></tr>");
-							modals.append("<tr><td>Estado: </td><td><input type=\"text\" id=\"txtEstado\" name=\"txtEstado\" value=\"" + e.getEstado() + "\"/></td></tr>");
-							modals.append("<tr><td>Pais: </td><td><input type=\"text\" id=\"txtPais\" name=\"txtPais\" value=\"" + e.getPais() + "\"/></td></tr>");
+							modals.append("<tr><td><input type='hidden' id='txtIdEndereco' name='txtIdEndereco' value='" + String.valueOf(e.getId())+ "'/></td></tr>");
+							modals.append("<tr><td>Apelido Endereco: </td><td><input type='text' id='txtNome' name='txtNome' value='" + e.getNome() + "'/></td></tr>");
+							modals.append("<tr><td>Tipo Residencia: </td><td><input type='text' id='txtTipoRes' name='txtTipoRes' value='" + e.getTipoRes() + "'/></td></tr>");
+							modals.append("<tr><td>Logradouro: </td><td><input type='text' id='txtLogradouro' name='txtLogradouro' value='" + e.getLogradouro() + "'/></td></tr>");
+							modals.append("<tr><td>Tipo Logradouro: </td><td><input type='text' id='txtTipoLog' name='txtTipoLog' value='" + e.getTipoLog() + "'/></td></tr>");
+							modals.append("<tr><td>Número da Casa: </td><td><input type='text' id='txtNumCasa' name='txtNumCasa' value='" + e.getNumCasa() + "'/></td></tr>");
+							modals.append("<tr><td>Bairro: </td><td><input type='text' id='txtBairro' name='txtBairro' value='" + e.getBairro() + "'/></td></tr>");
+							modals.append("<tr><td>CEP: </td><td><input type='text' id='txtCep' name='txtCep' value='" + e.getCep() + "'/></td></tr>");
+							modals.append("<tr><td>Cidade: </td><td><input type='text' id='txtCidade' name='txtCidade' value='" + e.getCidade() + "'/></td></tr>");
+							modals.append("<tr><td>Estado: </td><td><input type='text' id='txtEstado' name='txtEstado' value='" + e.getEstado() + "'/></td></tr>");
+							modals.append("<tr><td>Pais: </td><td><input type='text' id='txtPais' name='txtPais' value='" + e.getPais() + "'/></td></tr>");
 							modals.append("</table>");
 							modals.append("</div>");
-							modals.append("<div class=\"modal-footer\">");
-							modals.append("<input type=\"submit\" class =\"btn btn-primary\" id=\"operacao\" name=\"operacao\" value=\"ALTERAR\"  />");
-							modals.append("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancelar</button>");
+							modals.append("<div class='modal-footer'>");
+							modals.append("<input type='submit' class ='btn btn-primary' id='operacao' name='operacao' value='ALTERAR'  />");
+							modals.append("<button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancelar</button>");
 							modals.append("</div>");
 							modals.append("</div>");
 							modals.append("</div>");
@@ -234,7 +257,90 @@
                 </div>
               </div>
            </div>
-      </div>
+     
+      		<!--                               MODAL DOS ENDERECOS  (FIM)                            -->
+      		<!--                               MODAL DOS ENDERECOS	(FIM)                            -->
+      		
+      		
+      		
+      		<!--                               MODAL DOS CARTOES                               -->
+      		<!--                               MODAL DOS CARTOES                               -->
+      		
+           <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h4 class="card-title">
+                    Cartões
+                  </h4>
+					<table class="table table">
+					<% 
+					if(resultado != null)
+					{
+						entidades = resultado.getEntidades();
+							
+						for(int i = 0; i < cartoes.size(); i++)
+						{
+							
+							Cartao c = cartoes.get(i);
+							out.print("<tr>");
+							out.print("<td><p class='card-text'>" + c.getBandeira() + "</p></td>");
+							out.print("<td><button type='button' " +
+									"class='btn btn-primary' " +
+									"data-toggle='modal' "+
+									"data-target='#myModalCartao" + i + "'"+
+									"id='btnEndereco'>Alterar</button></td>");
+							out.print("<tr>");
+						}
+						out.print("</table>");
+						
+						StringBuilder modals = new StringBuilder();
+						for(int i = 0; i < cartoes.size(); i++)
+						{
+							Cartao c = cartoes.get(i);			
+							modals.setLength(0);
+							modals.append("<form action='SalvarCartao' method='post' id='frmSalvarLivro'>");
+							modals.append("<div class='modal fade' id='myModalCartao" + i + "' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>");
+							modals.append("<div class='modal-dialog'role='document'>");
+							modals.append("<div class='modal-content'>");
+							modals.append("<div class='modal-header'>");
+							modals.append("<h5 class='modal-title' id='myModalLabel'>Cartões</h5>");
+							modals.append("<button type='button' class='close' data-dismiss='modal' aria-label='Close'>");
+							modals.append("<span aria-hidden='true'>&times;</span>");
+							modals.append("</button>");
+							modals.append("</div>");
+							modals.append("<div class='modal-body' id='detalhesCartoes'>");
+							modals.append("<table>");
+							modals.append("<tr><td><input type='hidden' id='txtIdEndereco' name='txtIdEndereco' value='" + String.valueOf(c.getId())+ "'/></td></tr>");
+							modals.append("<tr><td>Número Cartão: </td><td><input type='text' id='txtNumCartao' name='txtNumCartao' value='" + c.getNumero() + "'/></td></tr>");
+							modals.append("<tr><td>Bandeira: </td><td><input type='text' id='ddlBandeira' name='ddlBandeira' value='" + c.getBandeira() + "'/></td></tr>");
+							modals.append("<tr><td>Data de Vencimento: </td><td><input type='text' id='txtDtVencimento' name='txtDtVencimento' value='" + c.getDtVencimento() + "'/></td></tr>");
+							modals.append("<tr><td>Código de Segurança: </td><td><input type='text' id='txtCodSeg' name='txtCodSeg' value='" + c.getCodSeg() + "'/></td></tr>");
+							modals.append("<tr><td><input type='hidden' id='txtIdCartaoFk' name='txtIdCartaoFk' value='" + c.getPkUsuario() + "'/></td></tr>");
+							modals.append("</table>");
+							modals.append("</div>");
+							modals.append("<div class='modal-footer'>");
+							modals.append("<input type='submit' class ='btn btn-primary' id='operacao' name='operacao' value='ALTERAR'  />");
+							modals.append("<button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancelar</button>");
+							modals.append("</div>");
+							modals.append("</div>");
+							modals.append("</div>");
+							modals.append("</div>");
+							modals.append("</form>");
+							
+							out.print(modals.toString());
+							}
+							
+						}
+					%>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarEnderecos">Adicionar</button>	
+                </div>
+              </div>
+           </div>
+           </div>
+                 <!--                               MODAL DOS CARTOES  FIM                            -->   
+      			<!--                               MODAL DOS CARTOES  FIM                            -->   
+      
+
 	<form action="SalvarEndereco" method="post" id="frmSalvarLivro">
 		<div class="modal fade" id="myModalAdicionarEnderecos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
