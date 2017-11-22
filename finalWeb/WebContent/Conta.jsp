@@ -63,6 +63,7 @@
 				mapaEndereco.put(pf.getEndereco().getId(), null);
 				end.add(pf.getEndereco());
 			}
+			request.getSession().setAttribute("enderecosCliente", end);
 			
 			if(!mapaCartao.containsKey(pf.getCartao().getId()))
 			{

@@ -1,8 +1,8 @@
 package finalDominio;
 
 public class Item extends EntidadeDominio {
-	Livro livro;
-	Integer qtde;
+	private Livro livro;
+	private Integer qtde;
 	
 	public Integer getQtde() {
 		return qtde;

@@ -1,8 +1,9 @@
 package finalDominio;
 
 public class EntidadeDominio implements IEntidade{
-	String nome;
-	Integer id;
+	private String nome;
+	private Integer id;
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}

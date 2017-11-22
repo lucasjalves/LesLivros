@@ -1,7 +1,7 @@
 package finalDominio;
 
 public class SubCategoria extends EntidadeDominio {
-	Integer fkCategoria;
+	private Integer fkCategoria;
 
 	public Integer getFkCategoria() {
 		return fkCategoria;

@@ -5,6 +5,7 @@ public class Telefone extends EntidadeDominio {
 	private String numero;
 	private String tipo;
 	private Integer fk_cliente;
+	
 	public String getDdd() {
 		return ddd;
 	}

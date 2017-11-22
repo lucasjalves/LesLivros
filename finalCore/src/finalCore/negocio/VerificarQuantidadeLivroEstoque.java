@@ -2,6 +2,8 @@ package finalCore.negocio;
 
 import java.util.List;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import finalCore.core.IStrategy;
 import finalCore.dao.LivroDAO;
 import finalDominio.EntidadeDominio;
@@ -17,6 +19,7 @@ public class VerificarQuantidadeLivroEstoque implements IStrategy {
 		Item itemCarrinho = (Item)entidade;
 		Livro l = itemCarrinho.getLivro();
 
+		
 		if(l.getQtdeEstoque() == 0)
 		{
 			return "Livro nao disponivel no estoque";

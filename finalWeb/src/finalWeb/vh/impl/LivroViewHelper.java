@@ -113,15 +113,6 @@ public class LivroViewHelper implements IViewHelper{
 		
 		String operacao = request.getParameter("operacao");
 		
-		if(resultado.getMsg() == null){
-			if(operacao.equals("SALVAR")){
-				resultado.setMsg("Livro cadastrado com sucesso!");
-			}
-			
-			request.getSession().setAttribute("resultado", resultado);
-			d= request.getRequestDispatcher("FormConsultaLivro.jsp");  			
-		}
-		
 		if(operacao.equals("CONSULTAR")){
 			request.getSession().setAttribute("resultado", resultado);
 			d= request.getRequestDispatcher("FormConsultaLivro.jsp");  

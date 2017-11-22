@@ -3,11 +3,11 @@ package finalDominio;
 import java.util.Date;
 
 public class Cartao extends EntidadeDominio{
-	String numero;
-	Date dtVencimento;
-	String codSeg;
-	String bandeira;
-	Integer pkUsuario;
+	private String numero;
+	private Date dtVencimento;
+	private String codSeg;
+	private String bandeira;
+	private Integer pkUsuario;
 	
 	public Integer getPkUsuario() {
 		return pkUsuario;

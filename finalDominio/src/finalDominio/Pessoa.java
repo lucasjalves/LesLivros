@@ -7,7 +7,7 @@ public class Pessoa extends EntidadeDominio{
 	private Endereco endereco;
 	private Cartao cartao;
 	private Telefone telefone;
-	
+	private String nome;
 	public Endereco getEndereco() {
 		return endereco;
 	}

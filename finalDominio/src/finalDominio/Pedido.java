@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Pedido extends EntidadeDominio{
-	List<Item> item;
-	Date dtPedido;
-	String status;
-	Pessoa usuario;
-	double precoTotal;
+	private List<Item> item;
+	private Date dtPedido;
+	private String status;
+	private Pessoa usuario;
+	private double precoTotal;
 	
 	public double getPrecoTotal() {
 		return precoTotal;
