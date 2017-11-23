@@ -20,6 +20,7 @@
 				}	
 			}
 		}
+		
     	if(request.getSession().getAttribute("redirecionar") == null)
     	{
     		request.getSession().setAttribute("redirecionar", "1");
@@ -68,31 +69,101 @@
 			  $('#myInput').focus()
 			})
 			
+		window.onload = function()
+		{
+			var precoTotal = document.getElementById("precoTot").value;
+
+			precoTotal = parseFloat(precoTotal);
+			var frete = document.getElementById("precoFrete").value;
+			frete = parseFloat(frete);
+			
+			var desconto = document.getElementById("descontoLivro").value;
+			desconto = parseFloat(desconto);
+			
+			
+
+			if(freteLivro == 0 || freteLivro == null)
+			{
+				freteLivro = 0;
+			}
+			
+			if(precoTotal == 0 || precoTotal == null)
+			{
+				precoTotal = 0
+			}
+			if(frete == null || frete == 0)
+			{
+				frete = 0;
+			}
+			
+			if(desconto == null || desconto == 0)
+			{
+				desconto = 0;
+			}
+			precoTotal = precoTotal + frete;
+			pTotal = precoTotal;
+			precoTotal = precoTotal - (precoTotal * (desconto));
+			
+			qtdeDiferenca = pTotal - precoTotal;
+			document.getElementById("descontostring").innerText = "Desconto: " + qtdeDiferenca.toFixed(2) + "R$";
+			document.getElementById("precoFretestring").innerText = "Frete: " + frete.toFixed(2) + "R$";
+			document.getElementById("precoTotalstring").innerText = "Total: " + precoTotal.toFixed(2) + "R$";
+			document.getElementById("txtValor").value = precoTotal;
+		}
 		function calcularCEP(radio, cep)
 		{
 			var cep = cep.slice(0,4);
 			
 			var numero = parseInt(cep);
 
+			var freteCep = 0; 
 			var frete = document.getElementById("precoFrete").value;
-
-			frete = parseInt(frete);
+			
+			if(frete == null)
+			{
+				frete = 0;
+			}
+			frete = parseFloat(frete);
 			if(numero <= 3000)
 			{
-				frete = frete + (numero / 85);
+				freteCep = freteCep + (numero / 85);
 			}
 			else
 			{
-				frete = frete + (numero / 150);
+				freteCep = freteCep + (numero / 150);
 			}
-			frete = frete.toFixed(2);
-
+			
+			
+			frete = freteCep + frete;
+			document.getElementById("precoFrete").innerText = "Frete: " + frete.toFixed(2) + "R$";
+			var precoTotal = document.getElementById("precoTot").value;
+			
+			var desconto = document.getElementById("descontoLivro").value;
+			desconto = parseFloat(desconto);
+			
+			if(desconto == null || desconto == 0)
+			{
+				desconto = 0;
+			}
+			precoTotal = parseFloat(precoTotal);
+			precoTotal = precoTotal + frete;
+		
+			pTotal = precoTotal;
+			precoTotal = precoTotal - (precoTotal * (desconto));
+			
+			qtdeDiferenca = pTotal - precoTotal;
+			document.getElementById("descontostring").innerText = "Desconto: " + qtdeDiferenca.toFixed(2) + "R$";
+			
+			document.getElementById("precoTotalstring").innerText = "Total: " + precoTotal.toFixed(2) + "R$";
+			document.getElementById("precoFretestring").innerText = "Frete: " + frete.toFixed(2) + "R$";
+			document.getElementById("txtValor").value = precoTotal;
+			
 			for(i = 0; i < (document.radio.ra.length); i++)
 			{
 				document.radio.ra[i].checked = false;
 			}
 			radio.checked = true;
-			document.getElementById("precoFrete").value = frete;
+
 		}
 	</script>
 </head>
@@ -156,7 +227,9 @@
 						<%
 						double desconto = 0;
 						double precoTotal = 0;
-						double precoFrete = 0;				
+						double precoFrete = 0;			
+						double preco = 0;
+						double freteLivro = 0;
 						if(map != null)
 						{
 							
@@ -184,7 +257,7 @@
 									sb.append(String.format("%.2f", l.getPreco()));
 									sb.append("R$</td>");
 									
-									double freteLivro = (Double.parseDouble(l.getAltura()) * 
+									freteLivro = (Double.parseDouble(l.getAltura()) * 
 											Double.parseDouble(l.getProfundidade()) * 
 											Double.parseDouble(l.getLargura())) / 200;
 									precoFrete = precoFrete + freteLivro;
@@ -223,7 +296,7 @@
 	
 	
 									int qtdeLivro = it.getQtde();
-									double preco = it.getLivro().getPreco();
+									preco = it.getLivro().getPreco();
 	
 									sb.append("<td id='subtotal" + i +"'>");
 									sb.append(String.format("%.2f" , (qtdeLivro * preco)) + "R$");
@@ -281,19 +354,18 @@
                 		  Cupom c = (Cupom)listCupom.get(0);
                 		  desconto = (c.getDesconto()) / 100;
                 		  precoTotal = precoTotal - (precoTotal * desconto);
-                		  request.getSession().setAttribute("resultadoCupom", cupom);
+       
                 	  }
                   }
                   %>
-                  <h6>Frete: <%out.print(String.format("%.2f", precoFrete)); %>R$</h6>
-                  <input type='hidden' value='<%out.print(String.format("%.2f", precoFrete)); %>' id='precoFrete'>
-                  <h6 style="color: green"> <%
-                  if(cupom != null){
-                	  out.print("Desconto: -" + String.format("%.2f", (precoTotal * desconto)) + "R$" );
-                  }
+                  <h6 id="precoFretestring"></h6>
+                  <input type='hidden' value='<%out.print(precoFrete); %>' id='precoFrete'>
                   
-                  %></h6>
-                  <h5>Total: <%out.print(String.format("%.2f", precoTotal)); %>R$</h5>
+                  <h6 style="color: green" id="descontostring"></h6>
+                  <input type='hidden' value='<% out.print(preco); %>' id='precoTot'>
+                  <input type='hidden' value='<% out.print(freteLivro); %>' id='freteLivro'>
+                  <input type='hidden' value='<% out.print(desconto); %>' id='descontoLivro'>
+                  <h5 id="precoTotalstring"></h5>
                   <form action="ValidarCupom" method="POST">
                   	<input type="text" name="txtCodigo" placeholder="Código do cupom" maxlength="6">
                   	<button type="submit" name="operacao" value="AdicionarCupom" class="btn btn-success" />	
@@ -301,9 +373,19 @@
                   	</button>
                   </form>
                   <br>
+                  
                   <form action="ComprarItens" method="POST">
-                  	 <input type="hidden" name="txtValor" value="<% out.print(precoTotal);%>">
-                  	 <button type="submit" name="operacao" value="ComprarItens" class="btn btn-primary" />
+                  	 <input type="hidden" id="txtValor" name="txtValor" value="">
+                  	 <%if(item.size() > 0)
+                  	 	{
+                  		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' />");
+                  	 	}
+                  	 	else
+                  	 	{
+                  	 		out.print("<button type='button' class='btn btn-danger' />");
+                  	 	}
+                  	%>
+                  	 
                   	 	<span>Finalizar Compra</span>	
                   </form>
                    <%if(cupom != null) 
@@ -353,7 +435,10 @@
     									"data-toggle='modal' "+
     									"data-target='#myModalEnderecos" + i + "'"+
     									"id='btnEndereco'>Visualizar</button></td>"); 
-    							out.print("<td><input type='radio'onclick='calcularCEP(this,  \""+ e.getCep() + "\")' name='ra'</td>");
+    							if(i == 0)
+    								out.print("<td><input type='radio'onclick='calcularCEP(this,  \""+ e.getCep() + "\")' name='ra' checked=></td>");
+    							else
+    								
     							out.print("</tr>");
     						}
     						out.print("</table>");

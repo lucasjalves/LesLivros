@@ -19,7 +19,6 @@
 					{
 						
 						$("#ddlCategoria").change(function(){
-							sessionStorage.setItem("lastname", "Smith");
 							var idCategoria = $(this).val();
 							var operacao = "CONSULTAR";
 							/*

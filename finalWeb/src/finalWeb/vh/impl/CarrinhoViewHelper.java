@@ -143,7 +143,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 			Livro l = (Livro) request.getSession().getAttribute("livro");
 			//Map<Integer, Integer> m = (Map<Integer, Integer>)request.getSession().getAttribute("mapaCarrinho");
 			Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
-			
+
 			
 			String txtId = (String)request.getSession().getAttribute("userid");
 			Integer id = Integer.parseInt(txtId);
@@ -151,6 +151,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 			{
 				mapaUsuarios = new HashMap<Integer, Pedido>();
 			}
+
 			String msg1 = "Nao ha mais livros restantes no estoque";
 			msg1.trim();
 			if(resultado.getMsg() == null || resultado.getMsg().trim().equals(msg1))
@@ -161,33 +162,31 @@ public class CarrinhoViewHelper implements IViewHelper {
 													
 					Item item = (Item)e.get(0);//pega o único item que retornou da fachada
 					Pedido p = mapaUsuarios.get(id); //pega o pedido que está associado com a id do usuário
+					List<Integer> listaIds= new ArrayList<Integer>();
+					int indice = 0;
 					if(p.getItem().size() == 0)      //se não existe uma lista de itens no pedido
 					{
 						p.setItem(new ArrayList<Item>()); 
 						p.getItem().add(item);  
 					}
-					
-					else // se o pedido já tem um item nele
+					else
 					{
-						for(int i = 0; i < p.getItem().size(); i++ )
+						for(int i = 0; i < p.getItem().size(); i++)
 						{
-							int idLivroFachada = p.getItem().get(i).getLivro().getId(); 
-							int idItemLivro = item.getLivro().getId();
-							if(idLivroFachada == idItemLivro)
-							{
-								p.getItem().get(i).setQtde(p.getItem().get(i).getQtde() + 1);
-								break;
-							}
-							else //se não existe
-							{
-								p.getItem().add(item); //adiciona na lista
-								break;
-							}
+							if(item.getLivro().getId() == p.getItem().get(i).getLivro().getId())
+								indice = i;
 							
-						}//for
-						mapaUsuarios.replace(id, p);  //pega o id atual do usuário e insero pedido para ele
+							listaIds.add(p.getItem().get(i).getLivro().getId()); 
+						}
+						
+						if(!listaIds.contains(item.getLivro().getId()))
+							p.getItem().add(item); 
+						else
+							p.getItem().get(indice).setQtde(p.getItem().get(indice).getQtde() + 1);
+						
+						mapaUsuarios.replace(id, p);  
 						request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-					}// if lista de item maior q 0
+					}
 				}//if contains key
 				
 				if(!mapaUsuarios.containsKey(id))
@@ -295,8 +294,6 @@ public class CarrinhoViewHelper implements IViewHelper {
 				mapaUsuarios.replace(idUsuario, p);
 							
 			}
-			//List<Livro> livros = (List<Livro>)request.getSession().getAttribute("livros");
-			//request.getSession().setAttribute("mapaCarrinho", m);
 			request.getSession().setAttribute("resultadoLivro", resultado);
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			d = request.getRequestDispatcher("Carrinho.jsp");
