@@ -71,44 +71,16 @@
 			
 		window.onload = function()
 		{
-			var precoTotal = document.getElementById("precoTot").value;
-
+			var freteLivro = document.getElementById("precoFreteLivro").value;
+			freteLivro = parseFloat(freteLivro);
+			freteLivro.toFixed(2);
+			
+			var precoTotal = document.getElementById("precoTotalInput").value;
 			precoTotal = parseFloat(precoTotal);
-			var frete = document.getElementById("precoFrete").value;
-			frete = parseFloat(frete);
+			precoTotal = precoTotal.toFixed(2);
 			
-			var desconto = document.getElementById("descontoLivro").value;
-			desconto = parseFloat(desconto);
-			
-			
-
-			if(freteLivro == 0 || freteLivro == null)
-			{
-				freteLivro = 0;
-			}
-			
-			if(precoTotal == 0 || precoTotal == null)
-			{
-				precoTotal = 0
-			}
-			if(frete == null || frete == 0)
-			{
-				frete = 0;
-			}
-			
-			if(desconto == null || desconto == 0)
-			{
-				desconto = 0;
-			}
-			precoTotal = precoTotal + frete;
-			pTotal = precoTotal;
-			precoTotal = precoTotal - (precoTotal * (desconto));
-			
-			qtdeDiferenca = pTotal - precoTotal;
-			document.getElementById("descontostring").innerText = "Desconto: " + qtdeDiferenca.toFixed(2) + "R$";
-			document.getElementById("precoFretestring").innerText = "Frete: " + frete.toFixed(2) + "R$";
-			document.getElementById("precoTotalstring").innerText = "Total: " + precoTotal.toFixed(2) + "R$";
-			document.getElementById("txtValor").value = precoTotal;
+			document.getElementById("precoTotal").innerText = "Preço: " + precoTotal.toFixed(2) + "R$ ";
+			document.getElementById("precoFretestring").innerText = "Frete: " + freteLivro.toFixed(2) + "R$ ";
 		}
 		function calcularCEP(radio, cep)
 		{
@@ -116,14 +88,11 @@
 			
 			var numero = parseInt(cep);
 
-			var freteCep = 0; 
-			var frete = document.getElementById("precoFrete").value;
+			var freteCep = 0;
 			
-			if(frete == null)
-			{
-				frete = 0;
-			}
-			frete = parseFloat(frete);
+			var freteLivro = document.getElementById("precoFreteLivro").value;
+			freteLivro = parseFloat(freteLivro);
+
 			if(numero <= 3000)
 			{
 				freteCep = freteCep + (numero / 85);
@@ -132,32 +101,12 @@
 			{
 				freteCep = freteCep + (numero / 150);
 			}
-			
-			
-			frete = freteCep + frete;
-			document.getElementById("precoFrete").innerText = "Frete: " + frete.toFixed(2) + "R$";
-			var precoTotal = document.getElementById("precoTot").value;
-			
-			var desconto = document.getElementById("descontoLivro").value;
-			desconto = parseFloat(desconto);
-			
-			if(desconto == null || desconto == 0)
-			{
-				desconto = 0;
-			}
+			freteCep += freteLivro;
+			var precoTotal = document.getElementById("precoTotalInput").value;
 			precoTotal = parseFloat(precoTotal);
-			precoTotal = precoTotal + frete;
-		
-			pTotal = precoTotal;
-			precoTotal = precoTotal - (precoTotal * (desconto));
-			
-			qtdeDiferenca = pTotal - precoTotal;
-			document.getElementById("descontostring").innerText = "Desconto: " + qtdeDiferenca.toFixed(2) + "R$";
-			
-			document.getElementById("precoTotalstring").innerText = "Total: " + precoTotal.toFixed(2) + "R$";
-			document.getElementById("precoFretestring").innerText = "Frete: " + frete.toFixed(2) + "R$";
-			document.getElementById("txtValor").value = precoTotal;
-			
+			precoTotal = precoTotal + freteCep;
+			document.getElementById("precoFretestring").innerText = "Frete: " + freteCep.toFixed(2) + "R$ ";
+			document.getElementById("precoTotal").innerText = "Preço: " + precoTotal.toFixed(2) + "R$ ";
 			for(i = 0; i < (document.radio.ra.length); i++)
 			{
 				document.radio.ra[i].checked = false;
@@ -359,13 +308,13 @@
                   }
                   %>
                   <h6 id="precoFretestring"></h6>
-                  <input type='hidden' value='<%out.print(precoFrete); %>' id='precoFrete'>
+                  <input type='hidden' value='<%out.print(precoTotal); %>' id='precoTotalInput'>
+                  <input type='hidden' value='<%out.print(precoFrete); %>' id='precoFreteLivro'>
                   
-                  <h6 style="color: green" id="descontostring"></h6>
-                  <input type='hidden' value='<% out.print(preco); %>' id='precoTot'>
-                  <input type='hidden' value='<% out.print(freteLivro); %>' id='freteLivro'>
-                  <input type='hidden' value='<% out.print(desconto); %>' id='descontoLivro'>
-                  <h5 id="precoTotalstring"></h5>
+                  <h6 style="color: green" id="desconto"></h6>
+                  
+                  <h5 id="precoTotal"></h5>
+                  
                   <form action="ValidarCupom" method="POST">
                   	<input type="text" name="txtCodigo" placeholder="Código do cupom" maxlength="6">
                   	<button type="submit" name="operacao" value="AdicionarCupom" class="btn btn-success" />	
@@ -435,9 +384,7 @@
     									"data-toggle='modal' "+
     									"data-target='#myModalEnderecos" + i + "'"+
     									"id='btnEndereco'>Visualizar</button></td>"); 
-    							if(i == 0)
     								out.print("<td><input type='radio'onclick='calcularCEP(this,  \""+ e.getCep() + "\")' name='ra' checked=></td>");
-    							else
     								
     							out.print("</tr>");
     						}

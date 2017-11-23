@@ -171,18 +171,26 @@ public class CarrinhoViewHelper implements IViewHelper {
 					}
 					else
 					{
+						int estoque = 0;
 						for(int i = 0; i < p.getItem().size(); i++)
 						{
-							if(item.getLivro().getId() == p.getItem().get(i).getLivro().getId())
+							if(item.getLivro().getId() == p.getItem().get(i).getLivro().getId()) {
 								indice = i;
-							
+								estoque = p.getItem().get(i).getLivro().getQtdeEstoque();
+						}
 							listaIds.add(p.getItem().get(i).getLivro().getId()); 
 						}
 						
 						if(!listaIds.contains(item.getLivro().getId()))
 							p.getItem().add(item); 
 						else
-							p.getItem().get(indice).setQtde(p.getItem().get(indice).getQtde() + 1);
+						{
+							if(p.getItem().get(indice).getQtde() != estoque)
+							{
+								p.getItem().get(indice).setQtde(p.getItem().get(indice).getQtde() + 1);
+							}
+						}
+							
 						
 						mapaUsuarios.replace(id, p);  
 						request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
