@@ -187,7 +187,7 @@
 							
 							String txtId = (String)request.getSession().getAttribute("userid");
 							int id = Integer.parseInt(txtId);
-							//Map<Integer, Resultado> mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
+
 							StringBuilder sb = new StringBuilder();
 							Pedido p = map.get(id);
 							item = p.getItem();
@@ -263,6 +263,13 @@
 									}
 									else{
 										sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td>");
+									}
+									if(res != null)
+									{
+										if(res.getMsg() != null)
+										{
+											sb.append("<td>" + res.getMsg() + "</td>");
+										}
 									}
 									sb.append("</tr>");	
 									out.print(sb.toString());	

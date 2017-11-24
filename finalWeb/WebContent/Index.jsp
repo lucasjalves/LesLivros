@@ -50,25 +50,26 @@
       </div>
     </nav>
     <div class="container">
-    	<form action="SalvarCliente" method="post" id="frmSalvarLivro" class="form-signin" style="max-width: 500px; position: relative; left: 20%;">
-    		<h2 style="position: relative; left: 20%;">Login ou <a href="" >Cadastre-se</a></h2>
-				<div class="input-group">
-					<span class="input-group-addon"><i class="fa fa-user"></i></span>
-					<input type="text" name="txtEmail" class="form-control" placeholder="Digite seu Email">
-				</div>
-				
-				<br>
-				
-				<div class="input-group">
-					<span class="input-group-addon"><i class="fa fa-lock"></i></span>
-					<input type="password" name="txtPwd" class="form-control"  placeholder="Digite sua senha">			
-				</div>
-				
-				<br>
-				<input type="submit" id="operacao" name="operacao" value="LOGIN" class="btn btn-lg btn-primary btn-block" />
-			</form>
+     	<div class="card mt-4">
+	    	<form action="SalvarCliente" method="post" id="frmSalvarLivro" class="form-signin" style="max-width: 500px;">
+	    		<h2 style="position: relative; left: 20%;">Login ou <a href="" >Cadastre-se</a></h2>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user"></i></span>
+						<input type="text" name="txtEmail" class="form-control" placeholder="Digite seu Email">
+					</div>
+					
+					<br>
+					
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+						<input type="password" name="txtPwd" class="form-control"  placeholder="Digite sua senha">			
+					</div>
+					
+					<br>
+					<input type="submit" id="operacao" name="operacao" value="LOGIN" class="btn btn-lg btn-primary btn-block" />
+				</form>
+			</div>
 		</div>
-		
 		<%
 			if(resultado != null)
 			{

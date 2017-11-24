@@ -34,7 +34,11 @@
 		request.getSession().setAttribute("redirecionar", null);
 		
 		Resultado resultado = (Resultado) session.getAttribute("resultado");
-
+		if(resultado == null)
+		{
+			pageContext.forward("Index.jsp");
+			return;
+		}
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		PessoaFisica p = (PessoaFisica) entidades.get(0);
 		String txtId = String.valueOf(p.getId());
