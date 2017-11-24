@@ -97,6 +97,7 @@ public class LivroDAO extends AbstractJdbcDAO{
 		{
 			sb.append("AND livros.id = '" + livro.getId() + "'");
 		}
+		System.out.println(sb.toString());
 		try{
 			openConnection();
 			pst = connection.prepareStatement(sb.toString());

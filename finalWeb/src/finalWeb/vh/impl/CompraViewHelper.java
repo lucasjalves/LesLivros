@@ -32,25 +32,21 @@ public class CompraViewHelper implements IViewHelper{
 			String txtId = (String)request.getSession().getAttribute("userid");
 			int id = Integer.parseInt(txtId);
 			Pedido p = mapaUsuarios.get(id);
-			String txtIdLivro = request.getParameter("id");
-			if(txtIdLivro != null)
+			Integer indiceLivro = (Integer)request.getSession().getAttribute("indice");
+			if(indiceLivro != null)
 			{
-				int idLivro = Integer.parseInt(txtIdLivro);
-				String qtdeTxt = request.getParameter("qtde");
-				int qtde = Integer.parseInt(qtdeTxt);
-				Item i = new Item();
-				i.setQtde(qtde);
-				Livro l = new Livro();
-				l.setId(id);
-				i.setLivro(l);
+				Item i = p.getItem().get(indiceLivro);
+				request.getSession().setAttribute("qtdeLivrosPedido", i.getQtde());
 				return i;
 			}
 			else
 			{
+				request.getSession().setAttribute("indice", 0);
 				Item item = p.getItem().get(0);
+				request.getSession().setAttribute("qtdeLivrosPedido", item.getQtde());
 				return item;
 			}
-			  //apenas o primeiro livro item é envidado para fachada, os livros restantes irão ser tratados na setview
+
 			
 		}
 		return null;
@@ -62,73 +58,63 @@ public class CompraViewHelper implements IViewHelper{
 		// TODO Auto-generated method stub
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
-		Integer qtdeLivrosVerificados = (Integer)request.getSession().getAttribute("livrosVerificados");
+
 		if(operacao.equals("ComprarItens"))
 		{
-			if(qtdeLivrosVerificados == null)
-			{
-				qtdeLivrosVerificados = 0;
-				request.getSession().setAttribute("livrosVerificados", qtdeLivrosVerificados);
-			}
-			if(resultado.getMsg() != null)
-			{
-				Map<Integer, Pedido> mapaUsuarios = (HashMap<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
-				String txtId = (String)request.getSession().getAttribute("userid");
-				int id = Integer.parseInt(txtId);
-				Pedido p = mapaUsuarios.get(id);
-				List<EntidadeDominio> e = resultado.getEntidades();
-				Item item = (Item)e.get(0);
-				Livro livroFachada = item.getLivro();
-				if(qtdeLivrosVerificados < p.getItem().size())
-				{	
-					for(int i = 0; i < p.getItem().size(); i ++)
-					{
-						Livro l = p.getItem().get(i).getLivro();
-						if(item.getQtde() < p.getItem().get(i).getQtde() && l.getId() == livroFachada.getId())
-						{
-							int idLivroPedido = p.getItem().get(i).getLivro().getId();
-							String url = "ComprarItens?id=" + idLivroPedido + "&qtde=" + p.getItem().get(i).getQtde() + "&operacao=ComprarItens"; 
-							d = request.getRequestDispatcher(url); 
-							p.getItem().get(i).setQtde(item.getQtde()); 
-							Integer qtdeLivros = (Integer)request.getSession().getAttribute("livrosVerificados");
-							request.getSession().setAttribute("livrosVerificados", qtdeLivros + 1);
-							request.getSession().setAttribute("falha", true);
-							break;
-						}
-						else
-						{
-							int idLivroPedido = p.getItem().get(i).getLivro().getId();
-							String url = "ComprarItens?id=" + idLivroPedido + "&qtde=" + p.getItem().get(i).getQtde() + "&operacao=ComprarItens"; 
-							d = request.getRequestDispatcher(url); 	
-							break;
-						}
+			Map<Integer, Pedido> mapaUsuarios = (HashMap<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
+			String txtId = (String)request.getSession().getAttribute("userid");
+			
+			int id = Integer.parseInt(txtId);
+			Pedido p = mapaUsuarios.get(id);
+			
+			List<EntidadeDominio> e = resultado.getEntidades();
+			Item item = (Item)e.get(0);
 					
-
-					}
-					d.forward(request,response);
-					return;
-				}
-				if((boolean)request.getSession().getAttribute("falha") == true)  //deu merda e volta pro carrinho
+			Integer indice = (Integer)request.getSession().getAttribute("indice"); 
+			
+			int qtdeLivroRestantes = item.getQtde();
+			int qtdeLivroPedido = (int)request.getSession().getAttribute("qtdeLivrosPedido");
+			
+			
+			if(qtdeLivroRestantes < qtdeLivroPedido)
+			{
+				request.getSession().setAttribute("falha", true);
+			}
+			int index = indice + 1;
+			int qtde = p.getItem().size();
+			System.out.println(index);
+			System.out.println(qtde);
+			if(index == qtde)
+			{
+				
+				if(request.getSession().getAttribute("falha") != null)  //deu merda e volta pro carrinho
 				{
 					request.getSession().removeAttribute("falha");
+					request.getSession().removeAttribute("indice");
+					request.getSession().removeAttribute("qtdeLivrosPedido");
 					d = request.getRequestDispatcher("Carrinho.jsp"); 
 					d.forward(request,response);
 					return;
 				}
 				else
-				{
+
 					request.getSession().removeAttribute("falha");
+					request.getSession().removeAttribute("indice");
+					request.getSession().removeAttribute("mapaUsuarios");
+					request.getSession().removeAttribute("qtdeLivrosPedido");
 					d = request.getRequestDispatcher("Compra.jsp"); 
 					d.forward(request,response);
-					return;	
+					return;						
 				}
-			}
 			else
 			{
-				d = request.getRequestDispatcher("Compra.jsp"); 
-				d.forward(request,response);	
-				return;
+				String url = "ComprarItens?indice=" + indice;
+				request.getSession().setAttribute("indice", indice + 1);
+				d = request.getRequestDispatcher(url);
+				d.forward(request,response);
+				return;						
 			}
+				
 		}
 		
 	}
