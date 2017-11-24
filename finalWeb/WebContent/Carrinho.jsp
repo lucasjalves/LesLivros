@@ -73,14 +73,16 @@
 		{
 			var freteLivro = document.getElementById("precoFreteLivro").value;
 			freteLivro = parseFloat(freteLivro);
-			freteLivro.toFixed(2);
+			
 			
 			var precoTotal = document.getElementById("precoTotalInput").value;
 			precoTotal = parseFloat(precoTotal);
-			precoTotal = precoTotal.toFixed(2);
+			
 			
 			document.getElementById("precoTotal").innerText = "Preço: " + precoTotal.toFixed(2) + "R$ ";
 			document.getElementById("precoFretestring").innerText = "Frete: " + freteLivro.toFixed(2) + "R$ ";
+			document.getElementById("txtValor").value = precoTotal + frete;
+			
 		}
 		function calcularCEP(radio, cep)
 		{
@@ -107,6 +109,7 @@
 			precoTotal = precoTotal + freteCep;
 			document.getElementById("precoFretestring").innerText = "Frete: " + freteCep.toFixed(2) + "R$ ";
 			document.getElementById("precoTotal").innerText = "Preço: " + precoTotal.toFixed(2) + "R$ ";
+			document.getElementById("txtValor").value = precoTotal + frete;
 			for(i = 0; i < (document.radio.ra.length); i++)
 			{
 				document.radio.ra[i].checked = false;
@@ -311,7 +314,17 @@
                   <input type='hidden' value='<%out.print(precoTotal); %>' id='precoTotalInput'>
                   <input type='hidden' value='<%out.print(precoFrete); %>' id='precoFreteLivro'>
                   
-                  <h6 style="color: green" id="desconto"></h6>
+                  <h6 style="color: green" id="desconto">
+                  	<%
+                  	if(cupom != null)
+                  	{
+                  		if(cupom.getMsg() == null)
+                  		{
+                  			out.print("Desconto: " + String.format("%.2f", precoTotal * desconto) + "R$");
+                  		}
+                  	}
+                  	%>
+                  </h6>
                   
                   <h5 id="precoTotal"></h5>
                   
@@ -327,15 +340,15 @@
                   	 <input type="hidden" id="txtValor" name="txtValor" value="">
                   	 <%if(item.size() > 0)
                   	 	{
-                  		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' />");
+                  		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' /><span>Finalizar Compra</span>");
                   	 	}
                   	 	else
                   	 	{
-                  	 		out.print("<button type='button' class='btn btn-danger' />");
+                  	 		out.print("<button type='button' class='btn btn-danger' /><span>Finalizar Compra</span>");
                   	 	}
                   	%>
                   	 
-                  	 	<span>Finalizar Compra</span>	
+                  	 	
                   </form>
                    <%if(cupom != null) 
                    {
