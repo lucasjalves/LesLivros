@@ -68,7 +68,9 @@
 		$('#myModal').on('shown.bs.modal', function () {
 			  $('#myInput').focus()
 			})
+
 			
+
 		window.onload = function()
 		{
 			var freteLivro = document.getElementById("precoFreteLivro").value;
@@ -77,14 +79,15 @@
 			
 			var precoTotal = document.getElementById("precoTotalInput").value;
 			precoTotal = parseFloat(precoTotal);
+			calcularCEP(1, document.getElementById("cepp").value, 0);
 			
+			//document.getElementById("precoTotal").innerText = "Preço: " + precoTotal.toFixed(2) + "R$ ";
+			//document.getElementById("precoFretestring").innerText = "Frete: " + freteLivro.toFixed(2) + "R$ ";
+			//document.getElementById("txtValor").value = precoTotal.toFixed(2);
 			
-			document.getElementById("precoTotal").innerText = "Preço: " + precoTotal.toFixed(2) + "R$ ";
-			document.getElementById("precoFretestring").innerText = "Frete: " + freteLivro.toFixed(2) + "R$ ";
-			document.getElementById("txtValor").value = precoTotal + frete;
 			
 		}
-		function calcularCEP(radio, cep)
+		function calcularCEP(radio, cep, i)
 		{
 			var cep = cep.slice(0,4);
 			
@@ -94,7 +97,7 @@
 			
 			var freteLivro = document.getElementById("precoFreteLivro").value;
 			freteLivro = parseFloat(freteLivro);
-
+			
 			if(numero <= 3000)
 			{
 				freteCep = freteCep + (numero / 85);
@@ -107,15 +110,20 @@
 			var precoTotal = document.getElementById("precoTotalInput").value;
 			precoTotal = parseFloat(precoTotal);
 			precoTotal = precoTotal + freteCep;
-			document.getElementById("precoFretestring").innerText = "Frete: " + freteCep.toFixed(2) + "R$ ";
+			
+			document.getElementById('txtIndiceEnderecos').value = i;
+			document.getElementById("precoFretestring").innerText = "Frete: " + (freteCep + freteLivro).toFixed(2) + "R$ ";
 			document.getElementById("precoTotal").innerText = "Preço: " + precoTotal.toFixed(2) + "R$ ";
-			document.getElementById("txtValor").value = precoTotal + frete;
+			document.getElementById("txtValor").value = precoTotal;
+			document.getElementById("txtIndiceEnderecos").value = i;
+			
+			document.getElementById("txtFrete").value = freteCep + freteLivro;
 			for(i = 0; i < (document.radio.ra.length); i++)
 			{
 				document.radio.ra[i].checked = false;
 			}
 			radio.checked = true;
-
+			
 		}
 	</script>
 </head>
@@ -259,16 +267,18 @@
 									if(qtdeLivro == 0){
 										item.remove(i);
 										p.setItem(item);
-										sb.append("<td><p style='color: red'>Este item será removido por indisponibilidade no estoque!</p></td>");
+										sb.append("<tr><td><p style='color: red'>Este item será removido por indisponibilidade no estoque!</p></td>");
+										map.replace(id, p);
+										request.getSession().setAttribute("mapUsuarios", map);
 									}
 									else{
-										sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td>");
+										sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td></tr>");
 									}
 									if(res != null)
 									{
 										if(res.getMsg() != null)
 										{
-											sb.append("<td>" + res.getMsg() + "</td>");
+											sb.append("<td>" + res.getMsg() + "</td></tr>");
 										}
 									}
 									sb.append("</tr>");	
@@ -285,7 +295,7 @@
 	
 							precoFrete = 0;
 							precoTotal = 0;
-							out.print("<tr><td>Não há itens no seu carrinho</td></tr>");									
+							out.print("<td>Não há itens no seu carrinho</td>");									
 						}
 				
 						
@@ -345,6 +355,8 @@
                   
                   <form action="ComprarItens" method="POST">
                   	 <input type="hidden" id="txtValor" name="txtValor" value="">
+                  	 <input type="hidden" id='txtIndiceEnderecos' name="txtIndiceEnderecos" value="0">
+                  	 <input type="hidden" id='txtFrete' name="txtFrete" value="">
                   	 <%if(item.size() > 0)
                   	 	{
                   		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' /><span>Finalizar Compra</span>");
@@ -391,7 +403,11 @@
                   		else
                   		{
                   			out.print("<table class='table table'>");
-                  			List<Endereco> end = (List<Endereco>)request.getSession().getAttribute("enderecosCliente");
+							String txtId = (String)request.getSession().getAttribute("userid");
+							int id = Integer.parseInt(txtId);
+							Pedido p = map.get(id);
+                  			Pessoa usuario = p.getUsuario();
+                  			List<Endereco> end = usuario.getEndereco();
     						for(int i = 0; i < end.size(); i++)
     						{
     							
@@ -404,10 +420,14 @@
     									"data-toggle='modal' "+
     									"data-target='#myModalEnderecos" + i + "'"+
     									"id='btnEndereco'>Visualizar</button></td>"); 
-    								out.print("<td><input type='radio'onclick='calcularCEP(this,  \""+ e.getCep() + "\")' name='ra' checked=></td>");
-    								
+    							if(i == 0)
+    								out.print("<td><input type='radio' onclick='calcularCEP(this,  \""+ e.getCep() + "\","+ i +")' name='ra' checked></td>");
+    							else
+    								out.print("<td><input type='radio' onclick='calcularCEP(this,  \""+ e.getCep() + "\","+ i +")' name='ra'></td>");
+    							
     							out.print("</tr>");
     						}
+    						out.print("<input type='hidden' value='" + end.get(0).getCep() +"' id='cepp'>" )	;
     						out.print("</table>");
     						
     						StringBuilder modals = new StringBuilder();

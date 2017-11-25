@@ -28,9 +28,9 @@ public class ClienteDAO extends AbstractJdbcDAO {
 		openConnection();
 		PreparedStatement pst = null;
 		PessoaFisica p = (PessoaFisica)entidade;
-		Endereco end = p.getEndereco();
-		Telefone tel = p.getTelefone();
-		Cartao c = p.getCartao();
+		//Endereco end = p.getEndereco();
+		//Telefone tel = p.getTelefone();
+		//Cartao c = p.getCartao();
 		try {
 			connection.setAutoCommit(false);
 			StringBuilder sql = new StringBuilder();
@@ -55,6 +55,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 			int id=0;
 			if(rs.next())
 				id = rs.getInt(1);
+			/*
 			end.setFk_pessoa(id);
 			tel.setFk_cliente(id);
 			c.setPkUsuario(id);
@@ -68,6 +69,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 			
 			CartaoDAO carDAO = new CartaoDAO();
 			carDAO.salvar(c);
+			*/
 		} catch (SQLException e) {
 			try {
 				connection.rollback();
@@ -140,10 +142,8 @@ public class ClienteDAO extends AbstractJdbcDAO {
 		// TODO Auto-generated method stub
 		PreparedStatement pst = null;
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT * FROM cliente INNER JOIN "
-				+ "endereco ON (cliente.id_cliente = endereco.pk_cliente) "
-				+ "INNER JOIN telefone ON (cliente.id_cliente = telefone.fk_cliente) "
-				+ "INNER JOIN cartao ON (cliente.id_cliente = cartao.pk_cliente) WHERE 1=1 ");
+		sb.append("SELECT * FROM cliente "
+				+ "INNER JOIN telefone ON (cliente.id_cliente = telefone.fk_cliente) ");
 		PessoaFisica pf = (PessoaFisica)entidade;
 		if(pf.getEmail() != null  && pf.getSenha() != null)
 		{
@@ -179,15 +179,12 @@ public class ClienteDAO extends AbstractJdbcDAO {
 			List<EntidadeDominio> pessoas = new ArrayList<EntidadeDominio>();
 			while(rs.next()){
 				PessoaFisica p = new PessoaFisica();
-				Endereco e = new Endereco();
 				Telefone t = new Telefone();
-				Cartao c = new Cartao();
 				
-				p.setEndereco(e);
 				p.setTelefone(t);
-				p.setCartao(c);
 				
 				p.setId(rs.getInt("id_cliente"));
+				int idCliente = p.getId();
 				p.setGenero(rs.getString("genero"));
 				p.setNome(rs.getString("nome_cliente"));
 				p.setDtNascimento(rs.getDate("dtNascimento"));
@@ -195,38 +192,66 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				p.setEmail(rs.getString("email"));
 				p.setSenha(rs.getString("senha"));
 				
-				p.getEndereco().setId(rs.getInt("id_endereco"));
-				p.getEndereco().setTipoRes(rs.getString("tipo_res"));
-				p.getEndereco().setTipoLog(rs.getString("tipo_log"));
-				p.getEndereco().setLogradouro(rs.getString("logradouro"));
-				p.getEndereco().setNumCasa(rs.getString("num_casa"));
-				p.getEndereco().setBairro(rs.getString("bairro"));
-				p.getEndereco().setCep(rs.getString("cep"));
-				p.getEndereco().setCidade(rs.getString("cidade"));
-				p.getEndereco().setEstado(rs.getString("estado"));
-				p.getEndereco().setPais(rs.getString("pais"));
-				p.getEndereco().setNome(rs.getString("nome_id"));
-				p.getEndereco().setFk_pessoa(rs.getInt("pk_cliente"));
-				
+
 				p.getTelefone().setId(rs.getInt("id_telefone"));
 				p.getTelefone().setDdd(rs.getString("ddd"));
 				p.getTelefone().setNumero(rs.getString("numero"));
 				p.getTelefone().setTipo(rs.getString("tipo_telefone"));
 				p.getTelefone().setFk_cliente(rs.getInt("fk_cliente"));
 				
-				p.getCartao().setId(rs.getInt("id_cartao"));
-				p.getCartao().setBandeira(rs.getString("bandeira"));
-				p.getCartao().setNumero(rs.getString("numero"));
-				p.getCartao().setCodSeg(rs.getString("codigo_seg"));
-				p.getCartao().setDtVencimento(rs.getDate("dtVencimento"));
-				p.getCartao().setPkUsuario(rs.getInt("pk_cliente"));
 				
+				pst = connection.prepareStatement("SELECT * FROM endereco WHERE pk_cliente = " + idCliente);
+				ResultSet enderecosCliente = pst.executeQuery();
+				List<Endereco> enderecos = new ArrayList<Endereco>();
+				while(enderecosCliente.next())
+				{
+					Endereco e = new Endereco();
+					
+					e.setId(enderecosCliente.getInt("id_endereco"));
+					e.setTipoRes(enderecosCliente.getString("tipo_res"));
+					e.setTipoLog(enderecosCliente.getString("tipo_log"));
+					e.setLogradouro(enderecosCliente.getString("logradouro"));
+					e.setNumCasa(enderecosCliente.getString("num_casa"));
+					e.setBairro(enderecosCliente.getString("bairro"));
+					e.setCep(enderecosCliente.getString("cep"));
+					e.setCidade(enderecosCliente.getString("cidade"));
+					e.setEstado(enderecosCliente.getString("estado"));
+					e.setPais(enderecosCliente.getString("pais"));
+					e.setNome(enderecosCliente.getString("nome_id"));
+					e.setFk_pessoa(enderecosCliente.getInt("pk_cliente"));
+					enderecos.add(e);
+				}
+				enderecosCliente.close();
+				
+				
+				pst = connection.prepareStatement("SELECT * FROM cartao WHERE pk_cliente = " + idCliente);
+				ResultSet cartoesCliente = pst.executeQuery();
+				List<Cartao> cartoes = new ArrayList<Cartao>();
+				while(cartoesCliente.next())
+				{
+					Cartao c = new Cartao();
+					
+					c.setId(cartoesCliente.getInt("id_cartao"));
+					c.setBandeira(cartoesCliente.getString("bandeira"));
+					c.setNumero(cartoesCliente.getString("numero"));
+					c.setCodSeg(cartoesCliente.getString("codigo_seg"));
+					c.setDtVencimento(cartoesCliente.getDate("dtVencimento"));
+					c.setPkUsuario(cartoesCliente.getInt("pk_cliente"));
+					cartoes.add(c);
+				}				
+				cartoesCliente.close();
+				
+				p.setEndereco(enderecos);
+				p.setCartao(cartoes);
 				pessoas.add(p);
 				
 			}
+			
 			return pessoas;
 		}catch(SQLException e){
 			e.printStackTrace();
+		} finally {
+			connection.close();
 		}
 		return null;
 	}

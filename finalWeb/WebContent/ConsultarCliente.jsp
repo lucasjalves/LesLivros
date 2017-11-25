@@ -17,7 +17,7 @@
 	%>
 		<form action="SalvarCliente" method="post">
 		<table>
-			<tr>
+			
 				<td>Nome Cliente: </td>
 				<td><input type="text" id="txtNomeCli" name="txtNomeCli" /></td>			
 				<td>Gênero: </td> 
@@ -31,10 +31,10 @@
 				<td><input type="text" id="txtCpf" name="txtCpf" /></td>
 				<td>Email: </td>
 				<td><input type="text" id="txtEmail" name="txtEmail" /></td>								
-			</tr>
-			<tr>
 			
-			</tr>
+			
+			
+			
 		</table>
 		<input type="submit" id="operacao" name="operacao" value="CONSULTARCLIENTE" />
 	</form>
@@ -49,12 +49,12 @@
 <BR>
 
 <TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
-   <TR>
+   
       <TH COLSPAN="26"><BR>
       	<H3>CLIENTES</H3>
       </TH>
-   </TR>
-   <TR>
+   
+   
       <TH>ID</TH>
       <TH>Genero</TH>
       <TH>Nome</TH>
@@ -82,8 +82,9 @@
       <TH>Data Vencimento</TH>
       <TH>Código de Segurança</TH>
       <th></th>
-   </TR>
+   
    <%
+   /*
    if (resultado != null) {
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		StringBuilder sbRegistro = new StringBuilder();
@@ -111,7 +112,7 @@
 							
 //		 				sbLink.append(">");
 				
-
+						/*
 						sbRegistro.append("<TD>");
 						sbRegistro.append(String.valueOf(p.getId()));		
 						sbRegistro.append("</TD>");
@@ -208,7 +209,7 @@
 						"<input type='hidden' name='txtId' value='"+ p.getId() + "'> " +
 						"<input type='submit' id='operacao' name='operacao' value='VISUALIZAR'/></form></td>");
 						
-						sbRegistro.append("</TR>");
+						sbRegistro.append("");
 						
 						out.print(sbRegistro.toString());						
 					}
@@ -327,14 +328,14 @@
 					"<input type='hidden' name='txtId' value='"+ p.getId() + "'> " +
 					"<input type='submit' id='operacao' name='operacao' value='VISUALIZAR'/></form></td>");
 					
-					sbRegistro.append("</TR>");
+					sbRegistro.append("");
 					
 					out.print(sbRegistro.toString());									
 				}
 			}
 		}
    }
-      
+      */
 			%>
    </TABLE>	
 </body>

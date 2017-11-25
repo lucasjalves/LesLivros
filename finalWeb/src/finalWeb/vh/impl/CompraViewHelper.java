@@ -100,7 +100,6 @@ public class CompraViewHelper implements IViewHelper{
 
 					request.getSession().removeAttribute("falha");
 					request.getSession().removeAttribute("indice");
-					request.getSession().removeAttribute("mapaUsuarios");
 					request.getSession().removeAttribute("qtdeLivrosPedido");
 					d = request.getRequestDispatcher("Compra.jsp"); 
 					d.forward(request,response);

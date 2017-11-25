@@ -1,25 +1,33 @@
 package finalDominio;
 
+import java.util.List;
+
 public class Pessoa extends EntidadeDominio{
 	private String email;
 	private String senha;
 	private String status;
-	private Endereco endereco;
-	private Cartao cartao;
 	private Telefone telefone;
 	private String nome;
-	public Endereco getEndereco() {
-		return endereco;
-	}
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
-	}
-	public Cartao getCartao() {
+
+	private List<Endereco> endereco;
+	private List<Cartao> cartao;
+	
+	
+	public List<Cartao> getCartao() {
 		return cartao;
 	}
-	public void setCartao(Cartao cartao) {
+	public void setCartao(List<Cartao> cartao) {
 		this.cartao = cartao;
 	}
+
+	public List<Endereco> getEndereco() {
+		return endereco;
+	}
+	public void setEndereco(List<Endereco> endereco) {
+		this.endereco = endereco;
+	}
+
+
 	public String getNome() {
 		return nome;
 	}

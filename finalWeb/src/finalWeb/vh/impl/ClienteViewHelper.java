@@ -159,7 +159,7 @@ public class ClienteViewHelper implements IViewHelper{
 			c.setCodSeg(codSeg);
 			c.setDtVencimento(dtVencimento);
 			c.setNumero(numCartao);
-			
+			/*
 			p.setNome(nome_cli);
 			p.setGenero(genero);
 			p.setDtNascimento(dtNascimento);
@@ -170,6 +170,7 @@ public class ClienteViewHelper implements IViewHelper{
 			p.setEndereco(e);
 			p.setTelefone(t);
 			p.setCartao(c);
+			*/
 			}
 		
 		
@@ -207,7 +208,7 @@ public class ClienteViewHelper implements IViewHelper{
 		
 		if(resultado.getMsg() == null && operacao.equals("LOGIN"))
 		{
-			request.getSession().setAttribute("resultado", resultado);
+			request.getSession().setAttribute("resultadoLogin", resultado);
 			d = request.getRequestDispatcher("Conta.jsp");  
 		}
 		

@@ -17,6 +17,7 @@ import finalDominio.EntidadeDominio;
 import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.Pedido;
+import finalDominio.Pessoa;
 import finalWeb.vh.IViewHelper;
 
 public class CarrinhoViewHelper implements IViewHelper {
@@ -25,7 +26,6 @@ public class CarrinhoViewHelper implements IViewHelper {
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		String stringId = (String)request.getSession().getAttribute("userid");
-		
 		if(stringId == null)
 		{
 			request.getSession().setAttribute("userid", "0");
@@ -117,7 +117,11 @@ public class CarrinhoViewHelper implements IViewHelper {
 			if(request.getSession().getAttribute("usuariodeslogado") != null)
 			{
 				Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
+				Resultado resu = (Resultado)request.getSession().getAttribute("resultadoLogin");
+				List<EntidadeDominio> e = resu.getEntidades();
+				Pessoa usuario = (Pessoa) e.get(0);
 				Pedido p = mapaUsuarios.get(0);
+				p.setUsuario(usuario);
 				mapaUsuarios.put(Integer.parseInt(stringId), p);
 				mapaUsuarios.remove(0);
 				request.getSession().removeAttribute("usuariodeslogado");

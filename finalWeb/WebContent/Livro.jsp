@@ -106,41 +106,41 @@
 						<th><h3>Características</h3></th>
 					</thead>
 					<tbody>
-						<tr>
-							<td>Ano</td>
-							<td><%out.print(l.getAno()); %></td>
-						</tr>
-						<tr>
-							<td>Editora</td>
-							<td><%out.print(l.getEditora()); %></td>
-						</tr>
-						<tr>
-							<td>Edição</td>
-							<td><%out.print(l.getEdicao()); %></td>
-						</tr>
-						<tr>
-							<td>ISBN</td>
-							<td><%out.print(l.getISBN()); %></td>
-						</tr>
-						<tr>
-							<td>Nº Páginas</td>
-							<td><%out.print(l.getNpaginas()); %></td>
-						</tr>
-						<tr>
-							<td>Altura</td>
-							<td><%out.print(l.getAltura()); %></td>
-						</tr>
-						<tr>
-							<td>Largura</td>
-							<td><%out.print(l.getLargura()); %></td>
-						</tr>
-						<tr>
-							<td>Profundidade</td>
-							<td><%out.print(l.getProfundidade()); %></td>
-						<tr>
-							<td>Peso</td>
-							<td><%out.print(l.getPeso()); %></td>
-						</tr>																																													
+						
+							<tr><td>Ano</td></tr>
+							<tr><td><%out.print(l.getAno()); %></td></tr>
+						
+						
+							<tr><td>Editora</td></tr>
+							<tr><td><%out.print(l.getEditora()); %></td></tr>
+						
+						
+							<tr><td>Edição</td></tr>
+							<tr><td><%out.print(l.getEdicao()); %></td></tr>
+						
+						
+							<tr><td>ISBN</td></tr>
+							<tr><td><%out.print(l.getISBN()); %></td></tr>
+						
+						
+							<tr><td>Nº Páginas</td></tr>
+							<tr><td><%out.print(l.getNpaginas()); %></td></tr>
+						
+						
+							<tr><td>Altura</td></tr>
+							<tr><td><%out.print(l.getAltura()); %></td></tr>
+						
+						
+							<tr><td>Largura</td></tr>
+							<tr><td><%out.print(l.getLargura()); %></td></tr>
+						
+						
+							<tr><td>Profundidade</td></tr>
+							<tr><td><%out.print(l.getProfundidade()); %></td></tr>
+						
+							<tr><td>Peso</td></tr>
+							<tr><td><%out.print(l.getPeso()); %></td></tr>
+																																																			
 					</tbody>
 					</table>
 				</div>

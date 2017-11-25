@@ -1,8 +1,9 @@
 package finalCore.dao;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import finalDominio.Endereco;
@@ -122,7 +123,43 @@ public class EnderecoDAO extends AbstractJdbcDAO{
 	@Override
 	public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
 		// TODO Auto-generated method stub
+		PreparedStatement pst = null;
+		StringBuilder sb = new StringBuilder();
+		Endereco end = (Endereco)entidade;
+		sb.append("SELECT * FROM endereco WHERE pk_cliente = " + end.getPk_pessoa());
+		try{
+			openConnection();
+			pst = connection.prepareStatement(sb.toString());
+			ResultSet enderecosCliente = pst.executeQuery();
+			List<EntidadeDominio> enderecos = new ArrayList<EntidadeDominio>();
+			while(enderecosCliente.next())
+			{
+				Endereco e = new Endereco();
+				
+				e.setId(enderecosCliente.getInt("id_endereco"));
+				e.setTipoRes(enderecosCliente.getString("tipo_res"));
+				e.setTipoLog(enderecosCliente.getString("tipo_log"));
+				e.setLogradouro(enderecosCliente.getString("logradouro"));
+				e.setNumCasa(enderecosCliente.getString("num_casa"));
+				e.setBairro(enderecosCliente.getString("bairro"));
+				e.setCep(enderecosCliente.getString("cep"));
+				e.setCidade(enderecosCliente.getString("cidade"));
+				e.setEstado(enderecosCliente.getString("estado"));
+				e.setPais(enderecosCliente.getString("pais"));
+				e.setNome(enderecosCliente.getString("nome_id"));
+				e.setFk_pessoa(enderecosCliente.getInt("pk_cliente"));
+				enderecos.add(e);
+			}
+			enderecosCliente.close();
+			return enderecos;
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 		return null;
+		
 	}
 
 }
+
+

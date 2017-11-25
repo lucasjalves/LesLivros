@@ -33,7 +33,7 @@
 		}
 		request.getSession().setAttribute("redirecionar", null);
 		
-		Resultado resultado = (Resultado) session.getAttribute("resultado");
+		Resultado resultado = (Resultado) session.getAttribute("resultadoLogin");
 		if(resultado == null)
 		{
 			pageContext.forward("Index.jsp");
@@ -45,37 +45,21 @@
 		
 
 		session.setAttribute("userid", txtId);
-		List<Endereco> end= new ArrayList<Endereco>();
-		List<Cartao> cartoes = new ArrayList<Cartao>();
+		List<Endereco> end= p.getEndereco();
+		List<Cartao> cartoes = p.getCartao();
 		
-		Map<Integer, Object> mapaEndereco = new HashMap<Integer, Object>();
-		Map<Integer, Object> mapaCartao = new HashMap<Integer, Object>();
-		
-		mapaEndereco.put(p.getEndereco().getId(), null);
-		mapaCartao.put(p.getCartao().getId(), null);
-		
-		end.add(p.getEndereco());
-		cartoes.add(p.getCartao());
-		
-		for(int i = 0; i < entidades.size(); i ++)
+		if(request.getSession().getAttribute("mapaUsuarios") == null)
 		{
-			
-			PessoaFisica pf = (PessoaFisica) entidades.get(i);
-			
-			if(!mapaEndereco.containsKey(pf.getEndereco().getId()))
-			{
-				mapaEndereco.put(pf.getEndereco().getId(), null);
-				end.add(pf.getEndereco());
-			}
-			request.getSession().setAttribute("enderecosCliente", end);
-			
-			if(!mapaCartao.containsKey(pf.getCartao().getId()))
-			{
-				mapaCartao.put(pf.getCartao().getId(), null);
-				cartoes.add(pf.getCartao());
-			}
-			
+			Map<Integer, Pedido>mapaUsuarios = new HashMap<Integer, Pedido>();
+			Pedido pedido = new Pedido();
+			pedido.setUsuario(p);
+			List<Item> itens = new ArrayList<Item>();
+			pedido.setItem(itens);
+			mapaUsuarios.put(p.getId(), pedido);
+			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 		}
+		
+
 	%>
 	<%
 	for(int i = 0; i < end.size(); i ++)
@@ -124,8 +108,8 @@
 								<table class="table table-striped">
 									<tr><td>Email: <%out.print(p.getEmail()); %></td></tr>
 									<tr><td>Nome: <%out.print(p.getNome()); %></td></tr>
-									<tr><td>Genero: <%out.print(p.getGenero()); %></td>
-									</tr>
+									<tr><td>Genero: <%out.print(p.getGenero()); %></td></tr>
+									
 									<tr><td>CPF: <%out.print(p.getCpf()); %></td></tr>
 									<tr><td>Data de Nascimento: <%out.print(ConverteDate.converteDateString(p.getDtNascimento())); %></td></tr>
 								</table>
@@ -140,32 +124,32 @@
 								        </button>
 								      </div>
 								      <div class="modal-body">
-									<table><tr>
+									<table>
+									<tr>
 											<td>Nome Cliente: </td>
 											<td><input type="text" id="txtNomeCli" name="txtNomeCli" value="<%out.print(p.getNome()); %>" /></td>
-										</tr>
-										<tr>
+										
+									</tr>
+									<tr>	
 											<td>Genero: </td>
 											<td><input type="text" id="txtGenero" name="txtGenero" value="<%out.print(p.getGenero()); %>"/></td>
-										</tr>			
-										<tr>
+									</tr>				
+									<tr>	
 											<td>Data de Nascimento: </td>
 											<td><input type="text" id="txtDtNascimento" name="txtDtNascimento" value="<%out.print(ConverteDate.converteDateString(p.getDtNascimento())); %>" /></td>
-										</tr>
-										<tr>
+									</tr>	
+									<tr>	
 											<td>CPF: </td>
 											<td><input type="text" id="txtCpf" name="txtCpf" value="<%out.print(p.getCpf()); %>"/></td>
-										</tr>
-											
-										<tr>
+									</tr>	
+									<tr>
 											<td>Email: </td>
 											<td><input type="text" id="txtEmail" name="txtEmail" value="<%out.print(p.getEmail()); %>"/></td>
-										</tr>
-										
-										<tr>
+									</tr>	
+									<tr>
 											<td>Senha: </td>
 											<td><input type="text" id="txtSenha" name="txtSenha" value="<%out.print(p.getSenha()); %>" /></td>
-										</tr>
+									</tr>	
 											<input type="hidden" name="txtId" value="<%out.print(p.getId()); %>">																							
 									</table>
 								      </div>
@@ -210,7 +194,7 @@
 									"data-toggle='modal' "+
 									"data-target='#myModalEnderecos" + i + "'"+
 									"id='btnEndereco'>Alterar</button></td>");
-							out.print("<tr>");
+							out.print("</tr>");
 						}
 						out.print("</table>");
 						
@@ -294,7 +278,7 @@
 									"data-toggle='modal' "+
 									"data-target='#myModalCartao" + i + "'"+
 									"id='btnEndereco'>Alterar</button></td>");
-							out.print("<tr>");
+							out.print("</tr>");
 						}
 						out.print("</table>");
 						
@@ -361,43 +345,43 @@
 				<tr>
 					<td>Apelido Endereço: </td>
 					<td><input type="text" id="txtNome" name="txtNome" /></td>
-				</tr>		
+				</tr>
 				<tr>
 					<td>Tipo Residencia: </td>
 					<td><input type="text" id="txtTipoRes" name="txtTipoRes" /></td>
-				</tr>
 				<tr>
+				</tr>
 					<td>Tipo Logradouro: </td>
 					<td><input type="text" id="txtTipoLog" name="txtTipoLog" /></td>
-				</tr>		
-				<tr>
+				<tr>		
+				</tr>
 					<td>Logradouro: </td>
 					<td><input type="text" id="txtLogradouro" name="txtLogradouro" /></td>
-				</tr>	
-				<tr>
+				<tr>	
+				</tr>
 					<td>Número da Casa: </td>
 					<td><input type="text" id="txtNumCasa" name="txtNumCasa" /></td>
-				</tr>
 				<tr>
+				</tr>
 					<td>Bairro: </td>
 					<td><input type="text" id="txtBairro" name="txtBairro" /></td>
-				</tr>
 				<tr>
+				</tr>
 					<td>CEP: </td>
 					<td><input type="text" id="txtCep" name="txtCep" /></td>
-				</tr>
 				<tr>
+				</tr>
 					<td>Cidade: </td>
 					<td><input type="text" id="txtCidade" name="txtCidade" /></td>
-				</tr>
 				<tr>
+				</tr>
 					<td>Estado: </td>
 					<td><input type="text" id="txtEstado" name="txtEstado" /></td>
-				</tr>
 				<tr>
-					<td>Pais: </td>
-					<td><input type="text" id="txtPais" name="txtPais" /></td>
 				</tr>
+					<td>Pais: </td>
+					<td><input type="text" id="txtPais" name="txtPais" /></td></tr>
+				
 				<input type="hidden" name="txtIdFkEndereco" value="<%out.print(p.getId()); %>">																							
 			</table>
 		      </div>
