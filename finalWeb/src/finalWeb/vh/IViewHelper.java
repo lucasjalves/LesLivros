@@ -12,6 +12,6 @@ import finalDominio.EntidadeDominio;
 public interface IViewHelper {
 	public EntidadeDominio getEntidade(HttpServletRequest request);
 	
-	public void setView(Resultado resultadoConsulta, Resultado resultado,  
+	public void setView(Resultado resultado,  
 			HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException;
 }

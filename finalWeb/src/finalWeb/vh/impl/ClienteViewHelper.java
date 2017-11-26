@@ -1,8 +1,11 @@
 package finalWeb.vh.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +20,9 @@ import finalDominio.EntidadeDominio;
 import finalDominio.PessoaFisica;
 import finalDominio.Telefone;
 import finalWeb.vh.IViewHelper;
+import finalDominio.Pedido;
+import finalDominio.Pessoa;
+import finalDominio.Item;
 
 public class ClienteViewHelper implements IViewHelper{
 
@@ -25,6 +31,7 @@ public class ClienteViewHelper implements IViewHelper{
 		String operacao = request.getParameter("operacao");
 		System.out.println(operacao);
 		PessoaFisica p = null;
+		System.out.println(operacao);
 		if(operacao.equals("LOGIN"))
 		{
 			p = new PessoaFisica();
@@ -96,12 +103,7 @@ public class ClienteViewHelper implements IViewHelper{
 			
 		}
 		
-		else {/*
-			HttpSession session = request.getSession();
-			Resultado resultado = (Resultado) session.getAttribute("resultado");
-			for(EntidadeDominio e: resultado.getEntidades()){
-					p = (PessoaFisica)e;
-			*/
+		else {
 			p = new PessoaFisica();
 			String tipoRes = request.getParameter("txtTipoRes");
 			String tipoLog = request.getParameter("txtTipoLog");
@@ -132,7 +134,6 @@ public class ClienteViewHelper implements IViewHelper{
 			String dtVencimentoTxt = request.getParameter("txtDtVencimento");
 			String codSeg = request.getParameter("txtCodSeg");
 			
-			Date dtVencimento = ConverteDate.converteStringDate(dtVencimentoTxt);
 			
 			Endereco e = new Endereco();
 			
@@ -157,7 +158,7 @@ public class ClienteViewHelper implements IViewHelper{
 			
 			c.setBandeira(bandeira);
 			c.setCodSeg(codSeg);
-			c.setDtVencimento(dtVencimento);
+			c.setDtVencimento(dtVencimentoTxt);
 			c.setNumero(numCartao);
 			/*
 			p.setNome(nome_cli);
@@ -178,14 +179,13 @@ public class ClienteViewHelper implements IViewHelper{
 	}
 
 	@Override
-	public void setView(Resultado resultadoConsulta, Resultado resultado, HttpServletRequest request, HttpServletResponse response)
+	public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 
 		RequestDispatcher d=null;
-		
+
 		String operacao = request.getParameter("operacao");
-		System.out.println(operacao);
 		if(operacao.equals("SALVARCLIENTE"))
 		{
 			request.getSession().setAttribute("resultado", resultado);
@@ -194,7 +194,7 @@ public class ClienteViewHelper implements IViewHelper{
 		}
 
 
-		if(resultado.getMsg() == null && operacao.equals("EXCLUIR")){
+		if(operacao.equals("EXCLUIR")){
 			
 			request.getSession().setAttribute("resultado", null);
 			d= request.getRequestDispatcher("ConsultarCliente.jsp");  
@@ -208,23 +208,65 @@ public class ClienteViewHelper implements IViewHelper{
 		
 		if(resultado.getMsg() == null && operacao.equals("LOGIN"))
 		{
+			List<EntidadeDominio> entidades = resultado.getEntidades();
+			PessoaFisica p = (PessoaFisica) entidades.get(0);
+			String txtId = String.valueOf(p.getId());
+			request.getSession().setAttribute("userid", txtId);
+			
+			if(request.getSession().getAttribute("mapaUsuarios") != null)
+			{
+				if(request.getSession().getAttribute("usuariodeslogado") != null)
+				{
+					Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
+					Pedido pedido = mapaUsuarios.get(0);
+					pedido.setUsuario(p);
+					mapaUsuarios.put(p.getId(), pedido);
+					mapaUsuarios.remove(0);
+					request.getSession().removeAttribute("usuariodeslogado");
+					request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
+				}
+				else
+				{
+					Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
+					Pedido pedido = mapaUsuarios.get(p.getId());
+					pedido.setUsuario(p);
+					mapaUsuarios.replace(p.getId(), pedido);
+					request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);			
+				}
+				
+			}
+			
+			if(request.getSession().getAttribute("mapaUsuarios") == null)
+			{
+				Map<Integer, Pedido>mapaUsuarios = new HashMap<Integer, Pedido>();
+				Pedido pedido = new Pedido();
+				pedido.setUsuario(p);
+				List<Item> itens = new ArrayList<Item>();
+				pedido.setItem(itens);
+				mapaUsuarios.put(p.getId(), pedido);
+				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
+			}
+						
 			request.getSession().setAttribute("resultadoLogin", resultado);
 			d = request.getRequestDispatcher("Conta.jsp");  
+			d.forward(request, response);
 		}
 		
 		if(operacao.equals("ALTERAR") || operacao.equals("VISUALIZAR"))
 		{
-			if(resultadoConsulta != null)
-			{
-				request.getSession().setAttribute("resultado", resultadoConsulta);
-				d = request.getRequestDispatcher("Conta.jsp"); 
-			}
-			else
-			{
-				request.getSession().setAttribute("resultado", resultado);
-				d = request.getRequestDispatcher("Conta.jsp"); 							
-			}
- 
+			Resultado res = (Resultado)request.getSession().getAttribute("resultadoLogin");
+			
+			List<EntidadeDominio> e = res.getEntidades();
+			
+			Pessoa p = (Pessoa)e.get(0);
+			
+			String email = p.getEmail();
+			String senha = p.getSenha();
+
+			
+			String url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&";
+			d = request.getRequestDispatcher(url); 		
+			d.forward(request, response);
 		}
 		
 		if(operacao.equals("CONSULTARCLIENTE")){
@@ -239,9 +281,7 @@ public class ClienteViewHelper implements IViewHelper{
 				d= request.getRequestDispatcher("ConsultarCliente.jsp");  	
 			}
 		}
-		
-		
-		d.forward(request,response);
+			
 	}		
 	
 

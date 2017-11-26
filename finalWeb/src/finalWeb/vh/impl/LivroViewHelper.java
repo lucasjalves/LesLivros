@@ -107,7 +107,7 @@ public class LivroViewHelper implements IViewHelper{
 	 * @return
 	 * @see lesWeb.controle.web.vh.IViewHelper#setView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	public void setView(Resultado resultadoConsulta, Resultado resultado, HttpServletRequest request, 
+	public void setView(Resultado resultado, HttpServletRequest request, 
 			HttpServletResponse response)  throws IOException, ServletException {
 		RequestDispatcher d=null;
 		

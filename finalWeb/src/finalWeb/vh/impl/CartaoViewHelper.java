@@ -1,6 +1,10 @@
 package finalWeb.vh.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +15,10 @@ import finalCore.aplicacao.Resultado;
 import finalCore.util.ConverteDate;
 import finalDominio.Cartao;
 import finalDominio.EntidadeDominio;
+import finalDominio.Pedido;
+import finalDominio.Pessoa;
+import finalDominio.PessoaFisica;
+import finalDominio.Item;
 import finalWeb.vh.IViewHelper;
 
 public class CartaoViewHelper implements IViewHelper{
@@ -43,46 +51,69 @@ public class CartaoViewHelper implements IViewHelper{
 			
 			c.setBandeira(bandeira);
 			c.setNumero(numCartao);
-			c.setDtVencimento(ConverteDate.converteStringDate(dtVencimentoTxt));
+			c.setDtVencimento(dtVencimentoTxt);
 			c.setCodSeg(codSeg);
 			c.setId(Integer.parseInt(txtId));
 			c.setPkUsuario(Integer.parseInt(txtFkId));
 			
 			return c;
 		}
+		
+		if(operacao.equals("SALVAR"))
+		{
+			c = new Cartao();
+			String numCartao = request.getParameter("txtNumCartao");
+			String bandeira = request.getParameter("ddlBandeira");
+			String dtVencimentoTxt = request.getParameter("txtDtVencimento");
+			String codSeg = request.getParameter("txtCodSeg");
+			String txtFkId = request.getParameter("txtIdCartaoFk");
+			
+		
+			System.out.println(txtFkId);
+			
+			c.setBandeira(bandeira);
+			c.setNumero(numCartao);
+			c.setDtVencimento(dtVencimentoTxt);
+			c.setCodSeg(codSeg);
+			c.setPkUsuario(Integer.parseInt(txtFkId));
+			
+			return c;
+		}		
 		// TODO Auto-generated method stub
 		return null;
 		
 	}
 
 	@Override
-	public void setView(Resultado resultadoConsulta, Resultado resultado, HttpServletRequest request,
+	public void setView(Resultado resultado, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		
 		RequestDispatcher d=null;
+
+		
 		
 		String operacao = request.getParameter("operacao");	
-		
-		if(operacao.equals("ALTERAR"))
+		if(operacao.equals("SALVAR") || operacao.equals("ALTERAR"))
 		{
-			if(resultadoConsulta != null)
-			{
-				request.getSession().setAttribute("resultado", resultadoConsulta);
-				d = request.getRequestDispatcher("Conta.jsp"); 
-			}
-			else
-			{
-				request.getSession().setAttribute("resultado", resultado);
-				d = request.getRequestDispatcher("Conta.jsp"); 							
-			}
+			Resultado res = (Resultado)request.getSession().getAttribute("resultadoLogin");
 			
-			d.forward(request,response);
- 
-		}
-		
-		
+			List<EntidadeDominio> e = res.getEntidades();
+			
+			Pessoa p = (Pessoa)e.get(0);
+			
+			String email = p.getEmail();
+			String senha = p.getSenha();
 
+			
+			String url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&";
+			d = request.getRequestDispatcher(url); 		
+			d.forward(request, response);
+			
+		}
+
+		
+		
 	}
 
 }

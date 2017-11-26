@@ -13,6 +13,7 @@
 			<script src="bootstrap/jquery-3.2.1.min.js"></script>
 			<script src="bootstrap/popper.js"></script>
 			<script src="bootstrap/bootstrap.min.js"></script>
+			<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 			<script>
 			
 			$(document).ready(function()		
@@ -76,18 +77,18 @@
 		
 		<form action="SalvarLivro" method="post" id="frmSalvarLivro">
 			<table>
-				<tr>
-					<td>Nome do livro</td>
+				
+					<tr><td>Nome do livro</td>
 					<td><input type="text"class="form-control" id="txtNome" name="txtNome"  value=
 					"<%if(livro != null) out.print(livro.getNome());%>" maxlength="100" required/>
-					</td>
-				</tr>
-				<tr>
-					<td>Autor do livro</td><td><input type="text"class="form-control" id="txtAutor" name="txtAutor" 
-					value="<%if(livro != null) out.print(livro.getAutor());%>" maxlength="100" required /></td>
-				</tr>
-				<tr>
-					<td>Categoria do livro</td>
+					</td></tr>
+				
+				
+					<tr><td>Autor do livro</td><td><input type="text"class="form-control" id="txtAutor" name="txtAutor" 
+					value="<%if(livro != null) out.print(livro.getAutor());%>" maxlength="100" required /></td></tr>
+				
+				
+					<tr><td>Categoria do livro</td>
 					<td>
 						<select id="ddlCategoria" name="ddlCategoria" class="ddlCategoria" required>
 							<option>SELECIONE</option>
@@ -117,10 +118,10 @@
 							%>
 
 						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>Subcategoria do livro</td>
+					</td></tr>
+				
+				
+					<tr><td>Subcategoria do livro</td>
 					<td>
 						<select id="ddlsCategoria" name="ddlsCategoria" required>
 							<%
@@ -136,10 +137,10 @@
 							}
 							%>						
 						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>Grupo Precificação</td>
+					</td></tr>
+				
+				
+					<tr><td>Grupo Precificação</td>
 					<td>
 						<select id="ddlsCategoria" name="ddlGrupoPrecificacao" required>
 							<%
@@ -154,48 +155,48 @@
 							}
 							%>						
 						</select>
-					</td>
-				</tr>				
-				<tr>
-					<td>Ano do livro</td>
-					<td><input type="text"class="form-control" id="txtAno" name="txtAno" maxlength="4" required/></td>
-				</tr>
-				<tr>
-					<td>Titulo do livro</td>
-					<td><input type="text"class="form-control" id="txtTitulo" name="txtTitulo"  maxlength="100" required/></td>
-				</tr>
-				<tr>
-					<td>Editora do livro</td>
-					<td><input type="text"class="form-control" id="txtEditora" name="txtEditora" maxlength="40" required/></td>
-				</tr>
-				<tr>
-					<td>Edição do livro</td>
+					</td></tr>
+								
+				
+					<tr><td>Ano do livro</td>
+					<td><input type="text"class="form-control" id="txtAno" name="txtAno" maxlength="4" required/></td></tr>
+				
+				
+					<tr><td>Titulo do livro</td>
+					<td><input type="text"class="form-control" id="txtTitulo" name="txtTitulo"  maxlength="100" required/></td></tr>
+				
+				
+					<tr><td>Editora do livro
+					<input type="text"class="form-control" id="txtEditora" name="txtEditora" maxlength="40" required/></td></tr>
+				
+				
+					<tr><td>Edição do livro</td>
 					<td><input type="text"class="form-control" id="txtEdicao" name="txtEdicao" maxlength="4" required/></td>
-				</tr>
-				<tr>
-					<td>ISBN do livro</td>
-					<td><input type="text"class="form-control" id="txtISBN" name="txtISBN"  maxlength="14" required/></td>
-				</tr>
-				<tr>
-					<td>Número de páginas do livro</td>
-					<td><input type="text"class="form-control" id="txtPaginas" name="txtPaginas"  maxlength="5" required/></td>
-				</tr>
-				<tr>
-					<td>Sinopse do livro</td>
-					<td><input type="text"class="form-control" id="txtSinopse" name="txtSinopse"  require/></td>
-				</tr>
-				<tr>
-					<td>Altura</td>
-					<td><input type="text"class="form-control" id="txtAltura" name="txtAltura"  maxlength="5" required/></td>
-				</tr>
-				<tr>
-					<td>Peso</td>
-					<td><input type="text"class="form-control" id="txtPeso" name="txtPeso" maxlength="5" required /></td>
-				</tr>
-				<tr>
-					<td>Profundidade</td>
-					<td><input type="text"class="form-control" id="txtProfundidade" name="txtProfundidade"  maxlength="5" required/></td>
-				</tr>												
+				
+				
+					<tr><td>ISBN do livro</td>
+					<td><input type="text"class="form-control" id="txtISBN" name="txtISBN"  maxlength="14" required/></td></tr>
+				
+				
+					<tr><td>Número de páginas do livro</td>
+					<td><input type="text"class="form-control" id="txtPaginas" name="txtPaginas"  maxlength="5" required/></td></tr>
+				
+				
+					<tr><td>Sinopse do livro</td>
+					<td><input type="text"class="form-control" id="txtSinopse" name="txtSinopse"  require/></td></tr>
+				
+				
+					<tr><td>Altura</td>
+					<td><input type="text"class="form-control" id="txtAltura" name="txtAltura"  maxlength="5" required/></td></tr>
+				
+				
+					<tr><td>Peso</td>
+					<td><input type="text"class="form-control" id="txtPeso" name="txtPeso" maxlength="5" required /></td></tr>
+				
+				
+					<tr><td>Profundidade</td>
+					<td><input type="text"class="form-control" id="txtProfundidade" name="txtProfundidade"  maxlength="5" required/></td></tr>
+																
 			</table>
 			<input type="submit" id="operacao" name="operacao"
 									value="SALVAR" class="btn btn-default" />

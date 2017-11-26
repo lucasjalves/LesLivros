@@ -57,18 +57,22 @@
 		*/
 	%>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Meu Carrinho</title>
 	<link rel="stylesheet" href="css/reset.css">
 	<link rel="stylesheet" href="bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="css/shop-item.css">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
 	<script src="bootstrap/bootstrap.bundle.min.js"></script>
 	<script>
 		$('#myModal').on('shown.bs.modal', function () {
 			  $('#myInput').focus()
 			})
-
+		$('#myModalAdicionarEnderecos').on('shown.bs.modal', function () {
+			  $('#myInput').focus()
+			})	
 			
 
 		window.onload = function()
@@ -128,31 +132,51 @@
 	</script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="#">Start Bootstrap</a>
+
+    <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #3B3738; height: 75px;">
+      <div class="container" >
+        <a class="navbar-brand" href="#" style="color: white;" >ECommerce LES</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div class="collapse navbar-collapse" id="navbarResponsive" >
           <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+		    <div class="input-group">
+		    <div class="input-group-btn">
+		    	<button type="button" class="btn btn-secondary dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: white;color: black;">
+		    		<span class="sr-only">Toggle Dropdown</span>
+		    		Filtros
+		    	</button>
+		        <div class="dropdown-menu">
+		          <a class="dropdown-item" href="#">Autor</a>
+		          <a class="dropdown-item" href="#">Edição</a>
+		          <a class="dropdown-item" href="#">Título</a>
+		        </div>		    	
+		    </div>
+		      <input type="text" class="form-control" style="width: 500px;">
+		      <div class="input-group-btn">
+		        <button type="button" class="btn btn-secondary" style="background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;"><i class="fa fa-search" aria-hidden="true"></i></button> 
+
+		      </div>
+		      </div>          
+          </li>
             <li class="nav-item active">
-              <a class="nav-link" href="Home.jsp">Home
+              <a class="nav-link" href="Home.jsp" style="color: white;">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+              <a class="nav-link" href="Conta.jsp" style="color: white;">Minha conta</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Services</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="Index.jsp">Login</a>
-            </li>
+              <a class="nav-link" href="Carrinho.jsp" style="color: white;">Meu Carrinho</a>
+            </li>  
+                       
           </ul>
+ 
         </div>
-      </div>
+      </div>   
     </nav>
     <div class="container">
     <div class="card card-outline-secondary my-4">
@@ -185,7 +209,7 @@
 							%>
 						</tr>
 						<%
-						double desconto = 0;
+						
 						double precoTotal = 0;
 						double precoFrete = 0;			
 						double preco = 0;
@@ -226,10 +250,10 @@
 									sb.append("<form action='SalvarCarrinho' method='POST' style=' float: left;' >" );
 									
 									if(p.getItem().get(i).getQtde() <= 1){
-										sb.append("<button type='button' style='float: left;' class='btn btn-danger' disabled>");
+										sb.append("<button type='button' style='float: left; background-color: #7E8F7C; hover:#7E8F7C; border: #7E8F7C;'  class='btn btn-danger' disabled>");
 									}		
 									else{
-										sb.append("<button type='submit' name='operacao' value='subtrairItem' style='float: left;' class='btn btn-danger'>");
+										sb.append("<button type='submit' name='operacao' value='subtrairItem' style='float: left;  background-color: #7E8F7C; hover:#7E8F7C; border: #7E8F7C;' class='btn btn-danger'>");
 									}
 									sb.append("<span>-</span>");
 									sb.append("</button>");   
@@ -240,10 +264,10 @@
 									
 									sb.append("<form action='SalvarCarrinho' method='POST' style=' float: right;' >" );
 									if(it.getQtde() == 0){
-										sb.append("<button type='button' style='float: left; size: 80%' class='btn btn-success' disabled> ");
+										sb.append("<button type='button' style='float: left; size: 80%;  background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;' class='btn btn-success' disabled> ");
 									}
 									else{
-										sb.append("<button type='submit' name='operacao' value='AdicionarItem' style='float: left; size: 80%' class='btn btn-success' > ");
+										sb.append("<button type='submit' name='operacao' value='AdicionarItem' class='btn btn-success' style='float: left; size: 80%;  background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'> ");
 									}
 									
 									sb.append("<span>+</span>");
@@ -272,15 +296,11 @@
 										request.getSession().setAttribute("mapUsuarios", map);
 									}
 									else{
-										sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td></tr>");
+										sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td>");
+
 									}
-									if(res != null)
-									{
-										if(res.getMsg() != null)
-										{
-											sb.append("<td>" + res.getMsg() + "</td></tr>");
-										}
-									}
+
+
 									sb.append("</tr>");	
 									out.print(sb.toString());	
 									//mapaResultado.replace(l.getId(), null);
@@ -306,6 +326,16 @@
 			</div>
          </div>
      </div>
+     					<% 
+	    					if(res != null)
+							{
+								if(res.getMsg() != null)
+								{
+									out.print("<p style='color: red;'>" + res.getMsg() + "<p>");
+								}
+								res = null;
+							}
+						%>
             <div class="col-lg-4 col-md-6 mb-4" style="position: relative; float: right;">
               <div class="card h-100">
                 <div class="card-body">
@@ -319,10 +349,12 @@
                   {
                 	  if(cupom.getMsg() == null && cupom.getEntidades().size() != 0)
                 	  {
+                		  
                 		  List<EntidadeDominio> listCupom = cupom.getEntidades();
                 		  Cupom c = (Cupom)listCupom.get(0);
-                		  desconto = (c.getDesconto()) / 100;
-                		  precoTotal = precoTotal - (precoTotal * desconto);
+						  int desconto = c.getDesconto();
+                		  
+                		  precoTotal = precoTotal - desconto;
        
                 	  }
                   }
@@ -333,11 +365,16 @@
                   
                   <h6 style="color: green" id="desconto">
                   	<%
+                  	
                   	if(cupom != null)
                   	{
+              		  List<EntidadeDominio> listCupom = cupom.getEntidades();
+              		  Cupom c = (Cupom)listCupom.get(0);
+						  int desconto = c.getDesconto();
+						desconto = 0 - desconto;
                   		if(cupom.getMsg() == null)
                   		{
-                  			out.print("Desconto: " + String.format("%.2f", precoTotal * desconto) + "R$");
+                  			out.print("Desconto: " + desconto + "R$");
                   		}
                   	}
                   	%>
@@ -347,7 +384,7 @@
                   
                   <form action="ValidarCupom" method="POST">
                   	<input type="text" name="txtCodigo" placeholder="Código do cupom" maxlength="6">
-                  	<button type="submit" name="operacao" value="AdicionarCupom" class="btn btn-success" />	
+                  	<button type="submit" name="operacao" value="AdicionarCupom" class="btn btn-success" style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'/>	
                   			<span>Adicionar Cupom</span>
                   	</button>
                   </form>
@@ -359,11 +396,12 @@
                   	 <input type="hidden" id='txtFrete' name="txtFrete" value="">
                   	 <%if(item.size() > 0)
                   	 	{
-                  		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' /><span>Finalizar Compra</span>");
+                  		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' " +
+                  		 			"style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'/><span>Finalizar Compra <i class='fa fa-shopping-cart' aria-hidden='true'></i></span>");
                   	 	}
                   	 	else
                   	 	{
-                  	 		out.print("<button type='button' class='btn btn-danger' /><span>Finalizar Compra</span>");
+                  	 		out.print("<button type='button' class='btn btn-secondary' /><span>Finalizar Compra</span>");
                   	 	}
                   	%>
                   	 
@@ -380,7 +418,7 @@
                 </div>
               </div>
             </div>
-            
+    
            <div class="col-lg-4 col-md-6 mb-4" style="position: relative; float: left;">
               <div class="card h-100">
                 <div class="card-body">
@@ -419,7 +457,7 @@
     									"class='btn btn-primary' " +
     									"data-toggle='modal' "+
     									"data-target='#myModalEnderecos" + i + "'"+
-    									"id='btnEndereco'>Visualizar</button></td>"); 
+    									"id='btnEndereco' style='background-color: #7E8F7C; hover:#7E8F7C; border: #7E8F7C'>Visualizar</button></td>"); 
     							if(i == 0)
     								out.print("<td><input type='radio' onclick='calcularCEP(this,  \""+ e.getCep() + "\","+ i +")' name='ra' checked></td>");
     							else
@@ -460,22 +498,23 @@
     							modals.append("</table>");
     							modals.append("</div>");
     							modals.append("<div class='modal-footer'>");
-    							modals.append("<button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancelar</button>");
+    							modals.append("<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>");
     							modals.append("</div>");
     							modals.append("</div>");
     							modals.append("</div>");
     							modals.append("</div>");
-
-    							
     							out.print(modals.toString());
     							}
-    							
+                      		out.print("<button type='button' class='btn btn-primary' "+
+                      				"data-toggle='modal' data-target='#myModalAdicionarEnderecos' "+
+                      				"style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	");  							
     						}
+
                   		}
-            
+            			
                   	%>
                		
-              
+        	      	
                 </div>
               </div>
             </div>                
@@ -484,6 +523,74 @@
 
             request.removeAttribute("resultadoCarrinho");
             %>
+       
+            
+  	<form action="SalvarEndereco" method="post" id="frmSalvarLivro">
+		<div class="modal fade" id="myModalAdicionarEnderecos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="myModalLabel">Adicionar Endereco</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+			<table>
+				<tr>
+					<td>Apelido Endereço: </td>
+					<td><input type="text" id="txtNome" name="txtNome" /></td>
+				</tr>
+				<tr>
+					<td>Tipo Residencia: </td>
+					<td><input type="text" id="txtTipoRes" name="txtTipoRes" /></td>
+				<tr>
+					<td>Tipo Logradouro: </td>
+					<td><input type="text" id="txtTipoLog" name="txtTipoLog" /></td>
+				</tr>					
+				<tr>		
+					<td>Logradouro: </td>
+					<td><input type="text" id="txtLogradouro" name="txtLogradouro" /></td>
+				</tr>					
+				<tr>	
+					<td>Número da Casa: </td>
+					<td><input type="text" id="txtNumCasa" name="txtNumCasa" /></td>
+					</tr>
+				<tr>
+					<td>Bairro: </td>
+					<td><input type="text" id="txtBairro" name="txtBairro" /></td>
+				</tr>
+				<tr>
+					<td>CEP: </td>
+					<td><input type="text" id="txtCep" name="txtCep" /></td>
+				</tr>
+				<tr>
+					<td>Cidade: </td>
+					<td><input type="text" id="txtCidade" name="txtCidade" /></td>
+				</tr>
+
+				<tr>
+					<td>Estado: </td>
+					<td><input type="text" id="txtEstado" name="txtEstado" /></td>
+				</tr>
+				<tr>
+					<td>Pais: </td>
+					<td><input type="text" id="txtPais" name="txtPais" /></td></tr>
+				
+				<input type="hidden" name="txtIdFkEndereco" value="<%out.print(stringId); %>"/>				
+				<input type="hidden" name="local" value="carrinho">																				
+			</table>
+		      </div>
+		      <div class="modal-footer">
+		        <input type="submit" class ="btn btn-primary" id="operacao" name="operacao" value="SALVAR"  style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'/>		      
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</form>          
+       
      </div> 
+
 </body>
 </html>

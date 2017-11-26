@@ -111,59 +111,19 @@ public class Servlet extends HttpServlet {
 	protected void doProcessRequest(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		//Obtêm a uri que invocou esta servlet (O que foi definido no methdo do form html)
+
 		
 		String uri = request.getRequestURI();
-		Resultado resultadoConsulta = null;
-		//Obtêm a operação 
-
 		String operacao = request.getParameter("operacao");
-		//Obtêm um viewhelper indexado pela uri que invocou esta servlet
-		IViewHelper vh = vhs.get(uri);
-		
-		//O viewhelper retorna a entidade especifica para a tela que chamou esta servlet
-		
+
+		IViewHelper vh = vhs.get(uri);		
 		EntidadeDominio entidade =  vh.getEntidade(request);
-		//Obtêm o command para executar a respectiva operação
-		ICommand command = commands.get(operacao);
 		
-		/*Executa o command que chamará a fachada para executar a operação requisitada
-		 * o retorno é uma instância da classe resultado que pode conter mensagens derro 
-		 * ou entidades de retorno
-		 */
-		if(operacao.equals("VISUALIZAR"))
-		{
-			String userid = (String)request.getSession().getAttribute("userid");
-			if(userid != null)
-			{
-				PessoaFisica p = new PessoaFisica();
-				Integer id = Integer.parseInt(userid);
-				p.setId(id);
-				command = commands.get("CONSULTAR");
-				resultadoConsulta = command.execute(p);
-			}			
-		}
+		ICommand command = commands.get(operacao);	
 		Resultado resultado = command.execute(entidade);
 
-		if(operacao.equals("ALTERAR") || operacao.equals("LOGIN") || operacao.equals("SALVAR"))
-		{
 
-			String userid = (String)request.getSession().getAttribute("userid");
-			if(userid != null)
-			{
-				PessoaFisica p = new PessoaFisica();
-				Integer id = Integer.parseInt(userid);
-				p.setId(id);
-				command = commands.get("CONSULTAR");
-				resultadoConsulta = command.execute(p);
-			}
-		}
-		/*
-		 * Executa o método setView do view helper específico para definir como deverá ser apresentado 
-		 * o resultado para o usuário
-		 */
-		
-		vh.setView(resultadoConsulta, resultado, request, response);
+		vh.setView(resultado, request, response);
 	
 	}
 }

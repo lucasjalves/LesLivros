@@ -35,8 +35,7 @@ public class CartaoDAO extends AbstractJdbcDAO{
 			pst = connection.prepareStatement(sql.toString());
 			pst.setString(1, c.getNumero());
 			pst.setString(2, c.getBandeira());
-			Timestamp time = new Timestamp(c.getDtVencimento().getTime());
-			pst.setTimestamp(3, time);
+			pst.setString(3, c.getDtVencimento());
 			pst.setString(4, c.getCodSeg());
 			pst.setInt(5, c.getPkUsuario());
 
@@ -77,8 +76,7 @@ public class CartaoDAO extends AbstractJdbcDAO{
 			pst = connection.prepareStatement(sql.toString());
 			pst.setString(1, c.getNumero());
 			pst.setString(2, c.getBandeira());
-			Timestamp time = new Timestamp(c.getDtVencimento().getTime());
-			pst.setTimestamp(3, time);
+			pst.setString(3, c.getDtVencimento());
 			pst.setString(4,  c.getCodSeg());
 			pst.setInt(5, c.getId());
 			pst.setInt(6, c.getPkUsuario());
@@ -134,7 +132,7 @@ public class CartaoDAO extends AbstractJdbcDAO{
 				c.setId(rs.getInt("id_cartao"));
 				c.setBandeira(rs.getString("bandeira"));
 				c.setNumero(rs.getString("numero"));
-				c.setDtVencimento(rs.getDate("dtVencimento"));
+				c.setDtVencimento(rs.getString("dtVencimento"));
 				c.setCodSeg(rs.getString("codigo_seg"));
 				c.setPkUsuario(rs.getInt("pk_cliente"));
 				

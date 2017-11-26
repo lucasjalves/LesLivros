@@ -7,6 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Consultar livro</title>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
 <body>
 
@@ -35,12 +36,12 @@
 	<BR>
 	
 	<TABLE BORDER="5"    WIDTH="50%"   CELLPADDING="4" CELLSPACING="3">
-	   <TR>
+	   
 	      <TH COLSPAN="11"><BR>
 	      	<H3>LIVROS</H3>
 	      </TH>
-	   </TR>
-	   <TR>
+	   
+	   
 	      <TH>Nome</TH>
 	      <TH>Autor</TH>
 	      <TH>Categoria</TH>
@@ -58,7 +59,7 @@
 	      <TH>Grupo</TH>
 	      <TH>Margem Grupo</TH>
 	      <TH>Operação</TH>
-	   </TR>
+	   
    
    <%
    if (resultado != null) {

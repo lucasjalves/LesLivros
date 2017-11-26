@@ -106,7 +106,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 	}
 
 	@Override
-	public void setView(Resultado resultadoConsulta, Resultado resultado, HttpServletRequest request,
+	public void setView(Resultado resultado, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		
 		request.getSession().removeAttribute("resultadoConsultaLivro");
@@ -156,7 +156,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 				mapaUsuarios = new HashMap<Integer, Pedido>();
 			}
 
-			String msg1 = "Nao ha mais livros restantes no estoque";
+			String msg1 = "Não há mais livros restantes no estoque";
 			msg1.trim();
 			if(resultado.getMsg() == null || resultado.getMsg().trim().equals(msg1))
 			{
@@ -269,9 +269,8 @@ public class CarrinhoViewHelper implements IViewHelper {
 						break;
 					}
 				}
-				
-				mapaUsuarios.replace(idUsuario, p);
-				
+				request.getSession().setAttribute("resultadoLivro", resultado);
+				mapaUsuarios.replace(idUsuario, p);		
 			}
 			
 			if(resultado.getMsg() != null)
@@ -333,7 +332,6 @@ public class CarrinhoViewHelper implements IViewHelper {
 			
 			mapaUsuarios.replace(idUsuario, p);
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-			request.getSession().setAttribute("resultadoLivro", resultado);
 			d = request.getRequestDispatcher("Carrinho.jsp");
 			
 			

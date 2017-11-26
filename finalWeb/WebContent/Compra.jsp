@@ -9,6 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="bootstrap/bootstrap.min.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	<script src="bootstrap/popper.js"></script>
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
 	<script src="bootstrap/bootstrap.min.js"></script>
@@ -18,14 +19,17 @@
 			})
 		$('#myModalAdicionarEnderecos').on('shown.bs.modal', function () {
 			  $('#myInput').focus()
-			})	
+			})
+		$('#myModalAdicionarCartao').on('shown.bs.modal', function () {
+			  $('#myInput').focus()
+			})				
 	</script>
 	<link rel="stylesheet" href="bootstrap/bootstrap.min.css">
 	<link href="css/shop-homepage.css" rel="stylesheet">
 	
 
 	<%
-	
+		
 		Map<Integer, Pedido> mapaUsuario = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
 		String id = (String)request.getSession().getAttribute("userid");
 		if(id == null)
@@ -48,10 +52,41 @@
 
 
 	%>
-
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Comprar</title>
-</head>
+	<script>
+		function colocarInput(indice)
+		{
+			var td = document.getElementById("cartao" + indice);
+			var input = document.createElement('input');
+			input.setAttribute("id", "input" + indice);
+			input.type = 'number';
+			
+			var formulario = document.getElementById("formulario");
+			var hidden = document.createElement('input');
+			hidden.setAttribute("name", "cartaoHidden" + indice);
+			hidden.setAttribute("id", "cartaoHidden" + indice);
+			hidden.type = "hidden";
+			
+			var chkbox = document.getElementById("chkbox" + indice).checked;
+			if(!chkbox)
+			{
+				$("#input"+indice).remove();
+				$("#cartaoHidden"+indice).remove();
+				var formInputHidden = document.getElementById("cartaoHidden"+indice);
+				var formInputNumber = document.getElementById("input"+indice);
+				formulario.removeChild(forminput);
+				td.removeChild(formInputNumber);
+			}
+			else
+			{
+				td.appendChild(input);
+				formulario.append(hidden);
+			}
+			
+		}
+	</script>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Comprar</title>
+	</head>
 
 
 <body>
@@ -62,14 +97,34 @@
 	}
 	%>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #2B7D77;">
-      <div class="container">
-        <a class="navbar-brand" href="#" style="color: white;" >Start Bootstrap</a>
+    <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #3B3738; height: 75px;">
+      <div class="container" >
+        <a class="navbar-brand" href="#" style="color: white;" >ECommerce LES</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div class="collapse navbar-collapse" id="navbarResponsive" >
           <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+		    <div class="input-group">
+		    <div class="input-group-btn">
+		    	<button type="button" class="btn btn-secondary dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: white;color: black;">
+		    		<span class="sr-only">Toggle Dropdown</span>
+		    		Filtros
+		    	</button>
+		        <div class="dropdown-menu">
+		          <a class="dropdown-item" href="#">Autor</a>
+		          <a class="dropdown-item" href="#">Edição</a>
+		          <a class="dropdown-item" href="#">Título</a>
+		        </div>		    	
+		    </div>
+		      <input type="text" class="form-control" style="width: 500px;">
+		      <div class="input-group-btn">
+		        <button type="button" class="btn btn-secondary" style="background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;"><i class="fa fa-search" aria-hidden="true"></i></button> 
+
+		      </div>
+		      </div>          
+          </li>
             <li class="nav-item active">
               <a class="nav-link" href="Home.jsp" style="color: white;">Home
                 <span class="sr-only">(current)</span>
@@ -78,9 +133,14 @@
             <li class="nav-item">
               <a class="nav-link" href="Conta.jsp" style="color: white;">Minha conta</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Carrinho.jsp" style="color: white;">Meu Carrinho</a>
+            </li>  
+                       
           </ul>
+ 
         </div>
-      </div>
+      </div>   
     </nav>
     <div class="container">
     	<div class="row">    
@@ -160,10 +220,13 @@
 									"class='btn btn-primary' " +
 									"data-toggle='modal' "+
 									"data-target='#myModalCartao" + i + "'"+
-									"id='btnEndereco' style='background-color: #2B7D77;'>Visualizar</button></td>");
+									"id='btnEndereco' style='background-color: #2B7D77; hover: #2B7D77;border: #2B7D77;'>Visualizar</button></td>");
+							out.print("<td><input type='checkbox' id='chkbox"+ i +"' onclick='colocarInput("+ i +")'></td>");
+							out.print("<td id='cartao" + i +"'></td>");
 							out.print("</tr>");
 			     		}
 			     	%>
+
 			     </table>
 			     <%
 			     	StringBuilder modals = new StringBuilder();
@@ -191,7 +254,7 @@
 						modals.append("</table>");
 						modals.append("</div>");
 						modals.append("<div class='modal-footer'>");
-						modals.append("<button type='button' class='btn btn-danger' data-dismiss='modal'>Fechar</button>");
+						modals.append("<button type='button' class='btn btn-secondary' data-dismiss='modal'>Fechar</button>");
 						modals.append("</div>");
 						modals.append("</div>");
 						modals.append("</div>");
@@ -200,12 +263,46 @@
 						out.print(modals.toString());
 					}
 			     %>	
-			        		
+			       <form action="ComprarItens" method="POST" id="formulario">
+			 
+			       </form>
+			       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarCartao" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>
 		      	</div>
 		  	</div>	
 		  </div>
 	</div>
-
+	<form action="SalvarCartao" method="post" id="frmSalvarCartao">
+		<div class="modal fade" id="myModalAdicionarCartao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="myModalLabel">Adicionar Cartão</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+			<table>
+					<tr><td>Número Cartão: </td><td><input type='text' id='txtNumCartao' name='txtNumCartao'/></td></tr>
+					<tr><td>Bandeira: 			<td><select name="ddlBandeira">
+					<option value="MasterCard">MasterCard</option>
+      				<option value="VISA">VISA</option>
+      				<option value="American Express">American Express</option>
+					</select></td></tr>
+					<tr><td>Data de Vencimento: </td><td><input type='text' id='txtDtVencimento' name='txtDtVencimento' /></td></tr>
+					<tr><td>Código de Segurança: </td><td><input type='text' id='txtCodSeg' name='txtCodSeg' /></td></tr>
+					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<%out.print(idUsuario); %>" />	</td></tr>
+					<tr><td><input type="hidden" name="local" value="compra" />	</td></tr>																				
+			</table>
+		      </div>
+		      <div class="modal-footer">
+		        <input type="submit" class ="btn btn-primary" id="operacao" name="operacao" value="SALVAR"  style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'/>		      
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</form>
 
 
 

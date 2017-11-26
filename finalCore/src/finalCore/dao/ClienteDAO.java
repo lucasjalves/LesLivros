@@ -235,7 +235,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 					c.setBandeira(cartoesCliente.getString("bandeira"));
 					c.setNumero(cartoesCliente.getString("numero"));
 					c.setCodSeg(cartoesCliente.getString("codigo_seg"));
-					c.setDtVencimento(cartoesCliente.getDate("dtVencimento"));
+					c.setDtVencimento(cartoesCliente.getString("dtVencimento"));
 					c.setPkUsuario(cartoesCliente.getInt("pk_cliente"));
 					cartoes.add(c);
 				}				

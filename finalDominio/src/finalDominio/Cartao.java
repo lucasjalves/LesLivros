@@ -1,10 +1,9 @@
 package finalDominio;
 
-import java.util.Date;
 
 public class Cartao extends EntidadeDominio{
 	private String numero;
-	private Date dtVencimento;
+	private String dtVencimento;
 	private String codSeg;
 	private String bandeira;
 	private Integer pkUsuario;
@@ -21,10 +20,11 @@ public class Cartao extends EntidadeDominio{
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-	public Date getDtVencimento() {
+
+	public String getDtVencimento() {
 		return dtVencimento;
 	}
-	public void setDtVencimento(Date dtVencimento) {
+	public void setDtVencimento(String dtVencimento) {
 		this.dtVencimento = dtVencimento;
 	}
 	public String getCodSeg() {

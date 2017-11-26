@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="bootstrap/bootstrap.min.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<script src="bootstrap/popper.js"></script>
@@ -39,26 +40,16 @@
 			pageContext.forward("Index.jsp");
 			return;
 		}
+		
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		PessoaFisica p = (PessoaFisica) entidades.get(0);
 		String txtId = String.valueOf(p.getId());
-		
-
 		session.setAttribute("userid", txtId);
+		
 		List<Endereco> end= p.getEndereco();
 		List<Cartao> cartoes = p.getCartao();
-		
-		if(request.getSession().getAttribute("mapaUsuarios") == null)
-		{
-			Map<Integer, Pedido>mapaUsuarios = new HashMap<Integer, Pedido>();
-			Pedido pedido = new Pedido();
-			pedido.setUsuario(p);
-			List<Item> itens = new ArrayList<Item>();
-			pedido.setItem(itens);
-			mapaUsuarios.put(p.getId(), pedido);
-			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-		}
-		
+
+
 
 	%>
 	<%
@@ -71,32 +62,51 @@
 		out.print("<script>$('#myModalCartao"+ i + "').on('shown.bs.modal', function () {$('#myInput').focus()})</script>");
 	}
 	%>	
-	  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-	      <div class="container">
-	        <a class="navbar-brand" href="#">Start Bootstrap</a>
-	        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-	          <span class="navbar-toggler-icon"></span>
-	        </button>
-	        <div class="collapse navbar-collapse" id="navbarResponsive">
-	          <ul class="navbar-nav ml-auto">
-	            <li class="nav-item active">
-	              <a class="nav-link" href="Home.jsp">Home
-	                <span class="sr-only">(current)</span>
-	              </a>
-	            </li>
-	            <li class="nav-item">
-	              <a class="nav-link" href="#">About</a>
-	            </li>
-	            <li class="nav-item">
-	              <a class="nav-link" href="#">Services</a>
-	            </li>
-	            <li class="nav-item">
-	              <a class="nav-link" href="Index.jsp">Login</a>
-	            </li>
-	          </ul>
-	        </div>
-	      </div>
-	    </nav>
+     <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #3B3738; height: 75px;">
+      <div class="container" >
+        <a class="navbar-brand" href="#" style="color: white;" >ECommerce LES</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive" >
+          <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+		    <div class="input-group">
+		    <div class="input-group-btn">
+		    	<button type="button" class="btn btn-secondary dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: white;color: black;">
+		    		<span class="sr-only">Toggle Dropdown</span>
+		    		Filtros
+		    	</button>
+		        <div class="dropdown-menu">
+		          <a class="dropdown-item" href="#">Autor</a>
+		          <a class="dropdown-item" href="#">Edição</a>
+		          <a class="dropdown-item" href="#">Título</a>
+		        </div>		    	
+		    </div>
+		      <input type="text" class="form-control" style="width: 500px;">
+		      <div class="input-group-btn">
+		        <button type="button" class="btn btn-secondary" style="background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;"><i class="fa fa-search" aria-hidden="true"></i></button> 
+
+		      </div>
+		      </div>          
+          </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="Home.jsp" style="color: white;">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Conta.jsp" style="color: white;">Minha conta</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Carrinho.jsp" style="color: white;">Meu Carrinho</a>
+            </li>  
+                       
+          </ul>
+ 
+        </div>
+      </div>   
+    </nav>
       <div class="container">
 	      <div class="row">
 		      <div class="col-lg-9">
@@ -154,13 +164,13 @@
 									</table>
 								      </div>
 								      <div class="modal-footer">
-								        <input type="submit" class ="btn btn-primary" id="operacao" name="operacao" value="ALTERAR"  />		      
-								        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								        <input type="submit" class ="btn btn-primary" id="operacao" name="operacao" value="ALTERAR"  style='background-color: #2B7D77; hover: #2B7D77;border: #2B7D77;'/>		      
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
 								      </div>
 								    </div>
 								  </div>
 								</div>
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Alterar</button>	
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Alterar</button>	
 								</form>								 
 			              </div>
 			            </div>
@@ -193,7 +203,7 @@
 									"class='btn btn-primary' " +
 									"data-toggle='modal' "+
 									"data-target='#myModalEnderecos" + i + "'"+
-									"id='btnEndereco'>Alterar</button></td>");
+									"id='btnEndereco' style='background-color: #7E8F7C; hover: #7E8F7C;border: #7E8F7C;'>Alterar</button></td>");
 							out.print("</tr>");
 						}
 						out.print("</table>");
@@ -229,8 +239,8 @@
 							modals.append("</table>");
 							modals.append("</div>");
 							modals.append("<div class='modal-footer'>");
-							modals.append("<input type='submit' class ='btn btn-primary' id='operacao' name='operacao' value='ALTERAR'  />");
-							modals.append("<button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancelar</button>");
+							modals.append("<input type='submit' class ='btn btn-primary' id='operacao' name='operacao' value='ALTERAR'  style='background-color: #2B7D77; hover: #2B7D77;border: #2B7D77;'/>");
+							modals.append("<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>");
 							modals.append("</div>");
 							modals.append("</div>");
 							modals.append("</div>");
@@ -242,7 +252,7 @@
 							
 						}
 					%>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarEnderecos">Adicionar</button>	
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarEnderecos" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	
                 </div>
               </div>
            </div>
@@ -277,7 +287,7 @@
 									"class='btn btn-primary' " +
 									"data-toggle='modal' "+
 									"data-target='#myModalCartao" + i + "'"+
-									"id='btnEndereco'>Alterar</button></td>");
+									"id='btnEndereco' style='background-color: #7E8F7C; hover: #7E8F7C;border: #7E8F7C; '>Alterar</button></td>");
 							out.print("</tr>");
 						}
 						out.print("</table>");
@@ -299,7 +309,7 @@
 							modals.append("</div>");
 							modals.append("<div class='modal-body' id='detalhesCartoes'>");
 							modals.append("<table>");
-							modals.append("<tr><td><input type='hidden' id='txtIdEndereco' name='txtIdEndereco' value='" + String.valueOf(c.getId())+ "'/></td></tr>");
+							modals.append("<tr><td><input type='hidden' id='txtIdCartao' name='txtIdCartao' value='" + String.valueOf(c.getId())+ "'/></td></tr>");
 							modals.append("<tr><td>Número Cartão: </td><td><input type='text' id='txtNumCartao' name='txtNumCartao' value='" + c.getNumero() + "'/></td></tr>");
 							modals.append("<tr><td>Bandeira: </td><td><input type='text' id='ddlBandeira' name='ddlBandeira' value='" + c.getBandeira() + "'/></td></tr>");
 							modals.append("<tr><td>Data de Vencimento: </td><td><input type='text' id='txtDtVencimento' name='txtDtVencimento' value='" + c.getDtVencimento() + "'/></td></tr>");
@@ -308,8 +318,8 @@
 							modals.append("</table>");
 							modals.append("</div>");
 							modals.append("<div class='modal-footer'>");
-							modals.append("<input type='submit' class ='btn btn-primary' id='operacao' name='operacao' value='ALTERAR'  />");
-							modals.append("<button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancelar</button>");
+							modals.append("<input type='submit' class ='btn btn-primary' id='operacao' name='operacao' value='ALTERAR' style='background-color: #2B7D77; hover: #2B7D77;border: #2B7D77;' />");
+							modals.append("<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>");
 							modals.append("</div>");
 							modals.append("</div>");
 							modals.append("</div>");
@@ -321,7 +331,7 @@
 							
 						}
 					%>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarEnderecos">Adicionar</button>	
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalCartao" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	
                 </div>
               </div>
            </div>
@@ -330,8 +340,41 @@
       			<!--                               MODAL DOS CARTOES  FIM                            -->   
       
 
+	<form action="SalvarCartao" method="post" id="frmSalvarCartao">
+		<div class="modal fade" id="myModalCartao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="myModalLabel">Adicionar Endereco</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+			<table>
+					<tr><td>Número Cartão: </td><td><input type='text' id='txtNumCartao' name='txtNumCartao'/></td></tr>
+					<tr><td>Bandeira: 			<td><select name="ddlBandeira">
+					<option value="MasterCard">MasterCard</option>
+      				<option value="VISA">VISA</option>
+      				<option value="American Express">American Express</option>
+					</select></td></tr>
+					<tr><td>Data de Vencimento: </td><td><input type='text' id='txtDtVencimento' name='txtDtVencimento' /></td></tr>
+					<tr><td>Código de Segurança: </td><td><input type='text' id='txtCodSeg' name='txtCodSeg' /></td></tr>
+					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<%out.print(txtId); %>" />	</td></tr>
+					<tr><td><input type="hidden" name="local" value="conta" />	</td></tr>																				
+			</table>
+		      </div>
+		      <div class="modal-footer">
+		        <input type="submit" class ="btn btn-primary" id="operacao" name="operacao" value="SALVAR"  style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'/>		      
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</form>
+	
 	<form action="SalvarEndereco" method="post" id="frmSalvarLivro">
-		<div class="modal fade" id="myModalAdicionarEnderecos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal fade" id="myModalCartao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -350,35 +393,35 @@
 					<td>Tipo Residencia: </td>
 					<td><input type="text" id="txtTipoRes" name="txtTipoRes" /></td>
 				<tr>
-				</tr>
 					<td>Tipo Logradouro: </td>
 					<td><input type="text" id="txtTipoLog" name="txtTipoLog" /></td>
+				</tr>					
 				<tr>		
-				</tr>
 					<td>Logradouro: </td>
 					<td><input type="text" id="txtLogradouro" name="txtLogradouro" /></td>
+				</tr>					
 				<tr>	
-				</tr>
 					<td>Número da Casa: </td>
 					<td><input type="text" id="txtNumCasa" name="txtNumCasa" /></td>
+					</tr>
 				<tr>
-				</tr>
 					<td>Bairro: </td>
 					<td><input type="text" id="txtBairro" name="txtBairro" /></td>
-				<tr>
 				</tr>
+				<tr>
 					<td>CEP: </td>
 					<td><input type="text" id="txtCep" name="txtCep" /></td>
-				<tr>
 				</tr>
+				<tr>
 					<td>Cidade: </td>
 					<td><input type="text" id="txtCidade" name="txtCidade" /></td>
-				<tr>
 				</tr>
+
+				<tr>
 					<td>Estado: </td>
 					<td><input type="text" id="txtEstado" name="txtEstado" /></td>
-				<tr>
 				</tr>
+				<tr>
 					<td>Pais: </td>
 					<td><input type="text" id="txtPais" name="txtPais" /></td></tr>
 				
@@ -386,13 +429,19 @@
 			</table>
 		      </div>
 		      <div class="modal-footer">
-		        <input type="submit" class ="btn btn-primary" id="operacao" name="operacao" value="SALVAR"  />		      
+		        <input type="submit" class ="btn btn-primary" id="operacao" name="operacao" value="SALVAR"  style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'/>		      
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
 		      </div>
 		    </div>
 		  </div>
 		</div>
 	</form>
+	</div>
 	
+    <footer class="py-5" style="background-color: #3B3738;">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+      </div>
+    </footer>	
 </body>
 </html>

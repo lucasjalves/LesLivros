@@ -40,7 +40,7 @@ public class PedidoViewHelper implements IViewHelper {
 	}
 
 	@Override
-	public void setView(Resultado resultadoConsulta, Resultado resultado, HttpServletRequest request,
+	public void setView(Resultado resultado, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		

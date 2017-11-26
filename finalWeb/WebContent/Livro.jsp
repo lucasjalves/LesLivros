@@ -20,41 +20,61 @@
 	%>
 	
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Livro: <%out.print(l.getNome()); %></title>
 	<link rel="stylesheet" href="bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="css/shop-item.css">
-	
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	<script src="bootstrap/jquery-3.2.1.min.js"></script>
     <script src="bootstrap/bootstrap.bundle.min.js"></script>
+    
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="#">Start Bootstrap</a>
+    <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #3B3738; height: 75px;">
+      <div class="container" >
+        <a class="navbar-brand" href="#" style="color: white;" >ECommerce LES</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div class="collapse navbar-collapse" id="navbarResponsive" >
           <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+		    <div class="input-group">
+		    <div class="input-group-btn">
+		    	<button type="button" class="btn btn-secondary dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: white;color: black;">
+		    		<span class="sr-only">Toggle Dropdown</span>
+		    		Filtros
+		    	</button>
+		        <div class="dropdown-menu">
+		          <a class="dropdown-item" href="#">Autor</a>
+		          <a class="dropdown-item" href="#">Edição</a>
+		          <a class="dropdown-item" href="#">Título</a>
+		        </div>		    	
+		    </div>
+		      <input type="text" class="form-control" style="width: 500px;">
+		      <div class="input-group-btn">
+		        <button type="button" class="btn btn-secondary" style="background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;"><i class="fa fa-search" aria-hidden="true"></i></button> 
+
+		      </div>
+		      </div>          
+          </li>
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home
+              <a class="nav-link" href="Home.jsp" style="color: white;">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+              <a class="nav-link" href="Conta.jsp" style="color: white;">Minha conta</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Services</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
-            </li>
+              <a class="nav-link" href="Carrinho.jsp" style="color: white;">Meu Carrinho</a>
+            </li>  
+                       
           </ul>
+ 
         </div>
-      </div>
+      </div>   
     </nav>
 
     <!-- Page Content -->
@@ -63,12 +83,7 @@
       <div class="row">
 
         <div class="col-lg-3">
-          <h1 class="my-4">Shop Name</h1>
-          <div class="list-group">
-            <a href="#" class="list-group-item active">Category 1</a>
-            <a href="#" class="list-group-item">Category 2</a>
-            <a href="#" class="list-group-item">Category 3</a>
-          </div>
+
         </div>
         <!-- /.col-lg-3 -->
 
@@ -87,7 +102,7 @@
               	}
               	else
               	{
-              		out.print("<a href='SalvarCarrinho?operacao=VERIFICAR' class='btn btn-success'>Adicionar ao carrinho</a>");
+              		out.print("<a href='SalvarCarrinho?operacao=VERIFICAR' class='btn btn-success' style='background-color: #2B7D77; hover: #2B7D77;border: #2B7D77;'>Adicionar ao carrinho</a>");
               	}
               %>
 			
@@ -107,39 +122,39 @@
 					</thead>
 					<tbody>
 						
-							<tr><td>Ano</td></tr>
-							<tr><td><%out.print(l.getAno()); %></td></tr>
+							<tr><td>Ano</td>
+							<td><%out.print(l.getAno()); %></td></tr>
 						
 						
-							<tr><td>Editora</td></tr>
-							<tr><td><%out.print(l.getEditora()); %></td></tr>
+							<tr><td>Editora</td>
+							<td><%out.print(l.getEditora()); %></td></tr>
 						
 						
-							<tr><td>Edição</td></tr>
-							<tr><td><%out.print(l.getEdicao()); %></td></tr>
+							<tr><td>Edição</td>
+							<td><%out.print(l.getEdicao()); %></td></tr>
 						
 						
-							<tr><td>ISBN</td></tr>
-							<tr><td><%out.print(l.getISBN()); %></td></tr>
+							<tr><td>ISBN</td>
+							<td><%out.print(l.getISBN()); %></td></tr>
 						
 						
-							<tr><td>Nº Páginas</td></tr>
-							<tr><td><%out.print(l.getNpaginas()); %></td></tr>
+							<tr><td>Nº Páginas</td>
+							<td><%out.print(l.getNpaginas()); %></td></tr>
 						
 						
-							<tr><td>Altura</td></tr>
-							<tr><td><%out.print(l.getAltura()); %></td></tr>
+							<tr><td>Altura</td>
+							<td><%out.print(l.getAltura()); %></td></tr>
 						
 						
-							<tr><td>Largura</td></tr>
-							<tr><td><%out.print(l.getLargura()); %></td></tr>
+							<tr><td>Largura</td>
+							<td><%out.print(l.getLargura()); %></td></tr>
 						
 						
-							<tr><td>Profundidade</td></tr>
-							<tr><td><%out.print(l.getProfundidade()); %></td></tr>
+							<tr><td>Profundidade</td>
+							<td><%out.print(l.getProfundidade()); %></td></tr>
 						
-							<tr><td>Peso</td></tr>
-							<tr><td><%out.print(l.getPeso()); %></td></tr>
+							<tr><td>Peso</td>
+							<td><%out.print(l.getPeso()); %></td></tr>
 																																																			
 					</tbody>
 					</table>
@@ -158,7 +173,7 @@
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark">
+    <footer class="py-5" style="background-color: #2B7D77;">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
       </div>

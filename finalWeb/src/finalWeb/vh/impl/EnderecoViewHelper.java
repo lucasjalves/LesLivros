@@ -1,6 +1,8 @@
 package finalWeb.vh.impl;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +13,8 @@ import finalCore.aplicacao.Resultado;
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalWeb.vh.IViewHelper;
+import finalDominio.Pedido;
+import finalDominio.Pessoa;
 
 public class EnderecoViewHelper implements IViewHelper {
 
@@ -87,29 +91,33 @@ public class EnderecoViewHelper implements IViewHelper {
 	}
 
 	@Override
-	public void setView(Resultado resultadoConsulta, Resultado resultado, HttpServletRequest request, HttpServletResponse response)
+	public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		RequestDispatcher d=null;
 		
 		String operacao = request.getParameter("operacao");
-
+		String local = request.getParameter("local");
+		
+		
 		if(operacao.equals("ALTERAR") || operacao.equals("VISUALIZAR") || operacao.equals("SALVAR"))
 		{
-			if(resultadoConsulta != null)
-			{
-				request.getSession().setAttribute("resultado", resultadoConsulta);
-				d = request.getRequestDispatcher("Conta.jsp"); 
-			}
-			else
-			{
-				request.getSession().setAttribute("resultado", resultado);
-				d = request.getRequestDispatcher("Conta.jsp"); 							
-			}
+			Resultado res = (Resultado)request.getSession().getAttribute("resultadoLogin");
+			
+			List<EntidadeDominio> e = res.getEntidades();
+			
+			Pessoa p = (Pessoa)e.get(0);
+			
+			String email = p.getEmail();
+			String senha = p.getSenha();
+
+			
+			String url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&";
+			d = request.getRequestDispatcher(url); 		
+			d.forward(request, response);
  
 		}
 		
-		d.forward(request,response);
 	}
 
 }
