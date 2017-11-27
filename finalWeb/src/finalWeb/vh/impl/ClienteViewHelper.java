@@ -246,9 +246,23 @@ public class ClienteViewHelper implements IViewHelper{
 				mapaUsuarios.put(p.getId(), pedido);
 				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			}
-						
-			request.getSession().setAttribute("resultadoLogin", resultado);
-			d = request.getRequestDispatcher("Conta.jsp");  
+			String local = request.getParameter("local");
+			
+			if(local == null)
+			{
+				d = request.getRequestDispatcher("Conta.jsp");
+				local = "";
+			}
+				  
+			
+			if(local.equals("carrinho"))
+				d = request.getRequestDispatcher("Carrinho.jsp");  
+			
+			if(local.equals("compra"))
+				d = request.getRequestDispatcher("Compra.jsp");
+			
+			
+			request.getSession().setAttribute("resultadoLogin", resultado);  
 			d.forward(request, response);
 		}
 		

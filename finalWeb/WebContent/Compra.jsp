@@ -40,7 +40,6 @@
 		String txtIndiceEndereco = request.getParameter("txtIndiceEnderecos");
 		int indiceEndereco = Integer.parseInt(txtIndiceEndereco);
 		
-		System.out.println(id);
 		int idUsuario = Integer.parseInt(id);
 		Pedido pedido = mapaUsuario.get(idUsuario);
 		
@@ -187,11 +186,10 @@
 									sb.append("R$</td></tr>");
 									out.print(sb.toString());
 								}
-								String txtFrete = request.getParameter("txtFrete");
-								double frete = Double.parseDouble(txtFrete);
 								
-								String txtTotal = request.getParameter("txtValor");
-								double total = Double.parseDouble(txtTotal);
+								double frete = pedido.getFrete();
+								
+								double total = pedido.getPrecoTotal();
 							%>
 							<tr>
 							<td></td>
@@ -264,7 +262,7 @@
 					}
 			     %>	
 			       <form action="ComprarItens" method="POST" id="formulario">
-			 
+			 		<input type='hidden' name='qtdeCartoes' id = 'qtdeCartoes' value=''/>
 			       </form>
 			       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarCartao" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>
 		      	</div>

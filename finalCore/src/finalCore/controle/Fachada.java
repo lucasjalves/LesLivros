@@ -16,7 +16,6 @@ import finalCore.dao.ClienteDAO;
 import finalCore.dao.CupomDAO;
 import finalCore.dao.EnderecoDAO;
 import finalCore.dao.GrupoPrecificacaoDAO;
-import finalCore.dao.ItemPedidoDAO;
 import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
 import finalCore.dao.SubCategoriaDAO;

@@ -180,13 +180,14 @@
 		</div>            
 		    <!--                               MODAL DOS ENDERECOS                              -->
       		<!--                               MODAL DOS ENDERECOS	                            -->
-      		<div class="row">
+      	<div class="row">
            <div class="col-lg-4 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
                   <h4 class="card-title">
                     Meus Endereços
                   </h4>
+                 </div>
 					<table class="table table">
 					<% 
 					if(resultado != null)
@@ -252,10 +253,11 @@
 							
 						}
 					%>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarEnderecos" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarEnderecos" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>
+				</table>	
                 </div>
               </div>
-           </div>
+        
      
       		<!--                               MODAL DOS ENDERECOS  (FIM)                            -->
       		<!--                               MODAL DOS ENDERECOS	(FIM)                            -->
@@ -271,6 +273,7 @@
                   <h4 class="card-title">
                     Cartões
                   </h4>
+                  
 					<table class="table table">
 					<% 
 					if(resultado != null)
@@ -331,10 +334,14 @@
 							
 						}
 					%>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalCartao" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	
+					
+						
+						</table>
+					</div>	
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalCartao" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	
                 </div>
+                
               </div>
-           </div>
            </div>
                  <!--                               MODAL DOS CARTOES  FIM                            -->   
       			<!--                               MODAL DOS CARTOES  FIM                            -->   
@@ -345,7 +352,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="myModalLabel">Adicionar Endereco</h5>
+		        <h5 class="modal-title" id="myModalLabel">Adicionar cartão de crédito</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -374,7 +381,7 @@
 	</form>
 	
 	<form action="SalvarEndereco" method="post" id="frmSalvarLivro">
-		<div class="modal fade" id="myModalCartao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal fade" id="myModalAdicionarEnderecos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -436,7 +443,7 @@
 		  </div>
 		</div>
 	</form>
-	</div>
+</div>   
 	
     <footer class="py-5" style="background-color: #3B3738;">
       <div class="container">

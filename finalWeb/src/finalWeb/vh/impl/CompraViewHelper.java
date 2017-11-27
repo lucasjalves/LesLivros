@@ -13,9 +13,11 @@ import finalDominio.Item;
 import finalDominio.Livro;
 
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import finalDominio.Cupom;
 import finalDominio.EntidadeDominio;
 import finalWeb.vh.IViewHelper;
 
@@ -26,27 +28,33 @@ public class CompraViewHelper implements IViewHelper{
 		// TODO Auto-generated method stub
 		Map<Integer, Pedido> mapaUsuarios = (HashMap<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
 		String operacao = request.getParameter("operacao");
-		System.out.println(operacao);
 		if(operacao.equals("ComprarItens"))
 		{
-			String txtId = (String)request.getSession().getAttribute("userid");
-			int id = Integer.parseInt(txtId);
-			Pedido p = mapaUsuarios.get(id);
-			Integer indiceLivro = (Integer)request.getSession().getAttribute("indice");
-			if(indiceLivro != null)
-			{
-				Item i = p.getItem().get(indiceLivro);
-				request.getSession().setAttribute("qtdeLivrosPedido", i.getQtde());
-				return i;
-			}
-			else
-			{
-				request.getSession().setAttribute("indice", 0);
-				Item item = p.getItem().get(0);
-				request.getSession().setAttribute("qtdeLivrosPedido", item.getQtde());
-				return item;
-			}
+			String precoTotalTxt = request.getParameter("txtValor");
+			String freteTxt = request.getParameter("txtFrete");
+			Resultado resultadoCupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
 
+			String id = (String)request.getSession().getAttribute("userid");
+			Map<Integer, Pedido> mapaUsuario = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");	
+			int idUsuario = Integer.parseInt(id);
+			Pedido pedido = mapaUsuario.get(idUsuario);
+			
+			double precoTotal = Double.parseDouble(precoTotalTxt);
+			double frete = Double.parseDouble(freteTxt);
+			
+			pedido.setFrete(frete);
+			pedido.setPrecoTotal(precoTotal);
+		
+			
+			if(resultadoCupom != null)
+			{
+				List<EntidadeDominio> e = resultadoCupom.getEntidades();
+				Cupom cupom = (Cupom)e.get(0);
+				List<Cupom> cupons = new ArrayList<Cupom>();
+				cupons.add(cupom);
+				pedido.setCupom(cupons);;
+			}
+			return new Item();
 			
 		}
 		return null;
@@ -60,62 +68,10 @@ public class CompraViewHelper implements IViewHelper{
 		String operacao = request.getParameter("operacao");
 
 		if(operacao.equals("ComprarItens"))
-		{
-			Map<Integer, Pedido> mapaUsuarios = (HashMap<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
-			String txtId = (String)request.getSession().getAttribute("userid");
-			
-			int id = Integer.parseInt(txtId);
-			Pedido p = mapaUsuarios.get(id);
-			
-			List<EntidadeDominio> e = resultado.getEntidades();
-			Item item = (Item)e.get(0);
-					
-			Integer indice = (Integer)request.getSession().getAttribute("indice"); 
-			
-			int qtdeLivroRestantes = item.getQtde();
-			int qtdeLivroPedido = (int)request.getSession().getAttribute("qtdeLivrosPedido");
-			
-			
-			if(qtdeLivroRestantes < qtdeLivroPedido)
-			{
-				request.getSession().setAttribute("falha", true);
-			}
-			int index = indice + 1;
-			int qtde = p.getItem().size();
-			System.out.println(index);
-			System.out.println(qtde);
-			if(index == qtde)
-			{
-				
-				if(request.getSession().getAttribute("falha") != null)  //deu merda e volta pro carrinho
-				{
-					request.getSession().removeAttribute("falha");
-					request.getSession().removeAttribute("indice");
-					request.getSession().removeAttribute("qtdeLivrosPedido");
-					d = request.getRequestDispatcher("Carrinho.jsp"); 
-					d.forward(request,response);
-					return;
-				}
-				else
-
-					request.getSession().removeAttribute("falha");
-					request.getSession().removeAttribute("indice");
-					request.getSession().removeAttribute("qtdeLivrosPedido");
-					d = request.getRequestDispatcher("Compra.jsp"); 
-					d.forward(request,response);
-					return;						
-				}
-			else
-			{
-				String url = "ComprarItens?indice=" + indice;
-				request.getSession().setAttribute("indice", indice + 1);
-				d = request.getRequestDispatcher(url);
-				d.forward(request,response);
-				return;						
-			}
-				
+		{		
+			d = request.getRequestDispatcher("Compra.jsp");
+			d.forward(request, response);
 		}
-		
 	}
 
 }

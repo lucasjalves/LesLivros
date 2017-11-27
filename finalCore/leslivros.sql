@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 21-Nov-2017 às 00:57
+-- Generation Time: 27-Nov-2017 às 00:56
 -- Versão do servidor: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -30,7 +30,7 @@ CREATE TABLE `cartao` (
   `id_cartao` int(11) NOT NULL,
   `numero` varchar(30) NOT NULL,
   `bandeira` varchar(100) NOT NULL,
-  `dtVencimento` date NOT NULL,
+  `dtVencimento` varchar(10) NOT NULL,
   `codigo_seg` varchar(20) NOT NULL,
   `pk_cliente` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -40,11 +40,11 @@ CREATE TABLE `cartao` (
 --
 
 INSERT INTO `cartao` (`id_cartao`, `numero`, `bandeira`, `dtVencimento`, `codigo_seg`, `pk_cliente`) VALUES
-(1, '1112223334455', 'MasterCard', '2022-08-01', '655', 5),
-(2, '1112223334455', 'MasterCard', '2022-08-01', '655', 6),
-(3, '33332223334455', 'American Express', '2022-08-01', '655', 6),
-(4, '123124124', 'MasterCard', '2022-08-01', '667', 7),
-(5, '124545', 'MasterCard', '2022-08-01', '123', 8);
+(1, '1112223334455', 'MasterCard', '09/2022', '655', 5),
+(2, '1112223334454', 'MasterCard', '09/2022', '655', 6),
+(4, '123124124', 'MasterCard', '09/2022', '667', 7),
+(5, '124545', 'MasterCard', '09/2022', '123', 8),
+(13, '11122233344550', 'VISA', '01/26', '590', 6);
 
 -- --------------------------------------------------------
 
@@ -88,8 +88,8 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`id_cliente`, `genero`, `nome_cliente`, `dtNascimento`, `cpf`, `email`, `senha`, `status`, `cnpj`) VALUES
-(5, 'M', 'Marco', '1965-07-23', '11122233344', 'teste@teste.com', '123', 1, NULL),
-(6, 'M', 'Lucas Julio', '1997-07-25', '11122233344', 'lucasjulio@brq.com', '12345', 1, NULL),
+(5, 'M', 'Marco', '1965-07-23', '11122233344', 'teste', '123', 1, NULL),
+(6, 'M', 'Lucas Julio Alves', '1997-07-25', '11122233344', 'lucasjulio', '123', 1, NULL),
 (7, 'M', 'Felipe', '2000-08-23', '4443332221100', 'felipe@teste.com', '123', 1, NULL),
 (8, 'M', 'Fabio', '1996-08-01', '55544433322', 'fabio@teste.com', '123', 1, NULL);
 
@@ -102,17 +102,30 @@ INSERT INTO `cliente` (`id_cliente`, `genero`, `nome_cliente`, `dtNascimento`, `
 CREATE TABLE `cupom` (
   `id_cupom` int(11) NOT NULL,
   `codigo` varchar(6) NOT NULL,
-  `desconto` double(4,2) DEFAULT NULL
+  `desconto` double(4,2) DEFAULT NULL,
+  `tipo` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `cupom`
 --
 
-INSERT INTO `cupom` (`id_cupom`, `codigo`, `desconto`) VALUES
-(1, 'aaa111', 5.00),
-(2, 'bbb222', 7.50),
-(3, 'ccc333', 10.00);
+INSERT INTO `cupom` (`id_cupom`, `codigo`, `desconto`, `tipo`) VALUES
+(1, 'aaa111', 20.00, 0),
+(2, 'bbb222', 30.00, 0),
+(3, 'ccc333', 40.00, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `cupom_pedido`
+--
+
+CREATE TABLE `cupom_pedido` (
+  `id` int(11) NOT NULL,
+  `fk_cupom` int(11) NOT NULL,
+  `fk_pedido` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -141,10 +154,9 @@ CREATE TABLE `endereco` (
 
 INSERT INTO `endereco` (`id_endereco`, `tipo_res`, `tipo_log`, `logradouro`, `num_casa`, `bairro`, `cep`, `cidade`, `estado`, `pais`, `pk_cliente`, `nome_id`) VALUES
 (6, 'TEste', 'Teste', 'Teste', '123', 'Morte', '0114687', 'Suzano', 'SP', 'Brasil', 5, 'Teste'),
-(7, 'Casa', 'Avenida', 'R. Teste', '1234', 'Bairro', '0114687', 'Mogi', 'SP', 'Brasil', 6, 'Casa'),
 (8, 'Casa', 'Teste', 'Teste', '801', 'Teste', '12345520', 'Suzno', 'SP', 'Brasil', 7, 'Casa'),
 (9, 'Apartamento', 'Avenida', 'R. Teste', '100', 'Jardim Teste', '08676250', 'Suzano', 'SP', 'Brasil', 6, 'Trabalho'),
-(13, 'TEste', 'Teste', 'Teste', '123', 'Morte', '0114687', 'Triste', 'Depressão', 'Aiai', 6, 'Casa 123'),
+(16, 'Apartamento', 'Avenida', 'R. Teste', '1234', 'Jardim Teste', '06676250', 'Mogi', 'SP', 'Brasil', 6, 'Casa'),
 (12, 'Casa', 'Rua', 'Teste', '801', 'Bairro', '08676250', 'Ferraz', 'SP', 'Brasil', 8, 'Casa');
 
 -- --------------------------------------------------------
@@ -175,7 +187,7 @@ INSERT INTO `grupoprecificacao` (`id_grupo`, `nome_grupo`, `taxa`) VALUES
 
 CREATE TABLE `item_pedido` (
   `id` int(11) NOT NULL,
-  `pk_livro` int(11) NOT NULL,
+  `fk_livro` int(11) NOT NULL,
   `quantidade` int(11) NOT NULL,
   `preco` double(4,2) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -219,9 +231,22 @@ INSERT INTO `livros` (`id`, `nome`, `autor`, `ano`, `status`, `titulo`, `editora
 (10, 'Nome', 'Autor', '2017', 1, 'Titulo', 'Editora', '1', '654654', '100', '200', 200, 200, 200, 1, 4, 2, 2, 50.30, '12.00'),
 (11, 'Dougras', 'Lucas', '2017', 1, 'Dougras', 'Fatec', '1', '12345', '100', 'Sinopse', 200, 200, 200, 1, 7, 1, 2, 1.40, '13.00'),
 (12, 'Nudge', 'Richard Thaler', '2009', 1, 'Nudge', 'Penguin Books UK', '1', '9780141040011', '100', 'Sinopse', 19, 13, 2, 2, 8, 2, 2, 50.60, '14.00'),
-(13, 'Option B - Facing Adversity, Building Resilience, And Finding Joy', 'Sandberg, Sheryl / Grant, Adam', '2017', 1, 'Option B - Facing Adversity, Building Resilience, And Finding Joy', 'Knopf', '1', '9781524711214', '240', 'Livro', 24.1, 0.44, 2.5, 2, 8, 1, 2, 50.80, '15.00'),
+(13, 'Building Resilience', 'Sandberg, Sheryl / Grant, Adam', '2017', 1, 'Building Resilience', 'Knopf', '1', '9781524711214', '240', 'Livro', 24.1, 0.44, 2.5, 2, 8, 1, 2, 50.80, '15.00'),
 (14, 'The Founder\'s Mentality', 'Allen, James / Zook, Chris', '2016', 1, 'The Founder\'s Mentality', 'Harvard Business Review Press', '1', '9781633691162', '224', 'Sinopse', 23.62, 0.41, 2.29, 2, 12, 2, 2, 50.50, '16.00'),
-(16, 'Option B - Facing Adversity, Building Resilience, And Finding Joy', 'Sandberg, Sheryl / Grant, Adam', '2017', 1, 'Option B - Facing Adversity, Building Resilience, And Finding Joy', 'Knopf', '1', '9781524711214', '240', 'Livro', 24.1, 0.44, 2.5, 2, 8, 1, 2, 50.70, '17.00');
+(16, 'Facing Adversity', 'Sandberg, Sheryl / Grant, Adam', '2017', 1, 'Facing Adversity', 'Knopf', '1', '9781524711214', '240', 'Livro', 24.1, 0.44, 2.5, 2, 8, 1, 2, 50.70, '17.00');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `pagamento_cartao`
+--
+
+CREATE TABLE `pagamento_cartao` (
+  `id_pagamento_cartao` int(11) NOT NULL,
+  `fk_cartao` int(11) NOT NULL,
+  `fk_pedido` int(11) NOT NULL,
+  `valor` double(5,2) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -234,7 +259,9 @@ CREATE TABLE `pedido` (
   `dtPedido` date NOT NULL,
   `status` varchar(20) NOT NULL,
   `pk_cliente` int(11) NOT NULL,
-  `precoTotal` double(5,2) DEFAULT NULL
+  `precoTotal` double(5,2) DEFAULT NULL,
+  `frete` double(4,2) DEFAULT NULL,
+  `fk_endereco` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -324,6 +351,14 @@ ALTER TABLE `cupom`
   ADD PRIMARY KEY (`id_cupom`);
 
 --
+-- Indexes for table `cupom_pedido`
+--
+ALTER TABLE `cupom_pedido`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_pedido` (`fk_pedido`),
+  ADD KEY `fk_cupom` (`fk_cupom`);
+
+--
 -- Indexes for table `endereco`
 --
 ALTER TABLE `endereco`
@@ -340,7 +375,8 @@ ALTER TABLE `grupoprecificacao`
 -- Indexes for table `item_pedido`
 --
 ALTER TABLE `item_pedido`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_livro` (`fk_livro`);
 
 --
 -- Indexes for table `livros`
@@ -349,10 +385,19 @@ ALTER TABLE `livros`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pagamento_cartao`
+--
+ALTER TABLE `pagamento_cartao`
+  ADD PRIMARY KEY (`id_pagamento_cartao`),
+  ADD KEY `fk_cartao` (`fk_cartao`),
+  ADD KEY `fk_pedido` (`fk_pedido`);
+
+--
 -- Indexes for table `pedido`
 --
 ALTER TABLE `pedido`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_endereco` (`fk_endereco`);
 
 --
 -- Indexes for table `subcategoria`
@@ -375,7 +420,7 @@ ALTER TABLE `telefone`
 -- AUTO_INCREMENT for table `cartao`
 --
 ALTER TABLE `cartao`
-  MODIFY `id_cartao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_cartao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `categoria`
 --
@@ -392,10 +437,15 @@ ALTER TABLE `cliente`
 ALTER TABLE `cupom`
   MODIFY `id_cupom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
+-- AUTO_INCREMENT for table `cupom_pedido`
+--
+ALTER TABLE `cupom_pedido`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `endereco`
 --
 ALTER TABLE `endereco`
-  MODIFY `id_endereco` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_endereco` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT for table `grupoprecificacao`
 --
@@ -411,6 +461,11 @@ ALTER TABLE `item_pedido`
 --
 ALTER TABLE `livros`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT for table `pagamento_cartao`
+--
+ALTER TABLE `pagamento_cartao`
+  MODIFY `id_pagamento_cartao` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `pedido`
 --

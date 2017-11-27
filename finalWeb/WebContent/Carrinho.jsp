@@ -352,7 +352,7 @@
                 		  
                 		  List<EntidadeDominio> listCupom = cupom.getEntidades();
                 		  Cupom c = (Cupom)listCupom.get(0);
-						  int desconto = c.getDesconto();
+						  double desconto = c.getDesconto();
                 		  
                 		  precoTotal = precoTotal - desconto;
        
@@ -370,11 +370,11 @@
                   	{
               		  List<EntidadeDominio> listCupom = cupom.getEntidades();
               		  Cupom c = (Cupom)listCupom.get(0);
-						  int desconto = c.getDesconto();
+						 double desconto = c.getDesconto();
 						desconto = 0 - desconto;
                   		if(cupom.getMsg() == null)
                   		{
-                  			out.print("Desconto: " + desconto + "R$");
+                  			out.print("Desconto: " + String.format("%.2f", desconto) + "R$");
                   		}
                   	}
                   	%>
@@ -590,7 +590,7 @@
 		</div>
 	</form>          
        
-     </div> 
+    
 
 </body>
 </html>

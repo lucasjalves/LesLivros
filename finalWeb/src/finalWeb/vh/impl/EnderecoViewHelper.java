@@ -98,7 +98,7 @@ public class EnderecoViewHelper implements IViewHelper {
 		
 		String operacao = request.getParameter("operacao");
 		String local = request.getParameter("local");
-		
+		String url;
 		
 		if(operacao.equals("ALTERAR") || operacao.equals("VISUALIZAR") || operacao.equals("SALVAR"))
 		{
@@ -106,13 +106,19 @@ public class EnderecoViewHelper implements IViewHelper {
 			
 			List<EntidadeDominio> e = res.getEntidades();
 			
+
 			Pessoa p = (Pessoa)e.get(0);
 			
 			String email = p.getEmail();
 			String senha = p.getSenha();
 
-			
-			String url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&";
+			if(local == null) {
+				url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&" ;
+			}
+			else
+			{
+				url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&redirect=" + local ;
+			}
 			d = request.getRequestDispatcher(url); 		
 			d.forward(request, response);
  

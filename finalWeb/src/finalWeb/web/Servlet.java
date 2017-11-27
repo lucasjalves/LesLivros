@@ -111,8 +111,6 @@ public class Servlet extends HttpServlet {
 	protected void doProcessRequest(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException {
 		
-
-		
 		String uri = request.getRequestURI();
 		String operacao = request.getParameter("operacao");
 

@@ -3,7 +3,8 @@ package finalDominio;
 public class Cupom extends EntidadeDominio {
 	private Integer id;
 	private String codigo;
-	private Integer desconto;
+	private double desconto;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -16,10 +17,10 @@ public class Cupom extends EntidadeDominio {
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-	public Integer getDesconto() {
+	public double getDesconto() {
 		return desconto;
 	}
-	public void setDesconto(Integer desconto) {
+	public void setDesconto(double desconto) {
 		this.desconto = desconto;
 	}
 	
