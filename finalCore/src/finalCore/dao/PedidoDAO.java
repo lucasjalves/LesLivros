@@ -28,11 +28,15 @@ public class PedidoDAO extends AbstractJdbcDAO{
 		PreparedStatement pst = null;
 		Pedido pedido = (Pedido)entidade;	
 		try {
+			pedido.setStatus("1");
 			connection.setAutoCommit(false);
 			StringBuilder sql = new StringBuilder();
 			sql.append("INSERT INTO pedido (dtPedido, status, pk_cliente, precoTotal, frete, fk_endereco) VALUES (?,?,?,?,?,?)");
 			pst = connection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);	
 		
+			
+			
+			
 			pst.setDate(1, new Date(pedido.getDtPedido().getTime()));
 			pst.setString(2, pedido.getStatus());
 			pst.setInt(3, pedido.getUsuario().getId());

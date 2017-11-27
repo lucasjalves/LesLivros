@@ -45,8 +45,8 @@ public class Servlet extends HttpServlet {
      */
     public Servlet(){
     	
-    	/* Utilizando o command para chamar a fachada e indexando cada command 
-    	 * pela operação garantimos que esta servelt atenderá qualquer operação */
+
+    	
     	commands = new HashMap<String, ICommand>();
     	commands.put("SALVAR", new SalvarCommand());
     	commands.put("SALVARCLIENTE", new SalvarCommand());
@@ -64,14 +64,10 @@ public class Servlet extends HttpServlet {
     	commands.put("removerItem", new VerificarCarrinhoCommand());
     	commands.put("ComprarItens", new VerificarCarrinhoCommand());
     	commands.put("AdicionarCupom", new ConsultarCommand());
-    	/* Utilizando o ViewHelper para tratar especificações de qualquer tela e indexando 
-    	 * cada viewhelper pela url em que esta servlet é chamada no form
-    	 * garantimos que esta servelt atenderá qualquer entidade */
+
     	
     	vhs = new HashMap<String, IViewHelper>();
-    	/*A chave do mapa é o mapeamento da servlet para cada form que 
-    	 * está configurado no web.xml e sendo utilizada no action do html
-    	 */
+ 
     	vhs.put("/finalWeb/SalvarLivro", new LivroViewHelper());
     	vhs.put("/finalWeb/SalvarCliente", new ClienteViewHelper());
     	vhs.put("/finalWeb/SalvarCartao", new CartaoViewHelper());
@@ -84,15 +80,7 @@ public class Servlet extends HttpServlet {
     	vhs.put("/finalWeb/ComprarItens", new CompraViewHelper());
     }
     
-    
-    /**
-     * TODO Descrição do Método
-     * @param req
-     * @param resp
-     * @throws ServletException
-     * @throws IOException
-     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
     		IOException {
@@ -100,9 +88,7 @@ public class Servlet extends HttpServlet {
 
     }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcessRequest(request, response);
 	}

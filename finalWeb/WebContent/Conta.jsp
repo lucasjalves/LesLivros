@@ -187,7 +187,7 @@
                   <h4 class="card-title">
                     Meus Endereços
                   </h4>
-                 </div>
+                 
 					<table class="table table">
 					<% 
 					if(resultado != null)
@@ -253,8 +253,10 @@
 							
 						}
 					%>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarEnderecos" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>
-				</table>	
+						
+				</table>
+				</div>
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarEnderecos" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	
                 </div>
               </div>
         

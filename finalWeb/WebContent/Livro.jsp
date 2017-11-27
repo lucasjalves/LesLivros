@@ -102,7 +102,9 @@
               	}
               	else
               	{
-              		out.print("<a href='SalvarCarrinho?operacao=VERIFICAR' class='btn btn-success' style='background-color: #2B7D77; hover: #2B7D77;border: #2B7D77;'>Adicionar ao carrinho</a>");
+              		out.print("<a href='SalvarCarrinho?operacao=VERIFICAR' class='btn btn-success' " +
+              				" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar ao carrinho" 
+              		+ "<i class='fa fa-shopping-cart' aria-hidden='true'></i></a>");
               	}
               %>
 			
@@ -173,7 +175,7 @@
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5" style="background-color: #2B7D77;">
+    <footer class="py-5" style="background-color: #3B3738;">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
       </div>

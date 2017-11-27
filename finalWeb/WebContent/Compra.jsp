@@ -38,47 +38,101 @@
 			return;
 		}
 		String txtIndiceEndereco = request.getParameter("txtIndiceEnderecos");
-		int indiceEndereco = Integer.parseInt(txtIndiceEndereco);
+
+		
 		
 		int idUsuario = Integer.parseInt(id);
 		Pedido pedido = mapaUsuario.get(idUsuario);
 		
-		
+		if(txtIndiceEndereco != null)
+		{
+			 
+			int indiceEndereco = Integer.parseInt(txtIndiceEndereco);
+			Endereco enderecoSelecionado = pedido.getUsuario().getEndereco().get(indiceEndereco);
+			pedido.setEndereco(enderecoSelecionado);
+		}
 		Pessoa cliente = pedido.getUsuario();
-		Endereco enderecoSelecionado = cliente.getEndereco().get(indiceEndereco);
 		List<Cartao> cartoes = cliente.getCartao();
 		
 
 
 	%>
 	<script>
-		function colocarInput(indice)
+		function colocarInput(indice, precoTotal, id)
 		{
-			var td = document.getElementById("cartao" + indice);
-			var input = document.createElement('input');
-			input.setAttribute("id", "input" + indice);
-			input.type = 'number';
+			//var td = document.getElementById("cartao" + indice);
+			//var input = document.createElement('input');
+			//input.type = 'number';
+			//input.setAttribute("id", "input" + indice);
+			//input.setAttribute("disabled", "true");
+			
 			
 			var formulario = document.getElementById("formulario");
+			
 			var hidden = document.createElement('input');
+			hidden.type = "hidden";
 			hidden.setAttribute("name", "cartaoHidden" + indice);
 			hidden.setAttribute("id", "cartaoHidden" + indice);
-			hidden.type = "hidden";
+			hidden.setAttribute("value", id)
+			//input.setAttribute("value", precoTotal);
 			
+			/*
+			var hiddenValor = document.createElement('input');
+			hiddenValor.type = "hidden";
+			hiddenValor.setAttribute("name", "cartaoValor" + indice);
+			hiddenValor.setAttribute("id", "cartaoValor" + indice);
+			*/
+
 			var chkbox = document.getElementById("chkbox" + indice).checked;
 			if(!chkbox)
 			{
-				$("#input"+indice).remove();
-				$("#cartaoHidden"+indice).remove();
+				
 				var formInputHidden = document.getElementById("cartaoHidden"+indice);
 				var formInputNumber = document.getElementById("input"+indice);
-				formulario.removeChild(forminput);
-				td.removeChild(formInputNumber);
+				//var formInputValor = document.getElementById("cartaoValor"+indice);
+
+				
+				//formulario.removeChild(formInputHidden);
+				//formulario.removeChild(formInputValor);
+				//td.removeChild(formInputNumber);
+				
+				
+				var qtdeCartoesInput = document.getElementById("qtdeCartoes").value;
+				var qtdeCartoesInt = parseInt(qtdeCartoesInput);
+				
+				qtdeCartoesInt = qtdeCartoesInt - 1;
+				document.getElementById("qtdeCartoes").value = qtdeCartoesInt;
+				
+				var qtdeCartoesInput = document.getElementById("qtdeCartoes").value;
+				qtdeCartoesInput = parseInt(qtdeCartoesInput);
+				if(qtdeCartoesInput == 0)
+					qtdeCartoesInput = 1;
+				precoTotal = parseFloat(precoTotal);
+				precoTotal = precoTotal / qtdeCartoesInput;
+				document.getElementById("precoPorCartao").innerText = precoTotal.toFixed(2)+" R$";
+				document.getElementById("precoCartaoCompra").value = precoTotal.toFixed(2);
 			}
 			else
 			{
-				td.appendChild(input);
-				formulario.append(hidden);
+				//td.appendChild(input);
+				formulario.appendChild(hidden);
+				//formulario.appendChild(hiddenValor);
+				
+				var qtdeCartoesInput = document.getElementById("qtdeCartoes").value;
+				var qtdeCartoesInt = parseInt(qtdeCartoesInput);
+				
+				qtdeCartoesInt = qtdeCartoesInt + 1;
+				qtdeCartoesInput = document.getElementById("qtdeCartoes").value = qtdeCartoesInt;
+				
+				//var formInputValor = document.getElementById("cartaoValor"+indice);
+				
+				//alert(formInputValor);
+				var qtdeCartoesInput = document.getElementById("qtdeCartoes").value;
+				qtdeCartoesInput = parseInt(qtdeCartoesInput);
+				precoTotal = parseFloat(precoTotal);
+				precoTotal = precoTotal / qtdeCartoesInput;
+				document.getElementById("precoPorCartao").innerText = precoTotal.toFixed(2)+" R$";
+				document.getElementById("precoCartaoCompra").value = precoTotal.toFixed(2);
 			}
 			
 		}
@@ -152,14 +206,14 @@
 			         
 			            	<p class="h6">Informações de entrega</p>
 			            	<hr>			
-							<p>RUA: <%out.print(enderecoSelecionado.getLogradouro()); %>,								
-							<%out.print(enderecoSelecionado.getNumCasa()); %></p>	
+							<p>RUA: <%out.print(pedido.getEndereco().getLogradouro()); %>,								
+							<%out.print(pedido.getEndereco().getNumCasa()); %></p>	
 							
 								
-							<p>CIDADE: <%out.print(enderecoSelecionado.getCidade()); %>,
-							<%out.print(enderecoSelecionado.getEstado()); %>,	
-							CEP: <%out.print(enderecoSelecionado.getCep()); %>,
-							<%out.print(enderecoSelecionado.getPais()); %></p>	
+							<p>CIDADE: <%out.print(pedido.getEndereco().getCidade()); %>,
+							<%out.print(pedido.getEndereco().getEstado()); %>,	
+							CEP: <%out.print(pedido.getEndereco().getCep()); %>,
+							<%out.print(pedido.getEndereco().getPais()); %></p>	
 							<p>T: (<%out.print(cliente.getTelefone().getDdd()); %>) <%out.print(cliente.getTelefone().getNumero());%></p>
 							<hr>
 
@@ -219,12 +273,18 @@
 									"data-toggle='modal' "+
 									"data-target='#myModalCartao" + i + "'"+
 									"id='btnEndereco' style='background-color: #2B7D77; hover: #2B7D77;border: #2B7D77;'>Visualizar</button></td>");
-							out.print("<td><input type='checkbox' id='chkbox"+ i +"' onclick='colocarInput("+ i +")'></td>");
-							out.print("<td id='cartao" + i +"'></td>");
+							out.print("<td><input type='checkbox' id='chkbox"+ i +"' onclick='colocarInput("+ i +",\"" + String.format("%.2f", pedido.getPrecoTotal()) +"\"," + c.getId() +")'></td>");
+							out.print("<td id='cartao" + i +"'></td>"); 
 							out.print("</tr>");
 			     		}
 			     	%>
-
+					<tr>
+						<td>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarCartao" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>
+							<td><p>Valor a pagar com cada cartão: </p></td>
+							<td><p id="precoPorCartao"></p></td>
+						</td>
+					</tr>
 			     </table>
 			     <%
 			     	StringBuilder modals = new StringBuilder();
@@ -262,9 +322,12 @@
 					}
 			     %>	
 			       <form action="ComprarItens" method="POST" id="formulario">
-			 		<input type='hidden' name='qtdeCartoes' id = 'qtdeCartoes' value=''/>
+			 			<input type='hidden' name='qtdeCartoes' id = 'qtdeCartoes' value='0'/>
+			 			<button type='submit' name='operacao' value='SALVAR'  class ="btn btn-primary">
+			 				<span>Finalizar Compra</span>
+			 			</button>
+			 			<input type='hidden' name="precoCartaoCompra" value="" />
 			       </form>
-			       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdicionarCartao" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>
 		      	</div>
 		  	</div>	
 		  </div>
@@ -302,8 +365,13 @@
 		</div>
 	</form>
 
-
-
+ </div>
+    <footer class="py-5" style="background-color: #3B3738;">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+      </div>
+      <!-- /.container -->
+    </footer>
 </div>
 </body>
 </html>

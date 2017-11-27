@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +44,14 @@ public class PedidoViewHelper implements IViewHelper {
 	public void setView(Resultado resultado, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		
+		RequestDispatcher d = null;
+		String operacao = request.getParameter("operacao");
+		if(operacao.equals("realizarPedido"))
+		{
+			request.getSession().invalidate();
+			d = request.getRequestDispatcher("Home.jsp");
+			d.forward(request, response);
+		}
 	}
 
 }

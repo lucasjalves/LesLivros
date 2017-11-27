@@ -20,7 +20,10 @@ import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
 import finalCore.dao.SubCategoriaDAO;
 import finalCore.dao.TelefoneDAO;
+import finalCore.negocio.ValidarCupomPromocionalData;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
+import finalCore.negocio.ValidarPagamentoCartoes;
+import finalCore.negocio.ValidarQtdeCupomPromocional;
 import finalCore.negocio.VerificarQuantidadeLivroEstoque;
 import finalDominio.Cartao;
 import finalDominio.Categoria;
@@ -83,6 +86,10 @@ public class Fachada implements IFachada{
 		/* Criando instâncias de regras de negócio a serem utilizados*/
 		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	
 		VerificarQuantidadeLivroEstoque vQtdeEstoque = new VerificarQuantidadeLivroEstoque();
+		
+		ValidarCupomPromocionalData vCupomData = new ValidarCupomPromocionalData();
+		ValidarPagamentoCartoes vPagamentoCartao = new ValidarPagamentoCartoes();
+		ValidarQtdeCupomPromocional vQtdCupomProm = new ValidarQtdeCupomPromocional();
 		/* Criando uma lista para conter as regras de negócio de fornencedor
 		 * quando a operação for salvar
 		 */
@@ -96,19 +103,30 @@ public class Fachada implements IFachada{
 		/* Cria o mapa que poderá conter todas as listas de regras de negócio específica 
 		 * por operação  do fornecedor
 		 */
+		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
+		
+		rnsValidarPedido.add(vCupomData);
+		rnsValidarPedido.add(vPagamentoCartao);
+		rnsValidarPedido.add(vQtdCupomProm);
+		
 		Map<String, List<IStrategy>> rnsLivro = new HashMap<String, List<IStrategy>>();
 		Map<String, List<IStrategy>> rnsCarrinho= new HashMap<String, List<IStrategy>>();
+		Map<String, List<IStrategy>> rnsPedido = new HashMap<String, List<IStrategy>>();
+		
 		/*
 		 * Adiciona a listra de regras na operação salvar no mapa do fornecedor (lista criada na linha 70)
 		 */
 		rnsLivro.put("SALVAR", rnsSalvarLivro);	
 		rnsCarrinho.put("VERIFICAR", rnsValidarCarrinho);
 		
+		rnsPedido.put("SALVAR", rnsValidarPedido);
+		
 		/* Adiciona o mapa(criado na linha 79) com as regras indexadas pelas operações no mapa geral indexado 
 		 * pelo nome da entidade
 		 */
 		rns.put(Livro.class.getName(), rnsLivro);
 		rns.put(Item.class.getName(), rnsCarrinho);
+		rns.put(Pedido.class.getName(), rnsPedido);
 	
 	}
 	
@@ -136,6 +154,7 @@ public class Fachada implements IFachada{
 		}else{
 			resultado.setMsg(msg);
 		}
+		System.out.println(resultado.getMsg());
 		return resultado;
 	}
 

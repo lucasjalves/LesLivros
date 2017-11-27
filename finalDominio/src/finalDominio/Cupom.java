@@ -1,10 +1,27 @@
 package finalDominio;
 
+import java.util.Date;
+
 public class Cupom extends EntidadeDominio {
 	private Integer id;
 	private String codigo;
 	private double desconto;
+	private Date dtValidade;
+	private int tipo;
 	
+	
+	public int getTipo() {
+		return tipo;
+	}
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
+	public Date getDtValidade() {
+		return dtValidade;
+	}
+	public void setDtValidade(Date dtValidade) {
+		this.dtValidade = dtValidade;
+	}
 	public Integer getId() {
 		return id;
 	}
