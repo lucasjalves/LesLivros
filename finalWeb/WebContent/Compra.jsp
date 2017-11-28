@@ -320,7 +320,13 @@
 						
 						out.print(modals.toString());
 					}
+					if(request.getSession().getAttribute("resultadoCompra") != null)
+					{
+						Resultado r = (Resultado)request.getSession().getAttribute("resultadoCompra");
+						out.print(r.getMsg());
+					}
 			     %>	
+			     
 			       <form action="ComprarItens" method="POST" id="formulario">
 			 			<input type='hidden' name='qtdeCartoes' id = 'qtdeCartoes' value='0'/>
 			 			<button type='submit' name='operacao' value='SALVAR'  class ="btn btn-primary">

@@ -1,6 +1,7 @@
 package finalWeb.vh.impl;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import finalCore.aplicacao.Resultado;
 import finalDominio.Cupom;
 import finalDominio.EntidadeDominio;
+import finalDominio.Pedido;
 import finalWeb.vh.IViewHelper;
 
 public class CupomViewHelper implements IViewHelper {
@@ -33,6 +35,14 @@ public class CupomViewHelper implements IViewHelper {
 		
 		if(operacao.equals("AdicionarCupom"))
 		{
+			if(resultado.getMsg() == null)
+			{
+				String idTxt = (String)request.getSession().getAttribute("userid");
+				int id = Integer.parseInt(idTxt);
+				Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
+				
+				
+			}
 			request.getSession().setAttribute("resultadoCupom", resultado);
 			d= request.getRequestDispatcher("Carrinho.jsp");  
 		}

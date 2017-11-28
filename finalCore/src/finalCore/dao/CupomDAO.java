@@ -57,7 +57,7 @@ public class CupomDAO extends AbstractJdbcDAO {
 				c.setId(rs.getInt("id_cupom"));
 				c.setCodigo(rs.getString("codigo"));
 				c.setDesconto(rs.getDouble("desconto"));
-				c.setDtValidade(rs.getDate("dtValidacao"));
+				c.setDtValidade(rs.getDate("dtVencimento"));
 				
 				cupons.add(c);
 			}

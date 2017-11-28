@@ -50,7 +50,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 			if(rs.next())
 				idPedido = rs.getInt(1);
 			pedido.setId(idPedido);
-			
+
 			for(int i = 0; i < pedido.getItem().size(); i++)
 			{
 				Livro l = pedido.getItem().get(i).getLivro();
@@ -71,14 +71,18 @@ public class PedidoDAO extends AbstractJdbcDAO{
 				pst.setDouble(3, c.getValorPago());
 				pst.executeUpdate();
 			}
-			
-			for(int i = 0; i < pedido.getCupom().size(); i ++)
+			if(pedido.getCupom() != null)
 			{
-				Cupom c = pedido.getCupom().get(i);
-				pst = connection.prepareStatement("INSERT INTO cupom_pedido (fk_cupom, fk_pedido");
-				pst.setInt(c.getId(), idPedido);
-				pst.executeUpdate();
+				for(int i = 0; i < pedido.getCupom().size(); i ++)
+				{
+					Cupom c = pedido.getCupom().get(i);
+					pst = connection.prepareStatement("INSERT INTO cupom_pedido (fk_cupom, fk_pedido");
+					pst.setInt(1, c.getId());
+					pst.setInt(2, c.getId());
+					pst.executeUpdate();
+				}				
 			}
+
 			connection.commit();
 
 		} catch (SQLException e) {

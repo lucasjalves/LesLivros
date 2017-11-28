@@ -31,6 +31,10 @@ public class CarrinhoViewHelper implements IViewHelper {
 			request.getSession().setAttribute("userid", "0");
 			request.getSession().setAttribute("usuariodeslogado", true);
 			stringId = "0";
+			Map<Integer, Pedido> mapaUsuarios = new HashMap<Integer, Pedido>();
+			mapaUsuarios.put(Integer.parseInt(stringId), new Pedido());
+			
+			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 		}
 		
 		Livro l = (Livro) request.getSession().getAttribute("livro");
@@ -79,20 +83,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 		{
 			
 		}
-		/*
-		if(operacao.equals("validar"))
-		{
-			String txtId = request.getParameter("idLivro");
-			int id = Integer.parseInt(txtId);
-			Livro liv = new Livro();
-			liv.setId(id);
-			Item it = new Item();
-			it.setQtde(m.get(id));
-			it.setLivro(liv);
-			return it;
-			
-		}
-		*/
+		
 		if(mapaUsuarios != null)
 		{
 			Item i = new Item();
@@ -130,14 +121,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 		}
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
-		/*
-		Map<Integer, Resultado> mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
-		if(mapaResultado == null)
-		{
-			mapaResultado = new HashMap<Integer, Resultado>();
-			request.getSession().setAttribute("mapaResultado", mapaResultado);
-		}
-		*/
+
 		
 		
 		
@@ -336,25 +320,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 			
 			
 		}
-		/*
-		if(operacao.equals("validar"))
-		{
-			mapaResultado =  (Map<Integer, Resultado>) request.getSession().getAttribute("mapaResultado");
-			List<EntidadeDominio> e = resultado.getEntidades();
-			Item i = (Item)e.get(0);
-			Livro l = i.getLivro();
-			mapaResultado.replace(l.getId(), resultado);
-			request.getSession().setAttribute("mapaResultado", mapaResultado);
-			if(resultado.getMsg() != null)
-			{
-				Map<Integer, Integer> m = (HashMap<Integer,Integer>)request.getSession().getAttribute("mapaCarrinho");
-				m.replace(l.getId(), i.getQtde());
-				request.getSession().setAttribute("mapaCarrinho", m);
-			}
 
-			d = request.getRequestDispatcher("Carrinho.jsp");			
-		}
-		*/
 		d.forward(request,response);
 	}
 }

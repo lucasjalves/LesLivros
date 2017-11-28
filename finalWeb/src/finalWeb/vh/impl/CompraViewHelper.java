@@ -112,10 +112,17 @@ public class CompraViewHelper implements IViewHelper{
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
 
-		if(operacao.equals("ComprarItens"))
+		if(operacao.equals("SALVAR"))
 		{		
+			request.getSession().setAttribute("resultadoCompra", resultado);
 			d = request.getRequestDispatcher("Compra.jsp");
 			d.forward(request, response);
+		}
+		
+		if(operacao.equals("ComprarItens"))
+		{
+			d = request.getRequestDispatcher("Compra.jsp");
+			d.forward(request, response);			
 		}
 	}
 
