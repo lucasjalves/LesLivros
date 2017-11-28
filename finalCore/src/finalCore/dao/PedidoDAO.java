@@ -5,14 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.List;
 
-import finalDominio.Cartao;
 import finalDominio.CartoesCompra;
 import finalDominio.Cupom;
 import finalDominio.EntidadeDominio;
-import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.Pedido;
 
@@ -115,7 +112,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 
 	@Override
 	public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
-		
+
 		return null;
 	}
 

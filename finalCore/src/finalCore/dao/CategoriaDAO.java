@@ -4,10 +4,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import finalDominio.Categoria;
 import finalDominio.EntidadeDominio;
+import finalDominio.SubCategoria;
 
 
 public class CategoriaDAO extends AbstractJdbcDAO{
@@ -40,31 +43,52 @@ public class CategoriaDAO extends AbstractJdbcDAO{
 		// TODO Auto-generated method stub
 		PreparedStatement pst = null;
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT * FROM `categoria`");
+		sb.append("SELECT * FROM CATEGORIA");
 		System.out.println(sb.toString());
 		try{
 			openConnection();
 			pst = connection.prepareStatement(sb.toString());
 			ResultSet rs = pst.executeQuery();
+			
+			List<Integer> ids = new ArrayList<Integer>();
+			Map<Integer, Categoria> mapaCategorias = new HashMap<Integer, Categoria>();
 			List<EntidadeDominio> categorias = new ArrayList<EntidadeDominio>();
+			
 			while(rs.next()){
 				Categoria c = new Categoria();
-				//SubCategoria subc = new SubCategoria();
-				//c.setSubcategoria(subc);
 				c.setId(rs.getInt("id_categoria"));
 				c.setNome((rs.getString("nome_categoria")));
-				//c.getSubcategoria().setNome(rs.getString("nome_subcategoria"));
-				//c.getSubcategoria().setId(rs.getInt("id_subcategoria"));
-				categorias.add(c);
 				
+				if(!mapaCategorias.containsKey(c.getId()))
+				{
+					c.setSubcategorias(new ArrayList<SubCategoria>());
+					mapaCategorias.put(c.getId(), c);
+					ids.add(c.getId());
+				}			
 			}
+			for(int i = 0; i < ids.size(); i++)
+			{
+				pst = connection.prepareStatement("SELECT * FROM subcategoria WHERE pk_categoria = " + ids.get(i));
+				ResultSet rsSubCategoria = pst.executeQuery();
+				while(rsSubCategoria.next())
+				{
+					SubCategoria s = new SubCategoria();
+					Categoria c = mapaCategorias.get(ids.get(i));
+					s.setId(rsSubCategoria.getInt("id_subcategoria"));
+					s.setNome((rsSubCategoria.getString("nome_subcategoria")));
+					c.getSubcategorias().add(s);
+				}	
+				categorias.add(mapaCategorias.get(ids.get(i)));
+			}		
+			
 			return categorias;		
 		
 	}catch(SQLException e)
 		{
 			e.printStackTrace();
-		}
+	}finally{
+		connection.close();
+	}
 		return null;
 	}
-
 }

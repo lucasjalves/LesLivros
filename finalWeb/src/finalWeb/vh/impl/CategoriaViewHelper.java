@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import finalCore.aplicacao.Resultado;
 import finalDominio.Categoria;
 import finalDominio.EntidadeDominio;
+import finalDominio.Livro;
 import finalDominio.SubCategoria;
 import finalWeb.vh.IViewHelper;
 
@@ -19,12 +20,50 @@ public class CategoriaViewHelper implements IViewHelper{
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		String operacao = request.getParameter("operacao");
-		if(operacao.equals("CONSULTAR"))
+		if(operacao == null)
 		{
-			Categoria c = new Categoria();
-			c.setSubcategoria(new SubCategoria());
+			operacao = "sessao";
+		}
+		if(operacao.equals("CONSULTAR"))
+			return new Categoria();
+		else
+		{
+			String nome = request.getParameter("txtNome");
+			String autor = request.getParameter("txtAutor");
+			String categoria = request.getParameter("ddlCategoria");
+			String subcategoria = request.getParameter("ddlsCategoria");
+			String grupo = request.getParameter("ddlGrupoPrecificacao");
+			String ano = request.getParameter("txtAno");
+			String titulo = request.getParameter("txtTitulo");
+			String editora = request.getParameter("txtEditora");
+			String edicao = request.getParameter("txtEdicao");
+			String isbn = request.getParameter("txtISBN");
+			String npaginas = request.getParameter("txtPaginas");
+			String sinopse = request.getParameter("txtSinopse");
+			String altura = request.getParameter("txtAltura");
+			String peso = request.getParameter("txtPeso");
+			String profundidade = request.getParameter("txtProfundidade");
+			String largura = request.getParameter("txtLargura");
 			
-			return c;
+			
+			Livro l = new Livro();
+			
+			l.setNome(nome);
+			l.setAutor(autor);
+			l.setAno(ano);
+			l.setTitulo(titulo);
+			l.setEditora(editora);
+			l.setEdicao(edicao);
+			l.setISBN(isbn);
+			l.setNpaginas(npaginas);
+			l.setAltura(altura);
+			l.setPeso(peso);
+			l.setProfundidade(profundidade);
+			l.setLargura(largura);
+			
+			request.getSession().setAttribute("formLivro", l);
+			
+			return new Categoria();
 		}
 		return null;
 	}
@@ -44,6 +83,7 @@ public class CategoriaViewHelper implements IViewHelper{
 			d= request.getRequestDispatcher("FormLivro.jsp");  	
 		}
 		d.forward(request,response);
+		
 	}	
 
 }

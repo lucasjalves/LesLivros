@@ -82,9 +82,6 @@
 
       <div class="row">
 
-        <div class="col-lg-3">
-
-        </div>
         <!-- /.col-lg-3 -->
 
         <div class="col-lg-9">
@@ -175,7 +172,7 @@
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5" style="background-color: #3B3738;">
+    <footer class="py-5" style="background-color: #3B3738; " >
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
       </div>

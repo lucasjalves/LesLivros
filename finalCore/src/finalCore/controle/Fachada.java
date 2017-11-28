@@ -18,7 +18,6 @@ import finalCore.dao.EnderecoDAO;
 import finalCore.dao.GrupoPrecificacaoDAO;
 import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
-import finalCore.dao.SubCategoriaDAO;
 import finalCore.dao.TelefoneDAO;
 import finalCore.negocio.ValidarCupomPromocionalData;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
@@ -66,7 +65,6 @@ public class Fachada implements IFachada{
 		TelefoneDAO telDAO = new TelefoneDAO();
 		CartaoDAO carDAO = new CartaoDAO();
 		CategoriaDAO catDAO = new CategoriaDAO();
-		SubCategoriaDAO subcatDAO = new SubCategoriaDAO();
 		GrupoPrecificacaoDAO gpDAO = new GrupoPrecificacaoDAO();
 		CupomDAO cupDAO = new CupomDAO();
 		PedidoDAO pedidoDAO = new PedidoDAO();
@@ -78,7 +76,6 @@ public class Fachada implements IFachada{
 		daos.put(Telefone.class.getName(), telDAO);
 		daos.put(Cartao.class.getName(), carDAO);
 		daos.put(Categoria.class.getName(), catDAO);
-		daos.put(SubCategoria.class.getName(), subcatDAO);
 		daos.put(GrupoPrecificacao.class.getName(), gpDAO);
 		daos.put(Cupom.class.getName(), cupDAO);
 		daos.put(Pedido.class.getName(),pedidoDAO);

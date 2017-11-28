@@ -1,14 +1,17 @@
 package finalDominio;
 
+import java.util.List;
+
 public class Categoria extends EntidadeDominio {
-	private SubCategoria subcategoria;
+	private List<SubCategoria> subcategorias;
 
-	public SubCategoria getSubcategoria() {
-		return subcategoria;
+	public List<SubCategoria> getSubcategorias() {
+		return subcategorias;
 	}
 
-	public void setSubcategoria(SubCategoria subcategoria) {
-		this.subcategoria = subcategoria;
+	public void setSubcategorias(List<SubCategoria> subcategorias) {
+		this.subcategorias = subcategorias;
 	}
+	
 	
 }

@@ -14,7 +14,7 @@ public class ValidarPagamentoCartoes implements IStrategy {
 			for(int i = 0; i < p.getCartoesCompra().size(); i ++)
 			{
 				double precoPagoCartao = p.getCartoesCompra().get(i).getValorPago();
-				if(precoPagoCartao < 10)
+				if(precoPagoCartao < 10 && p.getCupom() == null)
 				{
 					return "O valor mínimo para cada cartão é de 10R$";
 				}

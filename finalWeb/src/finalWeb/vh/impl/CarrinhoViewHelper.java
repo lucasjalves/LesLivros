@@ -127,9 +127,8 @@ public class CarrinhoViewHelper implements IViewHelper {
 		
 		
 		if(operacao.equals("VERIFICAR")){
-			//List<Item> livros = (List<Item>)request.getSession().getAttribute("livros");
 			Livro l = (Livro) request.getSession().getAttribute("livro");
-			//Map<Integer, Integer> m = (Map<Integer, Integer>)request.getSession().getAttribute("mapaCarrinho");
+
 			Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
 
 			

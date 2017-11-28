@@ -1,10 +1,31 @@
 package finalDominio;
 
+import java.util.List;
+
 public class Livro extends EntidadeDominio{
-	private String autor, ano, titulo, editora, edicao, 
-	ISBN, npaginas, sinopse, status, altura, peso, profundidade, largura;
-	private Categoria categoria;
-	private SubCategoria subcategoria;
+	private String autor; 
+	private String ano; 
+	private String titulo; 
+	private String editora; 
+	private String edicao; 
+	private String ISBN; 
+	private String npaginas;
+	private String sinopse;
+	private String status; 
+	private String altura; 
+	private String peso; 
+	private String profundidade; 
+	private String largura;
+	private List<Categoria> categoria;
+	
+	public List<Categoria> getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(List<Categoria> categoria) {
+		this.categoria = categoria;
+	}
+
 	private GrupoPrecificacao gp;
 	private Integer qtdeEstoque;
 	private Double preco;
@@ -16,23 +37,7 @@ public class Livro extends EntidadeDominio{
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
-
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
-	public SubCategoria getSubcategoria() {
-		return subcategoria;
-	}
-
-	public void setSubcategoria(SubCategoria subcategoria) {
-		this.subcategoria = subcategoria;
-	}
-
+	
 	public String getAno() {
 		return ano;
 	}

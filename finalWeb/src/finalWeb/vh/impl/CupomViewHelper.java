@@ -1,6 +1,8 @@
 package finalWeb.vh.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -35,13 +37,26 @@ public class CupomViewHelper implements IViewHelper {
 		
 		if(operacao.equals("AdicionarCupom"))
 		{
-			if(resultado.getMsg() == null)
+			if(resultado.getMsg() == null && resultado.getEntidades() != null)
 			{
 				String idTxt = (String)request.getSession().getAttribute("userid");
 				int id = Integer.parseInt(idTxt);
 				Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
+				Pedido pedido = mapaUsuarios.get(id);
+				List<EntidadeDominio> e = resultado.getEntidades();
+				Cupom cupomResultado = (Cupom)e.get(0);
 				
-				
+				if(pedido.getCupom() == null)
+				{
+					pedido.setCupom(new ArrayList<Cupom>());
+					pedido.getCupom().add(cupomResultado);
+				}
+				else
+				{
+					pedido.getCupom().add(cupomResultado);
+				}
+				mapaUsuarios.replace(id, pedido);
+				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			}
 			request.getSession().setAttribute("resultadoCupom", resultado);
 			d= request.getRequestDispatcher("Carrinho.jsp");  
