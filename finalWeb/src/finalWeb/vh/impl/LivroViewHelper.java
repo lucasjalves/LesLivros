@@ -27,6 +27,7 @@ public class LivroViewHelper implements IViewHelper{
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		String operacao = request.getParameter("operacao");
 		Livro l;
+		/*
 		if(operacao.equals("SALVAR"))
 		{
 			
@@ -77,7 +78,7 @@ public class LivroViewHelper implements IViewHelper{
 	
 			return l;
 		}
-		
+		*/
 		if(operacao.equals("CONSULTARLIVRO") || operacao.equals("INFORMACOESLIVRO"))
 		{
 			l = new Livro();
@@ -94,8 +95,7 @@ public class LivroViewHelper implements IViewHelper{
 		}
 		else
 		{
-			 l = new Livro();
-			 return l;
+			 return new Livro();
 		}
 		
 	}

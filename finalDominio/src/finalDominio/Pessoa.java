@@ -8,11 +8,16 @@ public class Pessoa extends EntidadeDominio{
 	private String status;
 	private Telefone telefone;
 	private String nome;
-
 	private List<Endereco> endereco;
 	private List<Cartao> cartao;
+	private List<Pedido> pedidos;
 	
-	
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
 	public List<Cartao> getCartao() {
 		return cartao;
 	}

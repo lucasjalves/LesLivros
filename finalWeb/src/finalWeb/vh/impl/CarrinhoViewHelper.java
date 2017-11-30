@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +17,8 @@ import finalDominio.EntidadeDominio;
 import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.Pedido;
-import finalDominio.Pessoa;
+
+import finalDominio.PessoaFisica;
 import finalWeb.vh.IViewHelper;
 
 public class CarrinhoViewHelper implements IViewHelper {
@@ -25,74 +26,82 @@ public class CarrinhoViewHelper implements IViewHelper {
 	@Override
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		// TODO Auto-generated method stub
-		String stringId = (String)request.getSession().getAttribute("userid");
-		if(stringId == null)
+		Integer id = (Integer)request.getSession().getAttribute("userid");
+		String qtdeLivrosTxt = request.getParameter("qtdeLivros");
+		int qtdeLivros = Integer.parseInt(qtdeLivrosTxt);
+		
+		if(id == null)
 		{
-			request.getSession().setAttribute("userid", "0");
-			request.getSession().setAttribute("usuariodeslogado", true);
-			stringId = "0";
-			Map<Integer, Pedido> mapaUsuarios = new HashMap<Integer, Pedido>();
-			mapaUsuarios.put(Integer.parseInt(stringId), new Pedido());
+			request.getSession().setAttribute("userid", 0);
+			
+			PessoaFisica pessoa = new PessoaFisica();
+			Pedido pedido = new Pedido();
+			
+			pedido.setItem(new ArrayList<Item>());
+			List<Pedido> pedidos = new ArrayList<Pedido>();
+			
+			pedidos.add(pedido);			
+			pessoa.setPedidos(pedidos);
+			
+			Map<Integer, PessoaFisica> mapaUsuarios = new HashMap<Integer, PessoaFisica>();		
+			mapaUsuarios.put(id, pessoa);	
 			
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 		}
 		
+		
+		
 		Livro l = (Livro) request.getSession().getAttribute("livro");
-		Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
-		Map<Integer, Resultado> mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
+		@SuppressWarnings("unchecked")
+		Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
 		String operacao = (String)request.getParameter("operacao");		
 		
 		
-		if(mapaUsuarios == null)
-		{
-			mapaUsuarios = new HashMap<Integer, Pedido>();
-			Pedido p = new Pedido();
-			p.setItem(new ArrayList<Item>());
-			Item i = new Item();
-			i.setLivro(l);
-			i.setQtde(1);
-			p.getItem().add(i);
-			int idUsuario = Integer.parseInt(stringId);
-			mapaUsuarios.put(idUsuario, p);
-			return i;
-		}
-		
 		if(operacao.equals("AdicionarItem") || operacao.equals("subtrairItem"))
 		{
-			String txtIdUsuario = (String)request.getSession().getAttribute("userid");
-			int idUsuario = Integer.parseInt(txtIdUsuario);
 			String txtIdLivro = request.getParameter("txtId");
 			int idLivro = Integer.parseInt(txtIdLivro);
-			Pedido p = mapaUsuarios.get(idUsuario);
-			Livro liv;
-			Item i = new Item();
-			for(int k = 0; k < p.getItem().size(); k++)
+			PessoaFisica pf = mapaUsuarios.get(id);
+			Pedido pedido = pf.getPedidos().get(0);
+			for(int i = 0; i < pedido.getItem().size(); i++)
 			{
-				if(p.getItem().get(k).getLivro().getId() == idLivro)
-				{
-					liv = p.getItem().get(k).getLivro();
-					i = p.getItem().get(k);
-					
+				int idLivroPedido = pedido.getItem().get(i).getLivro().getId();
+				if(idLivroPedido == idLivro)
+				{	
+					int qtde = pedido.getItem().get(i).getQtde();
+					if(operacao.equals("AdicionarItem"))
+						 qtde = qtde + 1;
+					else
+						qtde = qtde - 1;
+					pedido.getItem().get(i).setQtde(qtde);
+					break;
 				}
 			}
 			
-			return i;
+			return pedido;
 		}
 		
-		if(operacao.equals("removerItem"))
-		{
-			
-		}
-		
-		if(mapaUsuarios != null)
+		if(operacao.equals("VERIFICAR"))
 		{
 			Item i = new Item();
-			i.setQtde(1);
 			i.setLivro(l);
-			return i;
-		}
+			i.setQtde(qtdeLivros);
+			
+			PessoaFisica p = mapaUsuarios.get(id);
+			Pedido pedido = p.getPedidos().get(0);
+			
+			
+			List<Item> itensPedido = pedido.getItem();
+			itensPedido.add(i);
 		
-		return new Item();
+			pedido.setItem(itensPedido);
+			
+			return pedido;
+		}
+		PessoaFisica pf = mapaUsuarios.get(id);
+		Pedido pedido = pf.getPedidos().get(0);
+		
+		return pedido;
 		
 	}
 
@@ -101,225 +110,95 @@ public class CarrinhoViewHelper implements IViewHelper {
 			HttpServletResponse response) throws IOException, ServletException {
 		
 		request.getSession().removeAttribute("resultadoConsultaLivro");
-		String stringId = (String)request.getSession().getAttribute("userid");
-		
-		if(!stringId.trim().equals("0"))
-		{
-			if(request.getSession().getAttribute("usuariodeslogado") != null)
-			{
-				Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
-				Resultado resu = (Resultado)request.getSession().getAttribute("resultadoLogin");
-				List<EntidadeDominio> e = resu.getEntidades();
-				Pessoa usuario = (Pessoa) e.get(0);
-				Pedido p = mapaUsuarios.get(0);
-				p.setUsuario(usuario);
-				mapaUsuarios.put(Integer.parseInt(stringId), p);
-				mapaUsuarios.remove(0);
-				request.getSession().removeAttribute("usuariodeslogado");
-				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-			}	
-		}
+
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
-
-		
-		
-		
-		
+	
 		if(operacao.equals("VERIFICAR")){
-			Livro l = (Livro) request.getSession().getAttribute("livro");
+			@SuppressWarnings("unchecked")
+			Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
+			Integer id = (Integer)request.getSession().getAttribute("userid");
 
-			Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
-
-			
-			String txtId = (String)request.getSession().getAttribute("userid");
-			Integer id = Integer.parseInt(txtId);
-			if(mapaUsuarios == null)
-			{
-				mapaUsuarios = new HashMap<Integer, Pedido>();
-			}
-
-			String msg1 = "Não há mais livros restantes no estoque";
-			msg1.trim();
-			if(resultado.getMsg() == null || resultado.getMsg().trim().equals(msg1))
-			{
-				if(mapaUsuarios.containsKey(id)) //se o usuário já existe
-				{
-					List<EntidadeDominio> e = resultado.getEntidades();  //pegando o resultado que retorna da fachada
+			List<EntidadeDominio> e = resultado.getEntidades();  
 													
-					Item item = (Item)e.get(0);//pega o único item que retornou da fachada
-					Pedido p = mapaUsuarios.get(id); //pega o pedido que está associado com a id do usuário
-					List<Integer> listaIds= new ArrayList<Integer>();
-					int indice = 0;
-					if(p.getItem().size() == 0)      //se não existe uma lista de itens no pedido
-					{
-						p.setItem(new ArrayList<Item>()); 
-						p.getItem().add(item);  
-					}
-					else
-					{
-						int estoque = 0;
-						for(int i = 0; i < p.getItem().size(); i++)
-						{
-							if(item.getLivro().getId() == p.getItem().get(i).getLivro().getId()) {
-								indice = i;
-								estoque = p.getItem().get(i).getLivro().getQtdeEstoque();
-						}
-							listaIds.add(p.getItem().get(i).getLivro().getId()); 
-						}
-						
-						if(!listaIds.contains(item.getLivro().getId()))
-							p.getItem().add(item); 
-						else
-						{
-							if(p.getItem().get(indice).getQtde() != estoque)
-							{
-								p.getItem().get(indice).setQtde(p.getItem().get(indice).getQtde() + 1);
-							}
-						}
-							
-						
-						mapaUsuarios.replace(id, p);  
-						request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-					}
-				}//if contains key
+			Pedido p = (Pedido)e.get(0);
+			PessoaFisica pf = mapaUsuarios.get(id); 		
+			if(resultado.getMsg() != null)
+			{
+				String[] msg = resultado.getMsg().split("\\s");
+				String indice = msg[msg.length-1];
+				String qtde = msg[msg.length-2];
 				
-				if(!mapaUsuarios.containsKey(id))
-				{
-					List<EntidadeDominio> e = resultado.getEntidades();  //pegando o resultado que retorna da fachada
+				int i = Integer.parseInt(indice);
+				int qt = Integer.parseInt(qtde);
 
-					Item item = (Item)e.get(0);//pega o único item que retornou da fachada
-					Pedido p = mapaUsuarios.get(id); //pega o pedido que está associado com a id do usuário
-					
-					if(p == null)
-					{
-						p = new Pedido();
-					}
-					
-					p.setItem(new ArrayList<Item>()); 
-					p.getItem().add(item);  
-					
-					if(mapaUsuarios.size() == 0 || !mapaUsuarios.containsKey(id))
-					{
-						mapaUsuarios.put(id, p);  
-					}
-					else
-					{
-						mapaUsuarios.replace(id, p); 
-					}
-					request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-				} // if !containsKey
-			}// if getMsg == null
+				p.getItem().get(i).setQtde(qt);
+			}
+			pf.getPedidos().set(0, p);
+			mapaUsuarios.replace(id, pf);  
 			
-			
-			//request.getSession().setAttribute("livros", livros);
-			request.getSession().setAttribute("resultadoLivro", resultado);
-			//request.getSession().setAttribute("mapaResultado", mapaResultado);
-			
+			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);								
+			request.getSession().setAttribute("resultadoCarrinho", resultado);			
 			d= request.getRequestDispatcher("Carrinho.jsp");  
-		} //operacação == VERIFICAR
+		} 
 
 
 		
 		
 		if(operacao.equals("AdicionarItem") || operacao.equals("subtrairItem"))
 		{
-			Map<Integer, Pedido> mapaUsuarios = (HashMap<Integer,Pedido>)request.getSession().getAttribute("mapaUsuarios");
-			//mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
-			String txtIdLivro = (String) request.getParameter("txtId");
-			Integer idLivro = Integer.parseInt(txtIdLivro);
-			String txtIdUsuario = (String)request.getSession().getAttribute("userid");
-			Integer idUsuario = Integer.parseInt(txtIdUsuario);
-			Pedido p = mapaUsuarios.get(idUsuario);
-			if(resultado.getMsg() == null)
-			{
-				for(int i = 0; i < p.getItem().size(); i ++)
-				{
-					Livro l = p.getItem().get(i).getLivro();
-					if(l.getId() == idLivro)
-					{
-						Integer qtde;
-						if(operacao.equals("subtrairItem"))
-						{
-							qtde = p.getItem().get(i).getQtde() - 1;
-						}
-						else
-						{
-							qtde = p.getItem().get(i).getQtde() + 1;
-						}
-						
-						p.getItem().get(i).setQtde(qtde);
-						break;
-					}
-				}
-				request.getSession().setAttribute("resultadoLivro", resultado);
-				mapaUsuarios.replace(idUsuario, p);		
-			}
-			
-			if(resultado.getMsg() != null)
-			{
+			@SuppressWarnings("unchecked")
+			Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
+			Integer id = (Integer)request.getSession().getAttribute("userid");
 
-				List<EntidadeDominio> ed = resultado.getEntidades();
-				Item item = (Item)ed.get(0);
-				p = mapaUsuarios.get(idUsuario);
-				Integer qtdeLivrosRestantes = item.getQtde();
+			List<EntidadeDominio> e = resultado.getEntidades();  
+													
+			Pedido p = (Pedido)e.get(0);
+			PessoaFisica pf = mapaUsuarios.get(id); 
+
+			if(resultado.getMsg() == null)
+				pf.getPedidos().set(0, p);
+			else
+			{
+				String[] msg = resultado.getMsg().split("\\s");
+				String indice = msg[msg.length-1];
+				String qtde = msg[msg.length-2];
 				
-				for(int i = 0; i < p.getItem().size(); i ++)
-				{
-					Livro l = p.getItem().get(i).getLivro();
-					if(l.getId() == idLivro)
-					{
-						if(operacao.equals("subtrairItem") && qtdeLivrosRestantes == p.getItem().get(i).getQtde())
-						{
-							System.out.println(qtdeLivrosRestantes);
-							System.out.println(p.getItem().get(i).getQtde());
-							Integer qtdeItem = p.getItem().get(i).getQtde() - 1;
-							p.getItem().get(i).setQtde(qtdeItem);
-						}
-						else
-						{
-							p.getItem().get(i).setQtde(qtdeLivrosRestantes);
-						}
-						
-						break;					
-					}
-				}
-				
-				mapaUsuarios.replace(idUsuario, p);
-							
+				int i = Integer.parseInt(indice);
+				int qt = Integer.parseInt(qtde);
+
+				p.getItem().get(i).setQtde(qt);	
+				pf.getPedidos().set(0, p);
 			}
-			request.getSession().setAttribute("resultadoLivro", resultado);
+			mapaUsuarios.replace(id, pf);
+			
+			request.getSession().setAttribute("resultadoCarrinho", resultado);		
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-			d = request.getRequestDispatcher("Carrinho.jsp");
+			
 			
 		}
 
 		if(operacao.equals("removerItem"))
 		{
-			Map<Integer, Pedido> mapaUsuarios = (HashMap<Integer,Pedido>)request.getSession().getAttribute("mapaUsuarios");
-			String txtIdLivro = (String) request.getParameter("id");
-			Integer idLivro = Integer.parseInt(txtIdLivro);
-			String txtIdUsuario = (String)request.getSession().getAttribute("userid");
-			Integer idUsuario = Integer.parseInt(txtIdUsuario);
-			Pedido p = mapaUsuarios.get(idUsuario);
+			@SuppressWarnings("unchecked")
+			Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
+			Integer id = (Integer)request.getSession().getAttribute("userid");
+			String indice = request.getParameter("indice");
 			
-			for(int i = 0; i < p.getItem().size(); i ++)
-			{
-				Livro l = p.getItem().get(i).getLivro();
-				if(l.getId() == idLivro)
-				{
-					p.getItem().remove(i);
-					break;
-				}
-			}
+			int i = Integer.parseInt(indice);
 			
-			mapaUsuarios.replace(idUsuario, p);
+			PessoaFisica pf = mapaUsuarios.get(id); 
+			Pedido pedido = pf.getPedidos().get(0);
+			
+			pedido.getItem().remove(i);
+			
+			pf.getPedidos().set(0, pedido);
+			mapaUsuarios.replace(id, pf);
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-			d = request.getRequestDispatcher("Carrinho.jsp");
-			
+					
 			
 		}
-
+		d = request.getRequestDispatcher("Carrinho.jsp");
 		d.forward(request,response);
 	}
 }

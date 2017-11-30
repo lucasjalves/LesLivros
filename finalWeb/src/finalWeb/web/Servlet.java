@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import finalCore.aplicacao.Resultado;
 import finalDominio.EntidadeDominio;
-import finalDominio.PessoaFisica;
+
 import finalWeb.command.ICommand;
 import finalWeb.command.impl.AlterarCommand;
 import finalWeb.command.impl.ConsultarCommand;
@@ -30,7 +30,7 @@ import finalWeb.vh.impl.CupomViewHelper;
 import finalWeb.vh.impl.EnderecoViewHelper;
 import finalWeb.vh.impl.GrupoPrecificacaoViewHelper;
 import finalWeb.vh.impl.LivroViewHelper;
-import finalWeb.vh.impl.SubCategoriaViewHelper;
+
 
 public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -73,7 +73,6 @@ public class Servlet extends HttpServlet {
     	vhs.put("/finalWeb/SalvarCartao", new CartaoViewHelper());
     	vhs.put("/finalWeb/SalvarEndereco", new EnderecoViewHelper());
     	vhs.put("/finalWeb/SalvarCategoria", new CategoriaViewHelper());
-    	vhs.put("/finalWeb/SalvarSubCategoria", new SubCategoriaViewHelper());
     	vhs.put("/finalWeb/SalvarGrupos", new GrupoPrecificacaoViewHelper());
     	vhs.put("/finalWeb/SalvarCarrinho", new CarrinhoViewHelper());
     	vhs.put("/finalWeb/ValidarCupom", new CupomViewHelper());

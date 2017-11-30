@@ -20,13 +20,9 @@ public class CategoriaViewHelper implements IViewHelper{
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		String operacao = request.getParameter("operacao");
-		if(operacao == null)
-		{
-			operacao = "sessao";
-		}
 		if(operacao.equals("CONSULTAR"))
 			return new Categoria();
-		else
+		if(operacao.equals("CONSULTARLIVRO"))
 		{
 			String nome = request.getParameter("txtNome");
 			String autor = request.getParameter("txtAutor");
@@ -60,10 +56,19 @@ public class CategoriaViewHelper implements IViewHelper{
 			l.setPeso(peso);
 			l.setProfundidade(profundidade);
 			l.setLargura(largura);
+			l.setSinopse(sinopse);
 			
 			request.getSession().setAttribute("formLivro", l);
 			
-			return new Categoria();
+			
+			Categoria c = new Categoria();
+			
+			
+			String idCategoriaTxt = request.getParameter("idCategoria");
+			int idCategoria = Integer.parseInt(idCategoriaTxt);
+			
+			c.setId(idCategoria);
+			return c;
 		}
 		return null;
 	}
@@ -78,8 +83,13 @@ public class CategoriaViewHelper implements IViewHelper{
 		String operacao = request.getParameter("operacao");
 			
 		if(operacao.equals("CONSULTAR")){
-			request.getSession().setAttribute("resultadoCategorias", resultado);
+			request.getSession().setAttribute("resultadoTodasCategorias", resultado);
 			
+			d= request.getRequestDispatcher("FormLivro.jsp");  	
+		}
+		if(operacao.equals("CONSULTARLIVRO"))
+		{
+			request.getSession().setAttribute("resultadoCategorias", resultado);
 			d= request.getRequestDispatcher("FormLivro.jsp");  	
 		}
 		d.forward(request,response);

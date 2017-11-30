@@ -3,8 +3,10 @@ package finalCore.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import finalDominio.Categoria;
 import finalDominio.EntidadeDominio;
@@ -29,9 +31,9 @@ public class LivroDAO extends AbstractJdbcDAO{
 			sql.append("INSERT INTO livros(nome, autor, ano, status, titulo, ");
 			sql.append("editora, edicao, isbn, num_paginas, sinopse, altura, peso, ");
 			sql.append("profundidade, pk_categoria, pk_subcategoria, pk_grupo)");
-			sql.append("VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");		
+			sql.append("VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");		
 			
-			pst = connection.prepareStatement(sql.toString());
+			pst = connection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
 			pst.setString(1, livro.getNome());
 			pst.setString(2, livro.getAutor());
 			pst.setString(3, livro.getAno());
@@ -45,10 +47,22 @@ public class LivroDAO extends AbstractJdbcDAO{
 			pst.setString(11, livro.getAltura());
 			pst.setString(12, livro.getPeso());
 			pst.setString(13, livro.getProfundidade());
-			pst.setInt(14, livro.getCategoria().getId());
-			pst.setInt(15, livro.getSubcategoria().getId());
-			pst.setInt(16, livro.getGp().getId());
-			pst.executeUpdate();			
+			pst.setInt(14, livro.getGp().getId());
+			ResultSet rs = pst.getGeneratedKeys();
+			pst.executeUpdate();	
+			int id = 0;
+			if(rs.next())
+				id = rs.getInt(1);
+			
+			for(int i = 0; i < livro.getCategoria().size(); i ++ )
+			{
+				Categoria c = livro.getCategoria().get(i);
+				SubCategoria s = c.getSubcategorias().get(0);
+				pst = connection.prepareStatement("INSERT INTO `categoria_livro`(`id_livro`, `id_categoria`) VALUES ("+livro.getId()+"," +c.getId() +", " +s.getId()+")");		
+				pst.executeUpdate();
+			}
+				
+
 			connection.commit();
 		} catch (SQLException e) {
 			try {
@@ -86,10 +100,6 @@ public class LivroDAO extends AbstractJdbcDAO{
 		PreparedStatement pst = null;
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT * FROM `livros` "
-				+ "INNER JOIN categoria ON "
-				+ "(livros.pk_categoria = categoria.id_categoria) "
-				+ "INNER JOIN subcategoria ON "
-				+ "(livros.pk_subcategoria = subcategoria.id_subcategoria) "
 				+ "INNER JOIN grupoprecificacao ON "
 				+ "(livros.pk_grupo = grupoprecificacao.id_grupo) WHERE 1=1 ");
 		Livro livro = (Livro)entidade;
@@ -105,11 +115,9 @@ public class LivroDAO extends AbstractJdbcDAO{
 			List<EntidadeDominio> livros = new ArrayList<EntidadeDominio>();
 			while(rs.next()){
 				Livro l = new Livro();
-				Categoria c = new Categoria();
-				SubCategoria subc = new SubCategoria();
+
 				GrupoPrecificacao gp = new GrupoPrecificacao();
-				l.setCategoria(c);
-				l.setSubcategoria(subc);
+
 				l.setGp(gp);
 				
 				
@@ -129,13 +137,35 @@ public class LivroDAO extends AbstractJdbcDAO{
 				l.setPreco(rs.getDouble("preco_livro"));
 				l.setQtdeEstoque(rs.getInt("qtde_estoque"));
 				l.setLargura(rs.getString("largura"));
-				
-				l.getCategoria().setNome(rs.getString("nome_categoria"));
-				l.getSubcategoria().setNome(rs.getString("nome_subcategoria"));
+			
 				l.getGp().setNome(rs.getString("nome_grupo"));
 				l.getGp().setMargemLucro(rs.getDouble("taxa"));
-				
-				
+				l.setCategoria(new ArrayList<Categoria>());
+			
+				pst = connection.prepareStatement("SELECT nome_categoria, categoria_livro.id_categoria FROM "
+						+ "categoria_livro JOIN categoria on (categoria_livro.id_livro = " + l.getId() + " "
+						+ "and categoria_livro.id_categoria = categoria.id_categoria)");
+				ResultSet rsCategoria = pst.executeQuery();
+				while(rsCategoria.next())
+				{
+					Categoria c = new Categoria();
+					c.setNome(rsCategoria.getString("nome_categoria"));
+					c.setId(rsCategoria.getInt("categoria_livro.id_categoria"));
+					c.setSubcategorias(new ArrayList<SubCategoria>());
+					
+					pst = connection.prepareStatement("SELECT * "
+							+ "FROM categoria_livro JOIN subcategoria on (categoria_livro.id_livro = " + l.getId() + " "
+							+ "and categoria_livro.id_subcategoria = subcategoria.id_subcategoria)");
+					ResultSet rsSubCategoria = pst.executeQuery();
+					while(rsSubCategoria.next())
+					{
+						SubCategoria subc = new SubCategoria();
+						subc.setId(rsSubCategoria.getInt("id_subcategoria"));
+						subc.setNome(rsSubCategoria.getString("nome_subcategoria"));	
+						c.getSubcategorias().add(subc);
+					}					
+					l.getCategoria().add(c);
+				}
 				livros.add(l);
 			}
 			return livros;

@@ -18,7 +18,6 @@ import finalCore.dao.EnderecoDAO;
 import finalCore.dao.GrupoPrecificacaoDAO;
 import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
-import finalCore.dao.TelefoneDAO;
 import finalCore.negocio.ValidarCupomPromocionalData;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
 import finalCore.negocio.ValidarPagamentoCartoes;
@@ -34,95 +33,70 @@ import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.Pedido;
 import finalDominio.PessoaFisica;
-import finalDominio.SubCategoria;
-import finalDominio.Telefone;
 
 public class Fachada implements IFachada{
-	/** 
-	 * Mapa de DAOS, será indexado pelo nome da entidade 
-	 * O valor é uma instância do DAO para uma dada entidade; 
-	 */
+
 	private Map<String, IDAO> daos;
 	
-	/**
-	 * Mapa para conter as regras de negócio de todas operações por entidade;
-	 * O valor é um mapa que de regras de negócio indexado pela operação
-	 */
+
 	private Map<String, Map<String, List<IStrategy>>> rns;
 	
 	private Resultado resultado;
 
 	public Fachada(){
-		/* Intânciando o Map de DAOS */
+
 		daos = new HashMap<String, IDAO>();
-		/* Intânciando o Map de Regras de Negócio */
+
 		rns = new HashMap<String, Map<String, List<IStrategy>>>();
 		
-		/* Criando instâncias dos DAOs a serem utilizados*/
+
 		LivroDAO livroDAO = new LivroDAO();
 		EnderecoDAO	endDAO = new EnderecoDAO();
 		ClienteDAO cliDAO = new ClienteDAO();
-		TelefoneDAO telDAO = new TelefoneDAO();
 		CartaoDAO carDAO = new CartaoDAO();
 		CategoriaDAO catDAO = new CategoriaDAO();
 		GrupoPrecificacaoDAO gpDAO = new GrupoPrecificacaoDAO();
 		CupomDAO cupDAO = new CupomDAO();
 		PedidoDAO pedidoDAO = new PedidoDAO();
 		
-		/* Adicionando cada dao no MAP indexando pelo nome da classe */
+
 		daos.put(Livro.class.getName(), livroDAO);
 		daos.put(Endereco.class.getName(), endDAO);
 		daos.put(PessoaFisica.class.getName(), cliDAO);
-		daos.put(Telefone.class.getName(), telDAO);
 		daos.put(Cartao.class.getName(), carDAO);
 		daos.put(Categoria.class.getName(), catDAO);
 		daos.put(GrupoPrecificacao.class.getName(), gpDAO);
 		daos.put(Cupom.class.getName(), cupDAO);
 		daos.put(Pedido.class.getName(),pedidoDAO);
 		
-		/* Criando instâncias de regras de negócio a serem utilizados*/
+
 		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	
-		VerificarQuantidadeLivroEstoque vQtdeEstoque = new VerificarQuantidadeLivroEstoque();
+		VerificarQuantidadeLivroEstoque vQtdeEstoqueLivro = new VerificarQuantidadeLivroEstoque();
 		
 		ValidarCupomPromocionalData vCupomData = new ValidarCupomPromocionalData();
 		ValidarPagamentoCartoes vPagamentoCartao = new ValidarPagamentoCartoes();
 		ValidarQtdeCupomPromocional vQtdCupomProm = new ValidarQtdeCupomPromocional();
-		/* Criando uma lista para conter as regras de negócio de fornencedor
-		 * quando a operação for salvar
-		 */
+
 		List<IStrategy> rnsSalvarLivro = new ArrayList<IStrategy>();
-		/* Adicionando as regras a serem utilizadas na operação salvar do fornecedor*/
 		rnsSalvarLivro.add(vdObrigatoriosLivro);
 		
-		List<IStrategy> rnsValidarCarrinho = new ArrayList<IStrategy>();
-		
-		rnsValidarCarrinho.add(vQtdeEstoque);
-		/* Cria o mapa que poderá conter todas as listas de regras de negócio específica 
-		 * por operação  do fornecedor
-		 */
+
 		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
-		
 		rnsValidarPedido.add(vCupomData);
-		rnsValidarPedido.add(vPagamentoCartao);
+		//rnsValidarPedido.add(vPagamentoCartao);
 		rnsValidarPedido.add(vQtdCupomProm);
+		rnsValidarPedido.add(vQtdeEstoqueLivro);
 		
 		Map<String, List<IStrategy>> rnsLivro = new HashMap<String, List<IStrategy>>();
-		Map<String, List<IStrategy>> rnsCarrinho= new HashMap<String, List<IStrategy>>();
+
 		Map<String, List<IStrategy>> rnsPedido = new HashMap<String, List<IStrategy>>();
 		
-		/*
-		 * Adiciona a listra de regras na operação salvar no mapa do fornecedor (lista criada na linha 70)
-		 */
+
 		rnsLivro.put("SALVAR", rnsSalvarLivro);	
-		rnsCarrinho.put("VERIFICAR", rnsValidarCarrinho);
+		rnsPedido.put("ValidarCarrinho", rnsValidarPedido);
 		
-		rnsPedido.put("SALVAR", rnsValidarPedido);
-		
-		/* Adiciona o mapa(criado na linha 79) com as regras indexadas pelas operações no mapa geral indexado 
-		 * pelo nome da entidade
-		 */
+
 		rns.put(Livro.class.getName(), rnsLivro);
-		rns.put(Item.class.getName(), rnsCarrinho);
 		rns.put(Pedido.class.getName(), rnsPedido);
 	
 	}
@@ -257,30 +231,11 @@ public class Fachada implements IFachada{
 
 	@Override
 	public Resultado verificarCarrinho(EntidadeDominio entidade) {
-		resultado = new Resultado();
-		Item itemCarrinho = (Item)entidade;
-		Livro livroCarrinho = itemCarrinho.getLivro();
-		if(livroCarrinho != null)
-		{
-			LivroDAO dao = new LivroDAO();
-			List<EntidadeDominio> entidadeLivro = dao.consultar(livroCarrinho);
-			
-			Livro l = (Livro)entidadeLivro.get(0);
-			itemCarrinho.setLivro(l);
-			
-			List<EntidadeDominio> itens = new ArrayList<EntidadeDominio>();
-			itens.add(itemCarrinho);
-			
-			resultado.setEntidades(itens);
-			
-			String msg = executarRegras(itemCarrinho, "VERIFICAR");
-			
-			resultado.setMsg(msg);
-			if(resultado.getMsg() != null)
-			{
-				itemCarrinho.setQtde(l.getQtdeEstoque());
-			}			
-		}	
+		resultado = new Resultado();	
+		String msg = executarRegras(entidade, "ValidarCarrinho");
+		List<EntidadeDominio> e = new ArrayList<EntidadeDominio>();
+		e.add(entidade);
+		resultado.setMsg(msg);
 		return resultado;
 	}
 }

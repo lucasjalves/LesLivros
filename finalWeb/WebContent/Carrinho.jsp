@@ -296,7 +296,7 @@
 										request.getSession().setAttribute("mapUsuarios", map);
 									}
 									else{
-										sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&id=" + l.getId() +"'>Remover</a></td>");
+										sb.append("<td><a href='SalvarCarrinho?operacao=removerItem&indice=" + i +"'>Remover</a></td>");
 
 									}
 

@@ -44,7 +44,13 @@ public class CategoriaDAO extends AbstractJdbcDAO{
 		PreparedStatement pst = null;
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT * FROM CATEGORIA");
-		System.out.println(sb.toString());
+		
+		Categoria cat = (Categoria)entidade;
+		if(cat.getId() != null)
+		{
+			sb.append(" WHERE id_categoria = " + cat.getId());
+		}
+		System.out.println(cat.getId());
 		try{
 			openConnection();
 			pst = connection.prepareStatement(sb.toString());

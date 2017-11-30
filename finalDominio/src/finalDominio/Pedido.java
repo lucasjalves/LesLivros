@@ -6,9 +6,7 @@ import java.util.List;
 public class Pedido extends EntidadeDominio{
 	private List<Item> item;
 	private Date dtPedido;
-
 	private String status;
-	private Pessoa usuario;
 	private double precoTotal;
 	private double frete;
 	private List<Cupom> cupom;
@@ -48,12 +46,6 @@ public class Pedido extends EntidadeDominio{
 	}
 	public void setPrecoTotal(double precoTotal) {
 		this.precoTotal = precoTotal;
-	}
-	public Pessoa getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(Pessoa usuario) {
-		this.usuario = usuario;
 	}
 	public List<Item> getItem() {
 		return item;

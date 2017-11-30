@@ -16,7 +16,8 @@
 		
 	<%
 		List<EntidadeDominio> entidades = resultado.getEntidades();
-		Livro livro = (Livro)entidades.get(6);
+
+		
 	%>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

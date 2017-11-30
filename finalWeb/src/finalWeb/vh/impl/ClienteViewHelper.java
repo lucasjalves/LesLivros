@@ -206,65 +206,66 @@ public class ClienteViewHelper implements IViewHelper{
 			d = request.getRequestDispatcher("Index.jsp");  
 		}
 		
+		
+		
+		
+		
+		
 		if(resultado.getMsg() == null && operacao.equals("LOGIN"))
 		{
 			List<EntidadeDominio> entidades = resultado.getEntidades();
 			PessoaFisica p = (PessoaFisica) entidades.get(0);
-			String txtId = String.valueOf(p.getId());
-			request.getSession().setAttribute("userid", txtId);
+			request.getSession().setAttribute("userid", p.getId());
+			Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>) request.getSession().getAttribute("mapaUsuarios");
 			
-			if(request.getSession().getAttribute("mapaUsuarios") != null)
+			if(mapaUsuarios == null)
 			{
-				if(request.getSession().getAttribute("usuariodeslogado") != null)
-				{
-					Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
-					Pedido pedido = mapaUsuarios.get(0);
-					pedido.setUsuario(p);
-					mapaUsuarios.put(p.getId(), pedido);
-					mapaUsuarios.remove(0);
-					request.getSession().removeAttribute("usuariodeslogado");
-					request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-				}
-				else
-				{
-					Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
-					Pedido pedido = mapaUsuarios.get(p.getId());
-					pedido.setUsuario(p);
-					mapaUsuarios.replace(p.getId(), pedido);
-					request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);			
-				}
-				
-			}
-			
-			if(request.getSession().getAttribute("mapaUsuarios") == null)
-			{
-				Map<Integer, Pedido>mapaUsuarios = new HashMap<Integer, Pedido>();
 				Pedido pedido = new Pedido();
-				pedido.setUsuario(p);
-				List<Item> itens = new ArrayList<Item>();
-				pedido.setItem(itens);
-				mapaUsuarios.put(p.getId(), pedido);
+				pedido.setItem(new ArrayList<Item>());
+				
+				List<Pedido> pedidos = new ArrayList<Pedido>();
+				p.setPedidos(pedidos);		
+				mapaUsuarios = new HashMap<Integer, PessoaFisica>();
+				mapaUsuarios.put(p.getId(), p);	
+				
+				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
+			}if(mapaUsuarios.containsKey(0)){
+				PessoaFisica pessoa = mapaUsuarios.get(p.getId());
+				List<Pedido> pedidos = pessoa.getPedidos();
+				p.setPedidos(pedidos);		
+				mapaUsuarios.put(p.getId(), p);
 				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			}
-			String local = request.getParameter("local");
-			
-			if(local == null)
+			if(!mapaUsuarios.containsKey(p.getId()))
 			{
-				d = request.getRequestDispatcher("Conta.jsp");
-				local = "";
+				Pedido pedido = new Pedido();
+				pedido.setItem(new ArrayList<Item>());
+				
+				List<Pedido> pedidos = new ArrayList<Pedido>();
+				p.setPedidos(pedidos);		
+				mapaUsuarios = new HashMap<Integer, PessoaFisica>();
+				mapaUsuarios.put(p.getId(), p);					
 			}
-				  
 			
-			if(local.equals("carrinho"))
-				d = request.getRequestDispatcher("Carrinho.jsp");  
+
 			
-			if(local.equals("compra"))
-				d = request.getRequestDispatcher("Compra.jsp");
+			
+			String local = request.getParameter("local");		
+			if(local == null)d = request.getRequestDispatcher("Conta.jsp");local = "";
+			if(local.equals("carrinho"))d = request.getRequestDispatcher("Carrinho.jsp");  		
+			if(local.equals("compra"))d = request.getRequestDispatcher("Compra.jsp");
+				
 			
 			
 			request.getSession().setAttribute("resultadoLogin", resultado);  
 			d.forward(request, response);
 		}
+		
+		
+		
+		
+		
+		
 		
 		if(operacao.equals("ALTERAR") || operacao.equals("VISUALIZAR"))
 		{
@@ -282,6 +283,11 @@ public class ClienteViewHelper implements IViewHelper{
 			d = request.getRequestDispatcher(url); 		
 			d.forward(request, response);
 		}
+		
+		
+		
+		
+		
 		
 		if(operacao.equals("CONSULTARCLIENTE")){
 			
