@@ -28,12 +28,14 @@ public class CarrinhoViewHelper implements IViewHelper {
 		// TODO Auto-generated method stub
 		Integer id = (Integer)request.getSession().getAttribute("userid");
 		String qtdeLivrosTxt = request.getParameter("qtdeLivros");
-		int qtdeLivros = Integer.parseInt(qtdeLivrosTxt);
+		int qtdeLivros = 0;
+		if(qtdeLivrosTxt != null)
+			qtdeLivros = Integer.parseInt(qtdeLivrosTxt);
 		
 		if(id == null)
 		{
 			request.getSession().setAttribute("userid", 0);
-			
+			id = 0;
 			PessoaFisica pessoa = new PessoaFisica();
 			Pedido pedido = new Pedido();
 			
@@ -45,8 +47,8 @@ public class CarrinhoViewHelper implements IViewHelper {
 			
 			Map<Integer, PessoaFisica> mapaUsuarios = new HashMap<Integer, PessoaFisica>();		
 			mapaUsuarios.put(id, pessoa);	
-			
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
+			
 		}
 		
 		
@@ -83,14 +85,15 @@ public class CarrinhoViewHelper implements IViewHelper {
 		
 		if(operacao.equals("VERIFICAR"))
 		{
+			
 			Item i = new Item();
 			i.setLivro(l);
 			i.setQtde(qtdeLivros);
 			
 			PessoaFisica p = mapaUsuarios.get(id);
 			Pedido pedido = p.getPedidos().get(0);
-			
-			
+				
+	
 			List<Item> itensPedido = pedido.getItem();
 			itensPedido.add(i);
 		
@@ -120,9 +123,9 @@ public class CarrinhoViewHelper implements IViewHelper {
 			Integer id = (Integer)request.getSession().getAttribute("userid");
 
 			List<EntidadeDominio> e = resultado.getEntidades();  
-													
+			
 			Pedido p = (Pedido)e.get(0);
-			PessoaFisica pf = mapaUsuarios.get(id); 		
+			PessoaFisica pf = mapaUsuarios.get(id); 
 			if(resultado.getMsg() != null)
 			{
 				String[] msg = resultado.getMsg().split("\\s");

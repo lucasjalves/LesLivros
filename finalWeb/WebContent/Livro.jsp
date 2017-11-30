@@ -92,19 +92,21 @@
               <h3 class="card-title"><%out.print(l.getNome()); %></h3>
               <h4><%out.print(String.format("%.2f", l.getPreco())); %>R$</h4>
               <p class="card-text"><%out.print(l.getSinopse()); %></p>
-              <%
-              	if(l.getQtdeEstoque() == 0)
-              	{
-              		out.print("<a href='' class='btn btn-danger' disabled>Esgotado</a>");
-              	}
-              	else
-              	{
-              		out.print("<a href='SalvarCarrinho?operacao=VERIFICAR' class='btn btn-success' " +
-              				" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar ao carrinho" 
-              		+ "<i class='fa fa-shopping-cart' aria-hidden='true'></i></a>");
-              	}
-              %>
-			
+	              <form action="SalvarCarrinho" method="POST">
+	              <%
+	              	if(l.getQtdeEstoque() == 0)
+	              	{
+	              		out.print("<a href='' class='btn btn-danger' disabled>Esgotado</a>");
+	              	}
+	              	else
+	              	{
+	              		out.print("<button type='submit' name='operacao'  class='btn btn-danger' value='VERIFICAR' " +
+	              		" style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F'><span>Adicionar ao carrinho" 
+	              		+ "<i class='fa fa-shopping-cart' aria-hidden='true'></i></span></button>");
+	              	}
+	              %>
+	              <input type="number" name="qtdeLivros" min='1'/>
+				</form>
             </div>
           </div>
           <!-- /.card -->

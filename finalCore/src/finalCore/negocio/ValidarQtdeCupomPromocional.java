@@ -11,6 +11,7 @@ public class ValidarQtdeCupomPromocional implements IStrategy{
 	public String processar(EntidadeDominio entidade) {
 		Pedido p = (Pedido)entidade;
 		int qtdeCupomPromocional = 0;
+		
 		if(p.getCupom() != null)
 		{
 			for(int i = 0; i < p.getCupom().size(); i++)

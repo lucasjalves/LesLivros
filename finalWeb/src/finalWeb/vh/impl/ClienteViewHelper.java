@@ -216,37 +216,47 @@ public class ClienteViewHelper implements IViewHelper{
 			List<EntidadeDominio> entidades = resultado.getEntidades();
 			PessoaFisica p = (PessoaFisica) entidades.get(0);
 			request.getSession().setAttribute("userid", p.getId());
+			@SuppressWarnings("unchecked")
 			Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>) request.getSession().getAttribute("mapaUsuarios");
-			
+			System.out.println(p.getId());
+
+						
 			if(mapaUsuarios == null)
 			{
 				Pedido pedido = new Pedido();
 				pedido.setItem(new ArrayList<Item>());
 				
 				List<Pedido> pedidos = new ArrayList<Pedido>();
+				pedidos.add(pedido);
 				p.setPedidos(pedidos);		
 				mapaUsuarios = new HashMap<Integer, PessoaFisica>();
 				mapaUsuarios.put(p.getId(), p);	
-				
 				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-			}if(mapaUsuarios.containsKey(0)){
-				PessoaFisica pessoa = mapaUsuarios.get(p.getId());
-				List<Pedido> pedidos = pessoa.getPedidos();
-				p.setPedidos(pedidos);		
-				mapaUsuarios.put(p.getId(), p);
-				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-			}
-			if(!mapaUsuarios.containsKey(p.getId()))
+			}if(!mapaUsuarios.containsKey(p.getId()))
 			{
 				Pedido pedido = new Pedido();
 				pedido.setItem(new ArrayList<Item>());
 				
 				List<Pedido> pedidos = new ArrayList<Pedido>();
+				pedidos.add(pedido);
 				p.setPedidos(pedidos);		
 				mapaUsuarios = new HashMap<Integer, PessoaFisica>();
-				mapaUsuarios.put(p.getId(), p);					
+				mapaUsuarios.put(p.getId(), p);	
+				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
+			}if(mapaUsuarios.containsKey(0)){
+				List<Pedido> pedidos = null;
+				PessoaFisica pessoa = mapaUsuarios.get(p.getId());
+				
+				if(pessoa.getPedidos() == null)
+					pessoa.setPedidos(new ArrayList<Pedido>());
+				else
+					 pedidos = pessoa.getPedidos();
+				
+				p.setPedidos(pedidos);				
+				mapaUsuarios.put(p.getId(), p);
+				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			}
-			
+
 
 			
 			

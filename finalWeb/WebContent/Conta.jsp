@@ -43,12 +43,12 @@
 		
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		PessoaFisica p = (PessoaFisica) entidades.get(0);
-		String txtId = String.valueOf(p.getId());
-		session.setAttribute("userid", txtId);
+
 		
 		List<Endereco> end= p.getEndereco();
 		List<Cartao> cartoes = p.getCartao();
-
+		
+		Integer id = (Integer)request.getSession().getAttribute("userid");
 
 
 	%>
@@ -369,7 +369,7 @@
 					</select></td></tr>
 					<tr><td>Data de Vencimento: </td><td><input type='text' id='txtDtVencimento' name='txtDtVencimento' /></td></tr>
 					<tr><td>Código de Segurança: </td><td><input type='text' id='txtCodSeg' name='txtCodSeg' /></td></tr>
-					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<%out.print(txtId); %>" />	</td></tr>
+					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<%out.print(id); %>" />	</td></tr>
 					<tr><td><input type="hidden" name="local" value="conta" />	</td></tr>																				
 			</table>
 		      </div>

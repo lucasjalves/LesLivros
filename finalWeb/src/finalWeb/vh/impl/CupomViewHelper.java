@@ -14,23 +14,36 @@ import finalCore.aplicacao.Resultado;
 import finalDominio.Cupom;
 import finalDominio.EntidadeDominio;
 import finalDominio.Pedido;
+import finalDominio.PessoaFisica;
 import finalWeb.vh.IViewHelper;
 
 public class CupomViewHelper implements IViewHelper {
 
 	@Override
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
+		Map<Integer, PessoaFisica> m = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
 		String txtCodigo = request.getParameter("txtCodigo");
-		Cupom c = new Cupom();
-		c.setCodigo(txtCodigo);
-		return c;
+		Integer id = (Integer)request.getSession().getAttribute("userid");
+		
+		
+		
+		PessoaFisica pf = m.get(id);
+		Pedido pedido = pf.getPedidos().get(0);
+		Cupom cupom = new Cupom();
+		cupom.setCodigo(txtCodigo);
+		
+		if(pedido.getCupom() == null)	
+			pedido.setCupom(new ArrayList<Cupom>());
+		
+		pedido.getCupom().add(cupom);
+		
+		return pedido;
 	}
 
 	@Override
 	public void setView(Resultado resultado, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
+
 		RequestDispatcher d=null;
 		
 		String operacao = request.getParameter("operacao");

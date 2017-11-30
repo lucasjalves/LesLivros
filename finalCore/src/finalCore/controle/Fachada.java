@@ -233,9 +233,11 @@ public class Fachada implements IFachada{
 	public Resultado verificarCarrinho(EntidadeDominio entidade) {
 		resultado = new Resultado();	
 		String msg = executarRegras(entidade, "ValidarCarrinho");
+		Pedido p = (Pedido)entidade;
 		List<EntidadeDominio> e = new ArrayList<EntidadeDominio>();
-		e.add(entidade);
+		e.add(p);
 		resultado.setMsg(msg);
+		resultado.setEntidades(e);
 		return resultado;
 	}
 }

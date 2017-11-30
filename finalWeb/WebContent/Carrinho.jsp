@@ -5,21 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<% 
-		String stringId = (String)request.getSession().getAttribute("userid");
-		if(stringId != null){
-			if(!stringId.trim().equals("0"))
-			{
-				if(request.getSession().getAttribute("usuariodeslogado") != null)
-				{
-					Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
-					Pedido p = mapaUsuarios.get(0);
-					mapaUsuarios.put(Integer.parseInt(stringId), p);
-					mapaUsuarios.remove(0);
-					request.getSession().removeAttribute("usuariodeslogado");
-					request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
-				}	
-			}
-		}
+		Integer id = (Integer)request.getSession().getAttribute("userid");
+
 		
     	if(request.getSession().getAttribute("redirecionar") == null)
     	{
@@ -28,33 +15,11 @@
     		return;
    		}
 		request.getSession().setAttribute("redirecionar", null);
+	
 		
+		Map<Integer, PessoaFisica> map = (Map<Integer, PessoaFisica>) request.getSession().getAttribute("mapaUsuarios");;
 
 		
-		Map<Integer, Pedido> map = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
-		Resultado cupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
-		Resultado res = (Resultado)request.getSession().getAttribute("resultadoLivro");
-		List<Item> item = new ArrayList<Item>();
-		/*
-		if(map != null)
-		{
-			if(map.size() != 0)
-			{
-				Map<Integer, Resultado> mapaResultado = (Map<Integer, Resultado>)request.getSession().getAttribute("mapaResultado");
-				Set<Integer> chaves = mapaResultado.keySet();
-				for(Integer chave: chaves)
-				{
-					if(mapaResultado.get(chave) == null)
-					{
-						String url = "SalvarCarrinho?operacao=validar&idLivro="+chave;
-						pageContext.forward(url);
-						return;
-					}
-				}	
-			}
-				
-		}
-		*/
 	%>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,12 +48,10 @@
 			
 			var precoTotal = document.getElementById("precoTotalInput").value;
 			precoTotal = parseFloat(precoTotal);
-			calcularCEP(1, document.getElementById("cepp").value, 0);
-			
-			//document.getElementById("precoTotal").innerText = "Preço: " + precoTotal.toFixed(2) + "R$ ";
-			//document.getElementById("precoFretestring").innerText = "Frete: " + freteLivro.toFixed(2) + "R$ ";
-			//document.getElementById("txtValor").value = precoTotal.toFixed(2);
-			
+			if(document.getElementById("cepp").value != null)
+				calcularCEP(1, document.getElementById("cepp").value, 0);
+			else
+				calcularCEP(1, 0, 0);
 			
 		}
 		function calcularCEP(radio, cep, i)
@@ -197,16 +160,7 @@
 							<td>Quantidade</td>
 							<td>Subtotal</td>
 							<td>Operação</td>
-							<%
-							if(res != null)
-							{
-								if(res.getMsg() != null)
-								{
-									out.print("<td> </td>");
-								}
-							}
-								
-							%>
+			
 						</tr>
 						<%
 						
@@ -216,17 +170,14 @@
 						double freteLivro = 0;
 						if(map != null)
 						{
-							
-							String txtId = (String)request.getSession().getAttribute("userid");
-							int id = Integer.parseInt(txtId);
-
+						
 							StringBuilder sb = new StringBuilder();
-							Pedido p = map.get(id);
-							item = p.getItem();
+							PessoaFisica pf = map.get(id);
+							Pedido p = pf.getPedidos().get(0);
+							List<Item> item = p.getItem();
 							if(item.size() != 0)
 							{
-									
-					
+											
 								for(int i = 0; i < item.size(); i ++)
 								{
 									sb.setLength(0);
@@ -264,10 +215,14 @@
 									
 									sb.append("<form action='SalvarCarrinho' method='POST' style=' float: right;' >" );
 									if(it.getQtde() == 0){
-										sb.append("<button type='button' style='float: left; size: 80%;  background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;' class='btn btn-success' disabled> ");
+										sb.append("<button type='button' style='float: left; size: 80%; " +
+										" background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;' " +
+										"class='btn btn-success' disabled> ");
 									}
 									else{
-										sb.append("<button type='submit' name='operacao' value='AdicionarItem' class='btn btn-success' style='float: left; size: 80%;  background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'> ");
+										sb.append("<button type='submit' name='operacao' value='AdicionarItem' " +
+												"class='btn btn-success' style='float: left; size: 80%; " + 
+										"background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'> ");
 									}
 									
 									sb.append("<span>+</span>");
@@ -292,7 +247,8 @@
 										item.remove(i);
 										p.setItem(item);
 										sb.append("<tr><td><p style='color: red'>Este item será removido por indisponibilidade no estoque!</p></td>");
-										map.replace(id, p);
+										pf.getPedidos().set(0, p);
+										map.replace(id, pf);
 										request.getSession().setAttribute("mapUsuarios", map);
 									}
 									else{
@@ -310,9 +266,8 @@
 								
 							}
 						}
-						if(map == null || map.size() == 0 || item.size() == 0)
+						if(map == null || map.size() == 0)
 						{
-	
 							precoFrete = 0;
 							precoTotal = 0;
 							out.print("<td>Não há itens no seu carrinho</td>");									
@@ -320,21 +275,14 @@
 				
 						
 						%>																																				
-					</tbody>
-				</table>
-				</form>
-			</div>
-         </div>
-     </div>
+							</tbody>
+						</table>
+						</form>
+					</div>
+		         </div>
+		     </div>
      					<% 
-	    					if(res != null)
-							{
-								if(res.getMsg() != null)
-								{
-									out.print("<p style='color: red;'>" + res.getMsg() + "<p>");
-								}
-								res = null;
-							}
+
 						%>
             <div class="col-lg-4 col-md-6 mb-4" style="position: relative; float: right;">
               <div class="card h-100">
@@ -344,20 +292,9 @@
                   </h4>
                   
                   <%
-                 
-                  if(cupom != null) 
-                  {
-                	  if(cupom.getMsg() == null && cupom.getEntidades().size() != 0)
-                	  {
-                		  
-                		  List<EntidadeDominio> listCupom = cupom.getEntidades();
-                		  Cupom c = (Cupom)listCupom.get(0);
-						  double desconto = c.getDesconto();
-                		  
-                		  precoTotal = precoTotal - desconto;
-       
-                	  }
-                  }
+	
+                  //msg erro cupom
+                  
                   %>
                   <h6 id="precoFretestring"></h6>
                   <input type='hidden' value='<%out.print(precoTotal); %>' id='precoTotalInput'>
@@ -365,18 +302,21 @@
                   
                   <h6 style="color: green" id="desconto">
                   	<%
-                  	
-                  	if(cupom != null)
+                  	if(map != null)
                   	{
-              		  List<EntidadeDominio> listCupom = cupom.getEntidades();
-              		  Cupom c = (Cupom)listCupom.get(0);
-						 double desconto = c.getDesconto();
-						desconto = 0 - desconto;
-                  		if(cupom.getMsg() == null)
-                  		{
-                  			out.print("Desconto: " + String.format("%.2f", desconto) + "R$");
-                  		}
+                      	PessoaFisica pf = map.get(id);
+                      	Pedido p = pf.getPedidos().get(0);
+                      	List<Cupom> cupom = p.getCupom();
+                      	if(cupom != null)
+                      	{
+                  		 	Cupom c = (Cupom)cupom.get(0);
+    						double desconto = c.getDesconto();
+    						desconto = 0 - desconto;
+                      		out.print("Desconto: " + String.format("%.2f", desconto) + "R$");
+
+                      	}                  		
                   	}
+
                   	%>
                   </h6>
                   
@@ -394,27 +334,26 @@
                   	 <input type="hidden" id="txtValor" name="txtValor" value="">
                   	 <input type="hidden" id='txtIndiceEnderecos' name="txtIndiceEnderecos" value="0">
                   	 <input type="hidden" id='txtFrete' name="txtFrete" value="">
-                  	 <%if(item.size() > 0)
+                  	 <%
+                  	 	if(map != null)
                   	 	{
-                  		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' " +
-                  		 			"style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'/><span>Finalizar Compra <i class='fa fa-shopping-cart' aria-hidden='true'></i></span>");
-                  	 	}
-                  	 	else
-                  	 	{
+                      	 	PessoaFisica pf = map.get(id);
+                      	 	Pedido p = pf.getPedidos().get(0);
+                      	 	List<Item> item = p.getItem();
+                      		 if(item.size() > 0)
+                      	 	{
+                      		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' " +
+                      		 			"style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'/> " +
+                      		 			" <span>Finalizar Compra <i class='fa fa-shopping-cart' aria-hidden='true'></i></span></button>");
+                      	 	}
+                      	           	 		
+                  	 	}else
                   	 		out.print("<button type='button' class='btn btn-secondary' /><span>Finalizar Compra</span>");
-                  	 	}
-                  	%>
-                  	 
+
+                  	%>   
                   	 	
                   </form>
-                   <%if(cupom != null) 
-                   {
-                		if(cupom.getMsg() !=null)
-                		{
-                			out.print(cupom.getMsg());
-                		}
-                   }
-                  %>                 
+                                
                 </div>
               </div>
             </div>
@@ -433,7 +372,7 @@
                   	}
                   	if(request.getSession().getAttribute("userid") != null)
                   	{
-                  		if(request.getSession().getAttribute("userid").equals("0"))
+                  		if(request.getSession().getAttribute("userid").equals(0))
                   		{
                       		out.print("Você deve estar logado para realizar o calculo do frete!");
                       		out.print("Clique <a href='Index.jsp?redirect=carrinho'>AQUI</a> para logar");                 			
@@ -441,80 +380,34 @@
                   		else
                   		{
                   			out.print("<table class='table table'>");
-							String txtId = (String)request.getSession().getAttribute("userid");
-							int id = Integer.parseInt(txtId);
-							Pedido p = map.get(id);
-                  			Pessoa usuario = p.getUsuario();
-                  			List<Endereco> end = usuario.getEndereco();
-    						for(int i = 0; i < end.size(); i++)
-    						{
-    							
-    							Endereco e = end.get(i);
-    							
-    							out.print("<tr>");
-    							out.print("<td><p>" + e.getNome() + "</p></td>");
-    							out.print("<td><button type='button' " +
-    									"class='btn btn-primary' " +
-    									"data-toggle='modal' "+
-    									"data-target='#myModalEnderecos" + i + "'"+
-    									"id='btnEndereco' style='background-color: #7E8F7C; hover:#7E8F7C; border: #7E8F7C'>Visualizar</button></td>"); 
-    							if(i == 0)
-    								out.print("<td><input type='radio' onclick='calcularCEP(this,  \""+ e.getCep() + "\","+ i +")' name='ra' checked></td>");
-    							else
-    								out.print("<td><input type='radio' onclick='calcularCEP(this,  \""+ e.getCep() + "\","+ i +")' name='ra'></td>");
-    							
-    							out.print("</tr>");
-    						}
-    						out.print("<input type='hidden' value='" + end.get(0).getCep() +"' id='cepp'>" )	;
-    						out.print("</table>");
-    						
-    						StringBuilder modals = new StringBuilder();
-    						for(int i = 0; i < end.size(); i++)
-    						{
-    							Endereco e = end.get(i);			
-    							modals.setLength(0);
-    							modals.append("<div class='modal fade' id='myModalEnderecos" + i + "' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>");
-    							modals.append("<div class='modal-dialog'role='document'>");
-    							modals.append("<div class='modal-content'>");
-    							modals.append("<div class='modal-header'>");
-    							modals.append("<h5 class='modal-title' id='myModalLabel'>Endereços</h5>");
-    							modals.append("<button type='button' class='close' data-dismiss='modal' aria-label='Close'>");
-    							modals.append("<span aria-hidden='true'>&times;</span>");
-    							modals.append("</button>");
-    							modals.append("</div>");
-    							modals.append("<div class='modal-body' id='detalhesEnderecos'>");
-    							modals.append("<table>");
-    							modals.append("<tr><td><input type='hidden' id='txtIdEndereco' name='txtIdEndereco' value='" + String.valueOf(e.getId())+ "' disabled/></td></tr>");
-    							modals.append("<tr><td>Apelido Endereco: </td><td><input type='text' id='txtNome' name='txtNome' value='" + e.getNome() + "' disabled/></td></tr>");
-    							modals.append("<tr><td>Tipo Residencia: </td><td><input type='text' id='txtTipoRes' name='txtTipoRes' value='" + e.getTipoRes() + "' disabled/></td></tr>");
-    							modals.append("<tr><td>Logradouro: </td><td><input type='text' id='txtLogradouro' name='txtLogradouro' value='" + e.getLogradouro() + "' disabled /></td></tr>");
-    							modals.append("<tr><td>Tipo Logradouro: </td><td><input type='text' id='txtTipoLog' name='txtTipoLog' value='" + e.getTipoLog() + "' disabled/></td></tr>");
-    							modals.append("<tr><td>Número da Casa: </td><td><input type='text' id='txtNumCasa' name='txtNumCasa' value='" + e.getNumCasa() + "' disabled /></td></tr>");
-    							modals.append("<tr><td>Bairro: </td><td><input type='text' id='txtBairro' name='txtBairro' value='" + e.getBairro() + "' disabled /></td></tr>");
-    							modals.append("<tr><td>CEP: </td><td><input type='text' id='txtCep' name='txtCep' value='" + e.getCep() + "' disabled /></td></tr>");
-    							modals.append("<tr><td>Cidade: </td><td><input type='text' id='txtCidade' name='txtCidade' value='" + e.getCidade() + "'disabled /></td></tr>");
-    							modals.append("<tr><td>Estado: </td><td><input type='text' id='txtEstado' name='txtEstado' value='" + e.getEstado() + "'disabled /></td></tr>");
-    							modals.append("<tr><td>Pais: </td><td><input type='text' id='txtPais' name='txtPais' value='" + e.getPais() + "' disabled/></td></tr>");
-    							modals.append("</table>");
-    							modals.append("</div>");
-    							modals.append("<div class='modal-footer'>");
-    							modals.append("<button type='button' class='btn btn-danger' data-dismiss='modal'>Cancelar</button>");
-    							modals.append("</div>");
-    							modals.append("</div>");
-    							modals.append("</div>");
-    							modals.append("</div>");
-    							out.print(modals.toString());
-    							}
-                      		out.print("<button type='button' class='btn btn-primary' "+
-                      				"data-toggle='modal' data-target='#myModalAdicionarEnderecos' "+
-                      				"style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	");  							
-    						}
-
-                  		}
-            			
+                  			if(id != 0)
+                  			{
+                  				
+	                  			PessoaFisica pf = map.get(id);
+	                  			List<Endereco> end = pf.getEndereco();
+	    						for(int i = 0; i < end.size(); i++)
+	    						{
+	    							
+	    							Endereco e = end.get(i);
+	    							
+									out.print("<tr><td>" + end.get(i).getNome() +"</td>");
+	    							if(i == 0)
+	    								out.print("<td><input type='radio' onclick='calcularCEP(this,  \""+ e.getCep() + "\","+ i +")' name='ra' checked></td></tr>");
+	    							else
+	    								out.print("<td><input type='radio' onclick='calcularCEP(this,  \""+ e.getCep() + "\","+ i +")' name='ra'></td></tr>");
+	    							
+	    						}
+	    						out.print("<input type='hidden' value='" + end.get(0).getCep() +"' id='cepp'>" )	;
+	    						out.print("</table>");
+	                      		out.print("<button type='button' class='btn btn-primary' "+
+	                      				"data-toggle='modal' data-target='#myModalAdicionarEnderecos' "+
+	                      				"style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F;'>Adicionar</button>	");  							
+	    					}
+	
+	                  	}
+                  	}
                   	%>
-               		
-        	      	
+     	      	
                 </div>
               </div>
             </div>                
@@ -577,7 +470,7 @@
 					<td>Pais: </td>
 					<td><input type="text" id="txtPais" name="txtPais" /></td></tr>
 				
-				<input type="hidden" name="txtIdFkEndereco" value="<%out.print(stringId); %>"/>				
+				<input type="hidden" name="txtIdFkEndereco" value="<%out.print(id); %>"/>				
 				<input type="hidden" name="local" value="carrinho">																				
 			</table>
 		      </div>
