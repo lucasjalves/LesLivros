@@ -48,30 +48,31 @@
 			
 			var precoTotal = document.getElementById("precoTotalInput").value;
 			precoTotal = parseFloat(precoTotal);
-			if(document.getElementById("cepp").value != null)
+			if(document.getElementById("cepp") != null)
 				calcularCEP(1, document.getElementById("cepp").value, 0);
-			else
-				calcularCEP(1, 0, 0);
-			
+			else	
+				calcularCEP(null, null, 0);
+						
 		}
 		function calcularCEP(radio, cep, i)
 		{
-			var cep = cep.slice(0,4);
-			
-			var numero = parseInt(cep);
-
+	
 			var freteCep = 0;
 			
 			var freteLivro = document.getElementById("precoFreteLivro").value;
 			freteLivro = parseFloat(freteLivro);
-			
-			if(numero <= 3000)
+			if(cep != null)
 			{
-				freteCep = freteCep + (numero / 85);
-			}
-			else
-			{
-				freteCep = freteCep + (numero / 150);
+				var cep = cep.slice(0,4);
+				var numero = parseInt(cep);
+				if(numero <= 3000)
+				{
+					freteCep = freteCep + (numero / 85);
+				}
+				else
+				{
+					freteCep = freteCep + (numero / 150);
+				}
 			}
 			freteCep += freteLivro;
 			var precoTotal = document.getElementById("precoTotalInput").value;
@@ -293,7 +294,12 @@
                   
                   <%
 	
-                  //msg erro cupom
+                  Resultado msgcupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
+                  if(msgcupom != null)
+                  {
+                	  if(msgcupom.getMsg() != null)	
+                		  out.print("<p style='color: red;'>" + msgcupom.getMsg() +"</p>");
+                  }
                   
                   %>
                   <h6 id="precoFretestring"></h6>

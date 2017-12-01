@@ -18,18 +18,18 @@ import finalCore.dao.EnderecoDAO;
 import finalCore.dao.GrupoPrecificacaoDAO;
 import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
-import finalCore.negocio.ValidarCupomPromocionalData;
+import finalCore.negocio.ValidarCupomData;
+import finalCore.negocio.ValidarCupomVeridico;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
 import finalCore.negocio.ValidarPagamentoCartoes;
-import finalCore.negocio.ValidarQtdeCupomPromocional;
 import finalCore.negocio.VerificarQuantidadeLivroEstoque;
 import finalDominio.Cartao;
 import finalDominio.Categoria;
 import finalDominio.Cupom;
+import finalDominio.CupomPromocional;
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalDominio.GrupoPrecificacao;
-import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.Pedido;
 import finalDominio.PessoaFisica;
@@ -72,32 +72,36 @@ public class Fachada implements IFachada{
 
 		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	
 		VerificarQuantidadeLivroEstoque vQtdeEstoqueLivro = new VerificarQuantidadeLivroEstoque();
+		ValidarCupomVeridico vCupVeridico = new ValidarCupomVeridico();
 		
-		ValidarCupomPromocionalData vCupomData = new ValidarCupomPromocionalData();
+		ValidarCupomData vCupomData = new ValidarCupomData();
 		ValidarPagamentoCartoes vPagamentoCartao = new ValidarPagamentoCartoes();
-		ValidarQtdeCupomPromocional vQtdCupomProm = new ValidarQtdeCupomPromocional();
 
 		List<IStrategy> rnsSalvarLivro = new ArrayList<IStrategy>();
 		rnsSalvarLivro.add(vdObrigatoriosLivro);
 		
 
 		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
-		rnsValidarPedido.add(vCupomData);
+		
 		//rnsValidarPedido.add(vPagamentoCartao);
-		rnsValidarPedido.add(vQtdCupomProm);
 		rnsValidarPedido.add(vQtdeEstoqueLivro);
 		
+		List<IStrategy> rnsValidarCupom = new ArrayList<IStrategy>();
+		rnsValidarCupom.add(vCupVeridico);
+		rnsValidarCupom.add(vCupomData);
+		
 		Map<String, List<IStrategy>> rnsLivro = new HashMap<String, List<IStrategy>>();
-
 		Map<String, List<IStrategy>> rnsPedido = new HashMap<String, List<IStrategy>>();
+		Map<String, List<IStrategy>> rnsCupom = new HashMap<String, List<IStrategy>>();
 		
 
 		rnsLivro.put("SALVAR", rnsSalvarLivro);	
 		rnsPedido.put("ValidarCarrinho", rnsValidarPedido);
+		rnsCupom.put("CONSULTAR", rnsValidarCupom);
 		
-
 		rns.put(Livro.class.getName(), rnsLivro);
 		rns.put(Pedido.class.getName(), rnsPedido);
+		rns.put(Cupom.class.getName(), rnsCupom);
 	
 	}
 	
@@ -133,7 +137,7 @@ public class Fachada implements IFachada{
 	public Resultado consultar(EntidadeDominio entidade) {
 		resultado = new Resultado();
 		String nmClasse = entidade.getClass().getName();	
-		
+		System.out.println(nmClasse);
 		String msg = executarRegras(entidade, "CONSULTAR");
 		
 		
