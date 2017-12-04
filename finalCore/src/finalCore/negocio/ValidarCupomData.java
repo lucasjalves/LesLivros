@@ -17,6 +17,7 @@ public class ValidarCupomData implements IStrategy{
 	public String processar(EntidadeDominio entidade) {
 		
 		Cupom c = (Cupom)entidade;
+	
 		if(c.getId() != null)
 		{
 
@@ -28,7 +29,6 @@ public class ValidarCupomData implements IStrategy{
 					return "O cupom está fora do prazo de validade";
 			}		
 		}
-		
 		return null;
 	}
 

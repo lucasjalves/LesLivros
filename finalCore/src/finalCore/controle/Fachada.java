@@ -66,7 +66,7 @@ public class Fachada implements IFachada{
 		daos.put(Cartao.class.getName(), carDAO);
 		daos.put(Categoria.class.getName(), catDAO);
 		daos.put(GrupoPrecificacao.class.getName(), gpDAO);
-		daos.put(Cupom.class.getName(), cupDAO);
+		daos.put(CupomPromocional.class.getName(), cupDAO);
 		daos.put(Pedido.class.getName(),pedidoDAO);
 		
 
@@ -101,7 +101,7 @@ public class Fachada implements IFachada{
 		
 		rns.put(Livro.class.getName(), rnsLivro);
 		rns.put(Pedido.class.getName(), rnsPedido);
-		rns.put(Cupom.class.getName(), rnsCupom);
+		rns.put(CupomPromocional.class.getName(), rnsCupom);
 	
 	}
 	
@@ -129,7 +129,6 @@ public class Fachada implements IFachada{
 		}else{
 			resultado.setMsg(msg);
 		}
-		System.out.println(resultado.getMsg());
 		return resultado;
 	}
 
@@ -137,7 +136,6 @@ public class Fachada implements IFachada{
 	public Resultado consultar(EntidadeDominio entidade) {
 		resultado = new Resultado();
 		String nmClasse = entidade.getClass().getName();	
-		System.out.println(nmClasse);
 		String msg = executarRegras(entidade, "CONSULTAR");
 		
 		

@@ -85,7 +85,13 @@ public class CarrinhoViewHelper implements IViewHelper {
 			i.setQtde(qtdeLivros);
 			
 			Pedido pedido = mapaUsuarios.get(id);
+			if(pedido.getItem() == null)
+				pedido.setItem(new ArrayList<Item>());
 			
+			List<Item> itens = pedido.getItem();
+			
+			itens.add(i);
+			pedido.setItem(itens);
 			
 			return pedido;
 		}

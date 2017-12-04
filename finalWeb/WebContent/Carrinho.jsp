@@ -340,7 +340,7 @@
                   </form>
                   <br>
                   
-                  <form action="SALVAR" method="POST">
+                  <form action="ComprarItens" method="POST">
                   	 <input type="hidden" id="txtValor" name="txtValor" value="">
                   	 <input type="hidden" id='txtIndiceEnderecos' name="txtIndiceEnderecos" value="0">
                   	 <input type="hidden" id='txtFrete' name="txtFrete" value="">
@@ -349,14 +349,14 @@
                   	 	{
                   	 		Pedido pedido = map.get(id);
                       	 	List<Item> item = pedido.getItem();
-                      		 if(item.size() > 0)
+                      		if(item.size() > 0 || id != 0)
                       	 	{
                       		 	out.print("<button type='submit' name='operacao' value='SALVAR' class='btn btn-primary' " +
                       		 			"style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'/> " +
                       		 			" <span>Finalizar Compra <i class='fa fa-shopping-cart' aria-hidden='true'></i></span></button>");
                       	 	}
                       	           	 		
-                  	 	}else
+                  	 		}else
                   	 		out.print("<button type='button' class='btn btn-secondary' /><span>Finalizar Compra</span>");
 
                   	%>   

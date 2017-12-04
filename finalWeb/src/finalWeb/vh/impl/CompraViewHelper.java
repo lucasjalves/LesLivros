@@ -48,10 +48,16 @@ public class CompraViewHelper implements IViewHelper{
 			double frete = Double.parseDouble(freteTxt);
 			
 			String txtIndiceEndereco = request.getParameter("txtIndiceEnderecos");
-			int idEndereco = Integer.parseInt(txtIndiceEndereco);
+			int i = Integer.parseInt(txtIndiceEndereco);
 			
-			pedido.setEndereco(new Endereco());
-			pedido.getEndereco().setId(idEndereco);
+			
+			Resultado resultado = (Resultado)request.getSession().getAttribute("resultadoLogin");
+			
+			List<EntidadeDominio> e = resultado.getEntidades();
+			PessoaFisica pessoa =(PessoaFisica) e.get(0);
+			
+			Endereco end = pessoa.getEndereco().get(i);			
+			pedido.setEndereco(end);
 			
 			pedido.setFrete(frete);
 			pedido.setPrecoTotal(precoTotal);

@@ -25,7 +25,6 @@ public class PedidoDAO extends AbstractJdbcDAO{
 		PreparedStatement pst = null;
 		Pedido pedido = (Pedido)entidade;	
 		try {
-			pedido.setStatus("1");
 			connection.setAutoCommit(false);
 			StringBuilder sql = new StringBuilder();
 			sql.append("INSERT INTO pedido (dtPedido, status, pk_cliente, precoTotal, frete, fk_endereco) VALUES (?,?,?,?,?,?)");
@@ -51,10 +50,11 @@ public class PedidoDAO extends AbstractJdbcDAO{
 			for(int i = 0; i < pedido.getItem().size(); i++)
 			{
 				Livro l = pedido.getItem().get(i).getLivro();
-				pst = connection.prepareStatement("INSERT INTO item_pedido (fk_livro, quantidade,preco) VALUES (?,?,?)");
+				pst = connection.prepareStatement("INSERT INTO item_pedido (fk_livro, quantidade,preco, PK_PEDIDO) VALUES (?,?,?,?)");
 				pst.setInt(1, l.getId());
 				pst.setInt(2, pedido.getItem().get(i).getQtde());
 				pst.setDouble(3, l.getPreco());
+				pst.setInt(4, idPedido);
 				pst.executeUpdate();
 				
 			}
@@ -75,9 +75,9 @@ public class PedidoDAO extends AbstractJdbcDAO{
 			{
 
 				Cupom c = pedido.getCupomPromocional();
-				pst = connection.prepareStatement("INSERT INTO cupom_pedido (fk_cupom, fk_pedido");
+				pst = connection.prepareStatement("INSERT INTO cupom_pedido (fk_cupom, fk_pedido) VALUES(?,?)");
 				pst.setInt(1, c.getId());
-				pst.setInt(2, c.getId());
+				pst.setInt(2, idPedido);
 				pst.executeUpdate();
 								
 			}

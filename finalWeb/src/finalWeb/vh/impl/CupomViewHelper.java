@@ -49,15 +49,15 @@ public class CupomViewHelper implements IViewHelper {
 		if(request.getSession().getAttribute("cupomvalidado") != null && request.getSession().getAttribute("c") == null)
 		{
 			List<EntidadeDominio> e = resultado.getEntidades();
-			Cupom c = null;
+			CupomPromocional c = null;
 			
 			if(e.size() == 0)
-				c = new Cupom();
+				c = new CupomPromocional();
 			else
-				c = (Cupom)e.get(0);
+				c = (CupomPromocional)e.get(0);
 			
 			request.getSession().setAttribute("c", c);
-			d = request.getRequestDispatcher("ValidarCupom?operacao=AdicionarCupom");
+			d = request.getRequestDispatcher("ValidarCupom?operacao=CONSULTAR");
 			d.forward(request, response);
 			return;
 		}

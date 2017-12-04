@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import finalDominio.Cupom;
+import finalDominio.CupomPromocional;
+import finalDominio.CupomTroca;
 import finalDominio.EntidadeDominio;
 
 public class CupomDAO extends AbstractJdbcDAO {
@@ -40,11 +42,20 @@ public class CupomDAO extends AbstractJdbcDAO {
 		PreparedStatement pst = null;
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT * FROM `cupom` WHERE 1=1 ");
-		Cupom cup = (Cupom)entidade;
-		if(cup.getCodigo() != null)
+		if(entidade instanceof CupomPromocional)
 		{
-			sb.append("AND codigo = '" + cup.getCodigo() + "'");
+			CupomPromocional cup = (CupomPromocional)entidade;
+			if(cup.getCodigo() != null)
+				sb.append("AND codigo = '" + cup.getCodigo() + "'");
 		}
+			
+		if(entidade instanceof CupomTroca)
+		{
+			CupomTroca cup = (CupomTroca)entidade;
+			if(cup.getCodigo() != null)
+				sb.append("AND codigo = '" + cup.getCodigo() + "'");
+		}
+
 		System.out.println(sb.toString());
 		try{
 			openConnection();
@@ -52,14 +63,29 @@ public class CupomDAO extends AbstractJdbcDAO {
 			ResultSet rs = pst.executeQuery();
 			List<EntidadeDominio> cupons = new ArrayList<EntidadeDominio>();
 			while(rs.next()){
-				Cupom c = new Cupom();
-
-				c.setId(rs.getInt("id_cupom"));
-				c.setCodigo(rs.getString("codigo"));
-				c.setDesconto(rs.getDouble("desconto"));
-				c.setDtValidade(rs.getDate("dtVencimento"));
+				if(entidade instanceof CupomPromocional)
+				{
+					CupomPromocional c = new CupomPromocional();
+					c.setId(rs.getInt("id_cupom"));
+					c.setCodigo(rs.getString("codigo"));
+					c.setDesconto(rs.getDouble("desconto"));
+					c.setDtValidade(rs.getDate("dtVencimento"));	
+					cupons.add(c);
+				}
+				if(entidade instanceof CupomTroca)
+				{
+					
+				}
+					CupomTroca c = new CupomTroca();
+					c.setId(rs.getInt("id_cupom"));
+					c.setCodigo(rs.getString("codigo"));
+					c.setDesconto(rs.getDouble("desconto"));
+					c.setDtValidade(rs.getDate("dtVencimento"));	
+					cupons.add(c);				{
+					
+				}
 				
-				cupons.add(c);
+				
 			}
 			return cupons;		
 		

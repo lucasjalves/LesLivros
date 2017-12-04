@@ -12,6 +12,9 @@ import java.util.List;
 import finalDominio.Cartao;
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
+import finalDominio.Item;
+import finalDominio.Livro;
+import finalDominio.Pedido;
 import finalDominio.PessoaFisica;
 import finalDominio.Telefone;
 
@@ -241,12 +244,44 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				}				
 				cartoesCliente.close();
 				
+				pst = connection.prepareStatement("SELECT * FROM PEDIDO WHERE pk_cliente = " + idCliente);
+				ResultSet pedidosCliente = pst.executeQuery();
+				List<Pedido> pedidos = new ArrayList<Pedido>();
+				while(pedidosCliente.next())
+				{
+					Pedido pedido = new Pedido();
+					pedido.setId(pedidosCliente.getInt("id"));
+					pedido.setDtPedido(pedidosCliente.getDate("dtPedido"));
+					pedido.setStatus(pedidosCliente.getString("status"));
+					pedido.setFrete(pedidosCliente.getDouble("frete"));
+					pedido.setPrecoTotal(pedidosCliente.getDouble("precoTotal"));
+					
+					pst = connection.prepareStatement("SELECT * FROM ITEM_PEDIDO"
+							+ " INNER JOIN LIVROS ON "
+							+ "(ITEM_PEDIDO.FK_LIVRO = LIVROS.ID) WHERE PK_PEDIDO = " + pedido.getId());
+					ResultSet itensPedido = pst.executeQuery();
+					List<Item> itens = new ArrayList<Item>();
+					while(itensPedido.next())
+					{
+						Livro l = new Livro();
+						Item i = new Item();
+						i.setQtde(itensPedido.getInt("quantidade"));
+						l.setNome(itensPedido.getString("nome"));
+						i.setLivro(l);
+						itens.add(i);
+					}
+					itensPedido.close();
+					pedido.setItem(itens);
+					pedidos.add(pedido);
+				}
+				pedidosCliente.close();
+	
+				p.setPedidos(pedidos);
 				p.setEndereco(enderecos);
 				p.setCartao(cartoes);
 				pessoas.add(p);
-				
 			}
-			
+		
 			return pessoas;
 		}catch(SQLException e){
 			e.printStackTrace();

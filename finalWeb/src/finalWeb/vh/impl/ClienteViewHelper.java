@@ -174,7 +174,6 @@ public class ClienteViewHelper implements IViewHelper{
 			*/
 			}
 		
-		
 		return p;
 	}
 
@@ -186,32 +185,9 @@ public class ClienteViewHelper implements IViewHelper{
 		RequestDispatcher d=null;
 
 		String operacao = request.getParameter("operacao");
-		if(operacao.equals("SALVARCLIENTE"))
-		{
-			request.getSession().setAttribute("resultado", resultado);
-			d= request.getRequestDispatcher("ConsultarCliente.jsp"); 	
-			resultado.setMsg("Cliente cadastrado com sucesso!");
-		}
 
-
-		if(operacao.equals("EXCLUIR")){
-			
-			request.getSession().setAttribute("resultado", null);
-			d= request.getRequestDispatcher("ConsultarCliente.jsp");  
-		}
 		
-		if(resultado.getMsg() != null && operacao.equals("LOGIN"))
-		{
-			request.getSession().setAttribute("resultado", resultado);
-			d = request.getRequestDispatcher("Index.jsp");  
-		}
-		
-		
-		
-		
-		
-		
-		if(resultado.getMsg() == null && operacao.equals("LOGIN"))
+		if(operacao.equals("LOGIN"))
 		{
 			List<EntidadeDominio> entidades = resultado.getEntidades();
 			PessoaFisica p = (PessoaFisica) entidades.get(0);
@@ -239,8 +215,8 @@ public class ClienteViewHelper implements IViewHelper{
 				mapaUsuarios.put(p.getId(), pedido);	
 				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			}if(mapaUsuarios.containsKey(0)){
-				
-				Pedido pedido = mapaUsuarios.get(p.getId());
+				System.out.println("usuario n logado porra");
+				Pedido pedido = mapaUsuarios.get(0);
 				
 				mapaUsuarios.remove(0);
 				mapaUsuarios.put(p.getId(), pedido);

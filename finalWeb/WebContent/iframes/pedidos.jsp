@@ -41,7 +41,12 @@
 									StringBuilder sb = new StringBuilder();
 									for(int i = 0; i < pedidos.size(); i++)
 									{
-										
+										Pedido pe = p.getPedidos().get(i);
+										out.print("<tr><td>");
+										out.print("<p>Data: " + 
+											ConverteDate.converteDateString(pe.getDtPedido()) + "</p>");
+										out.print("<p>Valor: " + String.format("%.2f", pe.getPrecoTotal()) + " R$ </p>");
+										out.print("</td></tr>");
 									}									
 								}
 								else
