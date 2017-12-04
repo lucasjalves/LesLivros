@@ -9,16 +9,21 @@ public class ValidarPagamentoCartoes implements IStrategy {
 	@Override
 	public String processar(EntidadeDominio entidade) {
 		Pedido p = (Pedido)entidade;
-		if(p.getCartoesCompra().size() > 1)
+		if(p.getCartoesCompra() != null)
 		{
-			for(int i = 0; i < p.getCartoesCompra().size(); i ++)
+			
+			if(p.getCartoesCompra().size() > 1)
 			{
-				double precoPagoCartao = p.getCartoesCompra().get(i).getValorPago();
-				if(precoPagoCartao < 10 && p.getCupom() == null)
+				for(int i = 0; i < p.getCartoesCompra().size(); i ++)
 				{
-					return "O valor mínimo para cada cartão é de 10R$";
+					double precoPagoCartao = p.getCartoesCompra().get(i).getValorPago();
+					if(precoPagoCartao < 10 && p.getCupomTroca().size() == 0 || p.getCupomPromocional() == null)
+					{
+						return "O valor mínimo para cada cartão é de 10R$";
+					}
 				}
 			}
+			
 		}
 		return null;
 	}

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import finalCore.aplicacao.Resultado;
 import finalDominio.Cupom;
+import finalDominio.CupomPromocional;
 import finalDominio.EntidadeDominio;
 import finalDominio.Pedido;
 import finalDominio.PessoaFisica;
@@ -23,18 +24,18 @@ public class CupomViewHelper implements IViewHelper {
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		String txtCodigo = request.getParameter("txtCodigo");
 
-		Cupom cupom = new Cupom();
-		cupom.setCodigo(txtCodigo);
+		CupomPromocional cupomPromocional = new CupomPromocional();
+		cupomPromocional.setCodigo(txtCodigo);
 		request.getSession().setAttribute("cupomvalidado", "a");
 		if(request.getSession().getAttribute("c") != null)
 		{
 			request.getSession().removeAttribute("cupomvalidado");
-			Cupom cu = (Cupom)request.getSession().getAttribute("c");
+			CupomPromocional cu = (CupomPromocional)request.getSession().getAttribute("c");
 			request.getSession().removeAttribute("c");
 			return cu;
 		}
 		else	
-			return cupom;
+			return cupomPromocional;
 			
 		
 	}
@@ -63,7 +64,7 @@ public class CupomViewHelper implements IViewHelper {
 		
 		String operacao = request.getParameter("operacao");
 		System.out.println(resultado.getMsg());
-		if(operacao.equals("AdicionarCupom"))
+		if(operacao.equals("CONSULTAR"))
 		{
 			request.getSession().removeAttribute("cupomvalidado");
 			request.getSession().removeAttribute("c");
@@ -71,25 +72,13 @@ public class CupomViewHelper implements IViewHelper {
 			{
 				Integer id = (Integer)request.getSession().getAttribute("userid");
 				@SuppressWarnings("unchecked")
-				Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
-				PessoaFisica pf = mapaUsuarios.get(id);
-				Pedido pedido = pf.getPedidos().get(0);
+				Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
+				Pedido pedido = mapaUsuarios.get(id);
 				List<EntidadeDominio> e = resultado.getEntidades();
-				Cupom cupomResultado = (Cupom)e.get(0);
+				CupomPromocional cupomResultado = (CupomPromocional)e.get(0);
 				
-				if(pedido.getCupom() == null)
-				{
-					pedido.setCupom(new ArrayList<Cupom>());
-					if(resultado.getMsg() == null)
-						pedido.getCupom().add(cupomResultado);
-				}
-				else
-				{
-					if(resultado.getMsg() == null)
-						pedido.getCupom().add(cupomResultado);
-				}
-				pf.getPedidos().set(0, pedido);
-				mapaUsuarios.replace(id, pf);
+				pedido.setCupomPromocional(cupomResultado);
+				mapaUsuarios.replace(id, pedido);
 				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			}
 

@@ -25,8 +25,8 @@ public class ValidarDadosObrigatoriosLivro implements IStrategy{
 			if(l.getPeso() == null || l.getProfundidade() == null || l.getSinopse() == null  )
 				return "Peso, profundidade e sinopse são obrigatórios!";		
 			
-			if(l.getStatus() == null || l.getSubcategoria() == null || l.getTitulo() == null)
-				return "Status, subcategoria e títulos são obrigatórios!";	
+			if(l.getStatus() == null || l.getTitulo() == null)
+				return "Status e títulos são obrigatórios!";	
 			
 
 			
@@ -46,8 +46,8 @@ public class ValidarDadosObrigatoriosLivro implements IStrategy{
 			if(l.getPeso().trim().equals("") || l.getProfundidade().trim().equals("") || l.getSinopse().trim().equals("") )
 				return "Peso, profundidade e sinopse são obrigatórios!";		
 			
-			if(l.getStatus().trim().equals("") || l.getSubcategoria() == null || l.getTitulo().trim().equals(""))
-				return "Status, subcategoria e títulos são obrigatórios!";
+			if(l.getStatus().trim().equals("") || l.getTitulo().trim().equals(""))
+				return "Status e títulos são obrigatórios!";
 			
 			
 			return null;

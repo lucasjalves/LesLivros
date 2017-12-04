@@ -11,7 +11,7 @@ import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.Pedido;
 
-public class VerificarQuantidadeLivroEstoque implements IStrategy {
+public class VerificarQtdeLivroEstoque implements IStrategy {
 
 	@Override
 	public String processar(EntidadeDominio entidade) {

@@ -16,8 +16,16 @@
    		}
 		request.getSession().setAttribute("redirecionar", null);
 	
-		
-		Map<Integer, PessoaFisica> map = (Map<Integer, PessoaFisica>) request.getSession().getAttribute("mapaUsuarios");;
+		Resultado resultado = (Resultado) session.getAttribute("resultadoLogin");
+		Map<Integer, Pedido> map = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
+		List<EntidadeDominio> entidades = null;
+		PessoaFisica pf = null;
+		if(resultado != null)
+		{
+			entidades = resultado.getEntidades();
+			pf = (PessoaFisica) entidades.get(0);			
+		}
+
 
 		
 	%>
@@ -173,9 +181,8 @@
 						{
 						
 							StringBuilder sb = new StringBuilder();
-							PessoaFisica pf = map.get(id);
-							Pedido p = pf.getPedidos().get(0);
-							List<Item> item = p.getItem();
+							Pedido pedido = map.get(id);
+							List<Item> item = pedido.getItem();
 							if(item.size() != 0)
 							{
 											
@@ -201,7 +208,7 @@
 									sb.append("<td style='text-align: center;'>");
 									sb.append("<form action='SalvarCarrinho' method='POST' style=' float: left;' >" );
 									
-									if(p.getItem().get(i).getQtde() <= 1){
+									if(item.get(i).getQtde() <= 1){
 										sb.append("<button type='button' style='float: left; background-color: #7E8F7C; hover:#7E8F7C; border: #7E8F7C;'  class='btn btn-danger' disabled>");
 									}		
 									else{
@@ -246,10 +253,9 @@
 									sb.append("</td>");
 									if(qtdeLivro == 0){
 										item.remove(i);
-										p.setItem(item);
+										pedido.setItem(item);
 										sb.append("<tr><td><p style='color: red'>Este item será removido por indisponibilidade no estoque!</p></td>");
-										pf.getPedidos().set(0, p);
-										map.replace(id, pf);
+										map.replace(id, pedido);
 										request.getSession().setAttribute("mapUsuarios", map);
 									}
 									else{
@@ -310,12 +316,10 @@
                   	<%
                   	if(map != null)
                   	{
-                      	PessoaFisica pf = map.get(id);
-                      	Pedido p = pf.getPedidos().get(0);
-                      	List<Cupom> cupom = p.getCupom();
-                      	if(cupom != null)
+                  		Pedido pedido = map.get(id);
+                      	CupomPromocional c = pedido.getCupomPromocional();
+                      	if(c != null)
                       	{
-                  		 	Cupom c = (Cupom)cupom.get(0);
     						double desconto = c.getDesconto();
     						desconto = 0 - desconto;
                       		out.print("Desconto: " + String.format("%.2f", desconto) + "R$");
@@ -330,25 +334,24 @@
                   
                   <form action="ValidarCupom" method="POST">
                   	<input type="text" name="txtCodigo" placeholder="Código do cupom" maxlength="6">
-                  	<button type="submit" name="operacao" value="AdicionarCupom" class="btn btn-success" style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'/>	
+                  	<button type="submit" name="operacao" value="CONSULTAR" class="btn btn-success" style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'/>	
                   			<span>Adicionar Cupom</span>
                   	</button>
                   </form>
                   <br>
                   
-                  <form action="ComprarItens" method="POST">
+                  <form action="SALVAR" method="POST">
                   	 <input type="hidden" id="txtValor" name="txtValor" value="">
                   	 <input type="hidden" id='txtIndiceEnderecos' name="txtIndiceEnderecos" value="0">
                   	 <input type="hidden" id='txtFrete' name="txtFrete" value="">
                   	 <%
                   	 	if(map != null)
                   	 	{
-                      	 	PessoaFisica pf = map.get(id);
-                      	 	Pedido p = pf.getPedidos().get(0);
-                      	 	List<Item> item = p.getItem();
+                  	 		Pedido pedido = map.get(id);
+                      	 	List<Item> item = pedido.getItem();
                       		 if(item.size() > 0)
                       	 	{
-                      		 	out.print("<button type='submit' name='operacao' value='ComprarItens' class='btn btn-primary' " +
+                      		 	out.print("<button type='submit' name='operacao' value='SALVAR' class='btn btn-primary' " +
                       		 			"style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F;'/> " +
                       		 			" <span>Finalizar Compra <i class='fa fa-shopping-cart' aria-hidden='true'></i></span></button>");
                       	 	}
@@ -389,7 +392,6 @@
                   			if(id != 0)
                   			{
                   				
-	                  			PessoaFisica pf = map.get(id);
 	                  			List<Endereco> end = pf.getEndereco();
 	    						for(int i = 0; i < end.size(); i++)
 	    						{

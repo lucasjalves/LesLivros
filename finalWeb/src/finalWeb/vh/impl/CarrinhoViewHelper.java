@@ -36,17 +36,12 @@ public class CarrinhoViewHelper implements IViewHelper {
 		{
 			request.getSession().setAttribute("userid", 0);
 			id = 0;
-			PessoaFisica pessoa = new PessoaFisica();
 			Pedido pedido = new Pedido();
 			
 			pedido.setItem(new ArrayList<Item>());
-			List<Pedido> pedidos = new ArrayList<Pedido>();
 			
-			pedidos.add(pedido);			
-			pessoa.setPedidos(pedidos);
-			
-			Map<Integer, PessoaFisica> mapaUsuarios = new HashMap<Integer, PessoaFisica>();		
-			mapaUsuarios.put(id, pessoa);	
+			Map<Integer, Pedido> mapaUsuarios = new HashMap<Integer, Pedido>();		
+			mapaUsuarios.put(id, pedido);	
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			
 		}
@@ -55,7 +50,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 		
 		Livro l = (Livro) request.getSession().getAttribute("livro");
 		@SuppressWarnings("unchecked")
-		Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
+		Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
 		String operacao = (String)request.getParameter("operacao");		
 		
 		
@@ -63,8 +58,7 @@ public class CarrinhoViewHelper implements IViewHelper {
 		{
 			String txtIdLivro = request.getParameter("txtId");
 			int idLivro = Integer.parseInt(txtIdLivro);
-			PessoaFisica pf = mapaUsuarios.get(id);
-			Pedido pedido = pf.getPedidos().get(0);
+			Pedido pedido = mapaUsuarios.get(id);
 			for(int i = 0; i < pedido.getItem().size(); i++)
 			{
 				int idLivroPedido = pedido.getItem().get(i).getLivro().getId();
@@ -90,19 +84,12 @@ public class CarrinhoViewHelper implements IViewHelper {
 			i.setLivro(l);
 			i.setQtde(qtdeLivros);
 			
-			PessoaFisica p = mapaUsuarios.get(id);
-			Pedido pedido = p.getPedidos().get(0);
-				
-	
-			List<Item> itensPedido = pedido.getItem();
-			itensPedido.add(i);
-		
-			pedido.setItem(itensPedido);
+			Pedido pedido = mapaUsuarios.get(id);
+			
 			
 			return pedido;
 		}
-		PessoaFisica pf = mapaUsuarios.get(id);
-		Pedido pedido = pf.getPedidos().get(0);
+		Pedido pedido = mapaUsuarios.get(id);
 		
 		return pedido;
 		
@@ -119,13 +106,12 @@ public class CarrinhoViewHelper implements IViewHelper {
 	
 		if(operacao.equals("VERIFICAR")){
 			@SuppressWarnings("unchecked")
-			Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
+			Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
 			Integer id = (Integer)request.getSession().getAttribute("userid");
 
 			List<EntidadeDominio> e = resultado.getEntidades();  
 			
 			Pedido p = (Pedido)e.get(0);
-			PessoaFisica pf = mapaUsuarios.get(id); 
 			if(resultado.getMsg() != null)
 			{
 				String[] msg = resultado.getMsg().split("\\s");
@@ -137,8 +123,8 @@ public class CarrinhoViewHelper implements IViewHelper {
 
 				p.getItem().get(i).setQtde(qt);
 			}
-			pf.getPedidos().set(0, p);
-			mapaUsuarios.replace(id, pf);  
+			
+			mapaUsuarios.replace(id, p);  
 			
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);								
 			request.getSession().setAttribute("resultadoCarrinho", resultado);			
@@ -151,17 +137,15 @@ public class CarrinhoViewHelper implements IViewHelper {
 		if(operacao.equals("AdicionarItem") || operacao.equals("subtrairItem"))
 		{
 			@SuppressWarnings("unchecked")
-			Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
+			Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
 			Integer id = (Integer)request.getSession().getAttribute("userid");
 
 			List<EntidadeDominio> e = resultado.getEntidades();  
 													
 			Pedido p = (Pedido)e.get(0);
-			PessoaFisica pf = mapaUsuarios.get(id); 
 
-			if(resultado.getMsg() == null)
-				pf.getPedidos().set(0, p);
-			else
+
+			if(resultado.getMsg() != null)
 			{
 				String[] msg = resultado.getMsg().split("\\s");
 				String indice = msg[msg.length-1];
@@ -171,9 +155,9 @@ public class CarrinhoViewHelper implements IViewHelper {
 				int qt = Integer.parseInt(qtde);
 
 				p.getItem().get(i).setQtde(qt);	
-				pf.getPedidos().set(0, p);
+
 			}
-			mapaUsuarios.replace(id, pf);
+			mapaUsuarios.replace(id, p);
 			
 			request.getSession().setAttribute("resultadoCarrinho", resultado);		
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
@@ -184,19 +168,17 @@ public class CarrinhoViewHelper implements IViewHelper {
 		if(operacao.equals("removerItem"))
 		{
 			@SuppressWarnings("unchecked")
-			Map<Integer, PessoaFisica> mapaUsuarios = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
+			Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
 			Integer id = (Integer)request.getSession().getAttribute("userid");
 			String indice = request.getParameter("indice");
 			
 			int i = Integer.parseInt(indice);
 			
-			PessoaFisica pf = mapaUsuarios.get(id); 
-			Pedido pedido = pf.getPedidos().get(0);
+			Pedido pedido = mapaUsuarios.get(id); 
 			
 			pedido.getItem().remove(i);
 			
-			pf.getPedidos().set(0, pedido);
-			mapaUsuarios.replace(id, pf);
+			mapaUsuarios.replace(id, pedido);
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 					
 			
@@ -205,4 +187,3 @@ public class CarrinhoViewHelper implements IViewHelper {
 		d.forward(request,response);
 	}
 }
-	

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import finalCore.aplicacao.Resultado;
 import finalDominio.Pedido;
+import finalDominio.PessoaFisica;
 import finalDominio.Item;
 import finalDominio.Livro;
 
@@ -23,6 +24,7 @@ import java.util.List;
 import finalDominio.Cartao;
 import finalDominio.CartoesCompra;
 import finalDominio.Cupom;
+import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalWeb.vh.IViewHelper;
 
@@ -33,74 +35,35 @@ public class CompraViewHelper implements IViewHelper{
 		// TODO Auto-generated method stub
 		Map<Integer, Pedido> mapaUsuarios = (HashMap<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
 		String operacao = request.getParameter("operacao");
-		if(operacao.equals("ComprarItens"))
+		if(operacao.equals("SALVAR"))
 		{
 			String precoTotalTxt = request.getParameter("txtValor");
 			String freteTxt = request.getParameter("txtFrete");
-			Resultado resultadoCupom = (Resultado)request.getSession().getAttribute("resultadoCupom");
 
-			String id = (String)request.getSession().getAttribute("userid");
-			Map<Integer, Pedido> mapaUsuario = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");	
-			int idUsuario = Integer.parseInt(id);
-			Pedido pedido = mapaUsuario.get(idUsuario);
+			Integer id = (Integer)request.getSession().getAttribute("userid");
+			Pedido pedido = mapaUsuarios.get(id);
+			
 			
 			double precoTotal = Double.parseDouble(precoTotalTxt);
 			double frete = Double.parseDouble(freteTxt);
 			
+			String txtIndiceEndereco = request.getParameter("txtIndiceEnderecos");
+			int idEndereco = Integer.parseInt(txtIndiceEndereco);
+			
+			pedido.setEndereco(new Endereco());
+			pedido.getEndereco().setId(idEndereco);
+			
 			pedido.setFrete(frete);
 			pedido.setPrecoTotal(precoTotal);
-		
 			
-			if(resultadoCupom != null)
-			{
-				List<EntidadeDominio> e = resultadoCupom.getEntidades();
-				Cupom cupom = (Cupom)e.get(0);
-				List<Cupom> cupons = new ArrayList<Cupom>();
-				cupons.add(cupom);
-				pedido.setCupom(cupons);;
-			}
-			return new Item();
-		}
-		if(operacao.equals("SALVAR"))
-		{
-			String qtdeCartoesTxt = request.getParameter("qtdeCartoes");
-
-			
-			int qtdeCartoes = Integer.parseInt(qtdeCartoesTxt);
-
-			
-			
-			String id = (String)request.getSession().getAttribute("userid");
-			int idUsuario = Integer.parseInt(id);
-			
-			Pedido p = mapaUsuarios.get(idUsuario);
-			
-			
-			double precoPorCartao = (p.getPrecoTotal() / qtdeCartoes);
-					
-					
-			List<CartoesCompra> cartoesCompra = new ArrayList<CartoesCompra>();
-			for(int i = 0; i < qtdeCartoes; i ++)
-			{
-				String idCartaoTxt = request.getParameter("cartaoHidden"+i);
-				int idCartao = Integer.parseInt(idCartaoTxt);
-				Cartao c = new Cartao();
-				c.setId(idCartao);
-				CartoesCompra cc = new CartoesCompra();
-				cc.setCartao(c);
-				cc.setValorPago(precoPorCartao);
-				cartoesCompra.add(cc);
-			}
-			p.setCartoesCompra(cartoesCompra);
-
 			Calendar cal = Calendar.getInstance();
 			Date date;
 			
 			date = cal.getTime();
-			p.setDtPedido(date);
-			
-			return p;
-			
+			pedido.setDtPedido(date);
+			pedido.setIdCliente(id);
+		
+			return pedido;
 		}
 		return null;
 	}
@@ -115,15 +78,13 @@ public class CompraViewHelper implements IViewHelper{
 		if(operacao.equals("SALVAR"))
 		{		
 			request.getSession().setAttribute("resultadoCompra", resultado);
-			d = request.getRequestDispatcher("Compra.jsp");
+			if(resultado.getMsg() == null)
+				d = request.getRequestDispatcher("Compra.jsp");
+			else
+				d = request.getRequestDispatcher("Carrinho.jsp");
 			d.forward(request, response);
 		}
 		
-		if(operacao.equals("ComprarItens"))
-		{
-			d = request.getRequestDispatcher("Compra.jsp");
-			d.forward(request, response);			
-		}
 	}
 
 }

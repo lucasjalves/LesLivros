@@ -62,8 +62,6 @@ public class Servlet extends HttpServlet {
     	commands.put("AdicionarItem", new VerificarCarrinhoCommand());
     	commands.put("subtrairItem", new VerificarCarrinhoCommand());
     	commands.put("removerItem", new VerificarCarrinhoCommand());
-    	commands.put("ComprarItens", new VerificarCarrinhoCommand());
-    	commands.put("AdicionarCupom", new ConsultarCommand());
 
     	
     	vhs = new HashMap<String, IViewHelper>();

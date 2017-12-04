@@ -4,15 +4,36 @@ import java.util.Date;
 import java.util.List;
 
 public class Pedido extends EntidadeDominio{
+	
 	private List<Item> item;
 	private Date dtPedido;
 	private String status;
 	private double precoTotal;
 	private double frete;
-	private List<Cupom> cupom;
+	private List<CupomTroca> cupomTroca;
 	private List<CartoesCompra> cartoesCompra;
+	private CupomPromocional cupomPromocional;
 	private Endereco endereco;
+	private int idCliente;
 	
+	public int getIdCliente() {
+		return idCliente;
+	}
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
+	}
+	public CupomPromocional getCupomPromocional() {
+		return cupomPromocional;
+	}
+	public void setCupomPromocional(CupomPromocional cupomPromocional) {
+		this.cupomPromocional = cupomPromocional;
+	}
+	public List<CupomTroca> getCupomTroca() {
+		return cupomTroca;
+	}
+	public void setCupomTroca(List<CupomTroca> cupomTroca) {
+		this.cupomTroca = cupomTroca;
+	}
 	
 	public List<CartoesCompra> getCartoesCompra() {
 		return cartoesCompra;
@@ -33,14 +54,7 @@ public class Pedido extends EntidadeDominio{
 	public void setFrete(double frete) {
 		this.frete = frete;
 	}
-	public List<Cupom> getCupom() {
-		return cupom;
-	}
-	public void setCupom(List<Cupom> cupom) {
-		this.cupom = cupom;
-	}
-	
-	
+
 	public double getPrecoTotal() {
 		return precoTotal;
 	}

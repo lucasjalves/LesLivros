@@ -30,8 +30,8 @@
 
 	<%
 		
-		Map<Integer, Pedido> mapaUsuario = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
-		String id = (String)request.getSession().getAttribute("userid");
+		Map<Integer, PessoaFisica> mapaUsuario = (Map<Integer, PessoaFisica>)request.getSession().getAttribute("mapaUsuarios");
+		Integer id = (Integer)request.getSession().getAttribute("userid");
 		if(id == null)
 		{
 			pageContext.forward("Index.jsp");
@@ -41,18 +41,23 @@
 
 		
 		
-		int idUsuario = Integer.parseInt(id);
-		Pedido pedido = mapaUsuario.get(idUsuario);
-		
-		if(txtIndiceEndereco != null)
+		Resultado resultado = (Resultado) session.getAttribute("resultadoLogin");
+		Map<Integer, Pedido> map = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
+		List<EntidadeDominio> entidades = null;
+		PessoaFisica pf = null;
+		if(resultado != null)
 		{
-			 
-			int indiceEndereco = Integer.parseInt(txtIndiceEndereco);
-			Endereco enderecoSelecionado = pedido.getUsuario().getEndereco().get(indiceEndereco);
-			pedido.setEndereco(enderecoSelecionado);
+			entidades = resultado.getEntidades();
+			pf = (PessoaFisica) entidades.get(0);			
 		}
-		Pessoa cliente = pedido.getUsuario();
-		List<Cartao> cartoes = cliente.getCartao();
+		
+
+		int indiceEndereco = Integer.parseInt(txtIndiceEndereco);
+		Endereco enderecoSelecionado = pf.getEndereco().get(indiceEndereco);
+		Pedido pedido = map.get(id);
+		pedido.setEndereco(enderecoSelecionado);
+		
+		List<Cartao> cartoes = pf.getCartao();
 		
 
 
@@ -214,7 +219,7 @@
 							<%out.print(pedido.getEndereco().getEstado()); %>,	
 							CEP: <%out.print(pedido.getEndereco().getCep()); %>,
 							<%out.print(pedido.getEndereco().getPais()); %></p>	
-							<p>T: (<%out.print(cliente.getTelefone().getDdd()); %>) <%out.print(cliente.getTelefone().getNumero());%></p>
+							<p>T: (<%out.print(pf.getTelefone().getDdd()); %>) <%out.print(pf.getTelefone().getNumero());%></p>
 							<hr>
 
 							<p class="h5">Livros</p>
@@ -358,7 +363,7 @@
 					</select></td></tr>
 					<tr><td>Data de Vencimento: </td><td><input type='text' id='txtDtVencimento' name='txtDtVencimento' /></td></tr>
 					<tr><td>Código de Segurança: </td><td><input type='text' id='txtCodSeg' name='txtCodSeg' /></td></tr>
-					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<%out.print(idUsuario); %>" />	</td></tr>
+					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<%out.print(id); %>" />	</td></tr>
 					<tr><td><input type="hidden" name="local" value="compra" />	</td></tr>																				
 			</table>
 		      </div>

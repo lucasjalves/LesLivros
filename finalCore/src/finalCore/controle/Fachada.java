@@ -22,7 +22,7 @@ import finalCore.negocio.ValidarCupomData;
 import finalCore.negocio.ValidarCupomVeridico;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
 import finalCore.negocio.ValidarPagamentoCartoes;
-import finalCore.negocio.VerificarQuantidadeLivroEstoque;
+import finalCore.negocio.VerificarQtdeLivroEstoque;
 import finalDominio.Cartao;
 import finalDominio.Categoria;
 import finalDominio.Cupom;
@@ -71,7 +71,7 @@ public class Fachada implements IFachada{
 		
 
 		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	
-		VerificarQuantidadeLivroEstoque vQtdeEstoqueLivro = new VerificarQuantidadeLivroEstoque();
+		VerificarQtdeLivroEstoque vQtdeEstoqueLivro = new VerificarQtdeLivroEstoque();
 		ValidarCupomVeridico vCupVeridico = new ValidarCupomVeridico();
 		
 		ValidarCupomData vCupomData = new ValidarCupomData();
@@ -83,7 +83,7 @@ public class Fachada implements IFachada{
 
 		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
 		
-		//rnsValidarPedido.add(vPagamentoCartao);
+		rnsValidarPedido.add(vPagamentoCartao);
 		rnsValidarPedido.add(vQtdeEstoqueLivro);
 		
 		List<IStrategy> rnsValidarCupom = new ArrayList<IStrategy>();
