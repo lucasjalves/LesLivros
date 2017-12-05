@@ -6,12 +6,18 @@ public class Pessoa extends EntidadeDominio{
 	private String email;
 	private String senha;
 	private String status;
-	private Telefone telefone;
 	private String nome;
 	private List<Endereco> endereco;
 	private List<Cartao> cartao;
 	private List<Pedido> pedidos;
+	private List<Telefone> telefones;
 	
+	public List<Telefone> getTelefones() {
+		return telefones;
+	}
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
+	}
 	public List<Pedido> getPedidos() {
 		return pedidos;
 	}
@@ -57,11 +63,6 @@ public class Pessoa extends EntidadeDominio{
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public Telefone getTelefone() {
-		return telefone;
-	}
-	public void setTelefone(Telefone telefone) {
-		this.telefone = telefone;
-	}
+
 	
 }

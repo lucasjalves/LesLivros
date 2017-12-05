@@ -18,6 +18,8 @@ import finalCore.dao.EnderecoDAO;
 import finalCore.dao.GrupoPrecificacaoDAO;
 import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
+import finalCore.negocio.AprovarCompraCartao;
+import finalCore.negocio.AtualizarStatusPedidoEntrega;
 import finalCore.negocio.ValidarCupomData;
 import finalCore.negocio.ValidarCupomVeridico;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
@@ -73,20 +75,26 @@ public class Fachada implements IFachada{
 		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	
 		VerificarQtdeLivroEstoque vQtdeEstoqueLivro = new VerificarQtdeLivroEstoque();
 		ValidarCupomVeridico vCupVeridico = new ValidarCupomVeridico();
-		
+		AprovarCompraCartao aCompraCartao = new AprovarCompraCartao();
 		ValidarCupomData vCupomData = new ValidarCupomData();
 		ValidarPagamentoCartoes vPagamentoCartao = new ValidarPagamentoCartoes();
-
+		AtualizarStatusPedidoEntrega aStatusPedidoEntrega = new AtualizarStatusPedidoEntrega();
+		
+		List<IStrategy> rnsValidarCupom = new ArrayList<IStrategy>();
+		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
 		List<IStrategy> rnsSalvarLivro = new ArrayList<IStrategy>();
+		List<IStrategy> rnsAprovarCompra = new ArrayList<IStrategy>();
+		
 		rnsSalvarLivro.add(vdObrigatoriosLivro);
 		
 
-		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
+		rnsAprovarCompra.add(aCompraCartao);
+		rnsAprovarCompra.add(aStatusPedidoEntrega);
 		
 		rnsValidarPedido.add(vPagamentoCartao);
 		rnsValidarPedido.add(vQtdeEstoqueLivro);
 		
-		List<IStrategy> rnsValidarCupom = new ArrayList<IStrategy>();
+		
 		rnsValidarCupom.add(vCupVeridico);
 		rnsValidarCupom.add(vCupomData);
 		
@@ -98,6 +106,8 @@ public class Fachada implements IFachada{
 		rnsLivro.put("SALVAR", rnsSalvarLivro);	
 		rnsPedido.put("ValidarCarrinho", rnsValidarPedido);
 		rnsCupom.put("CONSULTAR", rnsValidarCupom);
+		rnsPedido.put("CONSULTAR", rnsAprovarCompra);
+		
 		
 		rns.put(Livro.class.getName(), rnsLivro);
 		rns.put(Pedido.class.getName(), rnsPedido);

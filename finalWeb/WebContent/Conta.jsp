@@ -41,12 +41,6 @@
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		PessoaFisica p = (PessoaFisica) entidades.get(0);
 
-		
-		List<Endereco> end= p.getEndereco();
-		List<Cartao> cartoes = p.getCartao();
-		
-		Integer id = (Integer)request.getSession().getAttribute("userid");
-
 
 	%>
      <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #3B3738; height: 75px;">
@@ -101,10 +95,18 @@
           <div class="card mt-4">
 	          	<div class="card-body">
 		          <div class="list-group">
-		            <a href="#" class="list-group-item" onclick="mudarIframe('iframes/MinhaConta.jsp')">Minha Conta</a>
-					<a href="#" class="list-group-item" onclick="mudarIframe('iframes/enderecos.jsp')">Meus Endereços</a>
-					<a href="#" class="list-group-item" onclick="mudarIframe('iframes/cartoes.jsp')">Meus Cartões</a>	
-					<a href="#" class="list-group-item" onclick="mudarIframe('iframes/pedidos.jsp')">Meus Pedidos</a>		
+		            <a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/MinhaConta.jsp')">Minha Conta</a>
+					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/enderecos.jsp')">Meus Endereços</a>
+					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/cartoes.jsp')">Meus Cartões</a>	
+					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/pedidos.jsp')">Meus Pedidos</a>	
+					<%
+						if(p.getTipo() == 1)
+						{
+							out.print("<p class='list-group-item'>Opções administrativas</p>");
+							out.print("<a href='#' class='list-group-item' "
+									+ "onclick=\"mudarIframe('iframes/listapedidos.jsp')\">Todos os Pedidos</a>");
+						}
+					%>	
 		          </div>
 	          </div>
 		</div>

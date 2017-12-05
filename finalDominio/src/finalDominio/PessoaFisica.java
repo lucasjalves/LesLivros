@@ -6,6 +6,16 @@ public class PessoaFisica extends Pessoa {
 	private String cpf;
 	private Date dtNascimento;
 	private String genero;
+	private int tipo;
+	
+	
+	
+	public int getTipo() {
+		return tipo;
+	}
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
 	public String getCpf() {
 		return cpf;
 	}

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import finalCore.aplicacao.Resultado;
+import finalCore.util.ValidarCartao;
 import finalDominio.Pedido;
 import finalDominio.PessoaFisica;
 import finalDominio.Item;
@@ -35,6 +36,8 @@ public class CompraViewHelper implements IViewHelper{
 		// TODO Auto-generated method stub
 		Map<Integer, Pedido> mapaUsuarios = (HashMap<Integer, Pedido>)request.getSession().getAttribute("mapaUsuarios");
 		String operacao = request.getParameter("operacao");
+		
+		String local = request.getParameter("local");
 		if(operacao.equals("SALVAR"))
 		{
 			String precoTotalTxt = request.getParameter("txtValor");
@@ -73,6 +76,24 @@ public class CompraViewHelper implements IViewHelper{
 		}
 		if(operacao.equals("ALTERAR"))
 		{
+			
+			Pedido p = (Pedido)request.getSession().getAttribute("pedido");
+			request.getSession().removeAttribute("pedido");
+			String status = request.getParameter("status");
+			String idTxt = request.getParameter("id");
+			if(idTxt != null)
+			{
+				if(p == null)
+					p = new Pedido();
+				int id = Integer.parseInt(idTxt);
+				p.setId(id);
+			}
+			p.setStatus(status);
+			
+			return p;
+		}
+		if(operacao.equals("CONSULTAR") && local == null)
+		{
 			Resultado resultado = (Resultado) request.getSession().getAttribute("resultadoLogin");
 			List<EntidadeDominio> e = resultado.getEntidades();
 			PessoaFisica pf = (PessoaFisica)e.get(0);
@@ -83,10 +104,10 @@ public class CompraViewHelper implements IViewHelper{
 			
 			Pedido pedido = pf.getPedidos().get(indicePedido);
 			
-
-					
 			String qtdeCartoesTxt = request.getParameter("qtdeCartoes");
 			int qtdeCartoes = Integer.parseInt(qtdeCartoesTxt);
+			
+			List<CartoesCompra> cartoes = new ArrayList<CartoesCompra>();
 			for(int i = 0; i < qtdeCartoes; i++)
 			{
 				double v = pedido.getPrecoTotal() / qtdeCartoes;
@@ -98,7 +119,24 @@ public class CompraViewHelper implements IViewHelper{
 				c.setId(id);
 				cc.setValorPago(v);
 				cc.setCartao(c);
+				cartoes.add(cc);
+				pedido.setCartoesCompra(cartoes);
 			}
+			request.getSession().setAttribute("pedido", pedido);
+			return pedido;
+		}
+		
+		if(operacao.equals("CONSULTAR") && local != null)
+		{
+			Pedido p = new Pedido();
+			String idTxt = request.getParameter("id");
+			int id = Integer.parseInt(idTxt);
+			
+			p.setId(id);
+			p.setStatus("entregar");
+			
+			return p;
+			
 		}
 		return null;
 	}
@@ -109,7 +147,8 @@ public class CompraViewHelper implements IViewHelper{
 		// TODO Auto-generated method stub
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
-
+		String local = request.getParameter("local");
+		
 		if(operacao.equals("SALVAR"))
 		{		
 			request.getSession().setAttribute("resultadoCompra", resultado);
@@ -119,6 +158,32 @@ public class CompraViewHelper implements IViewHelper{
 				d = request.getRequestDispatcher("Carrinho.jsp");
 			d.forward(request, response);
 		}
+		
+		if(operacao.equals("CONSULTAR"))
+		{	
+			if(local == null)
+				d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR&status="+resultado.getMsg());
+			else
+			{
+				String idTxt = request.getParameter("id");
+				d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR&local=local&status="+resultado.getMsg()+"&id="+idTxt);				
+			}
+	
+			d.forward(request, response);
+		}
+		if(operacao.equals("ALTERAR"))
+		{
+			String url = null;
+			
+			if(local != null)
+				url = "iframes/listapedidos.jsp";
+			else
+				url = "Conta.jsp";
+			
+			d = request.getRequestDispatcher(url);
+			d.forward(request, response);
+		}
+		
 		
 	}
 

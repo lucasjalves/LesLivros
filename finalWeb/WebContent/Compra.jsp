@@ -332,7 +332,7 @@
 			 				if(indicePedido != null)
 			 					out.print("<input type='hidden' name='indicePedido' value='" + indicePedido + "'/>");
 			 			%>
-			 			<button type='submit' name='operacao' value='ALTERAR'  class ="btn btn-primary">
+			 			<button type='submit' name='operacao' value='CONSULTAR'  class ="btn btn-primary">
 			 				<span>Finalizar Compra</span>
 			 			</button>
 			 			<input type='hidden' name="precoCartaoCompra" value="" />

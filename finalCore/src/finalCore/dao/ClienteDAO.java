@@ -146,8 +146,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 		// TODO Auto-generated method stub
 		PreparedStatement pst = null;
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT * FROM cliente "
-				+ "INNER JOIN telefone ON (cliente.id_cliente = telefone.fk_cliente) ");
+		sb.append("SELECT * FROM cliente WHERE 1=1 ");
 		PessoaFisica pf = (PessoaFisica)entidade;
 		if(pf.getEmail() != null  && pf.getSenha() != null)
 		{
@@ -183,9 +182,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 			List<EntidadeDominio> pessoas = new ArrayList<EntidadeDominio>();
 			while(rs.next()){
 				PessoaFisica p = new PessoaFisica();
-				Telefone t = new Telefone();
 				
-				p.setTelefone(t);
 				
 				p.setId(rs.getInt("id_cliente"));
 				int idCliente = p.getId();
@@ -195,13 +192,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				p.setCpf(rs.getString("cpf"));
 				p.setEmail(rs.getString("email"));
 				p.setSenha(rs.getString("senha"));
-				
-
-				p.getTelefone().setId(rs.getInt("id_telefone"));
-				p.getTelefone().setDdd(rs.getString("ddd"));
-				p.getTelefone().setNumero(rs.getString("numero"));
-				p.getTelefone().setTipo(rs.getString("tipo_telefone"));
-				p.getTelefone().setFk_cliente(rs.getInt("fk_cliente"));
+				p.setTipo(rs.getInt("tipo"));
 				
 				
 				pst = connection.prepareStatement("SELECT * FROM endereco WHERE pk_cliente = " + idCliente);
@@ -230,6 +221,22 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				}
 				enderecosCliente.close();
 				
+				pst = connection.prepareStatement("SELECT * FROM TELEFONE WHERE fk_cliente = " + idCliente);
+				ResultSet telefoneCliente = pst.executeQuery();
+				List<Telefone> telefones = new ArrayList<Telefone>();
+				while(telefoneCliente.next())
+				{
+					Telefone t = new Telefone();
+
+					t.setId(telefoneCliente.getInt("id_telefone"));
+					t.setDdd(telefoneCliente.getString("ddd"));
+					t.setNumero(telefoneCliente.getString("numero"));
+					t.setTipo(telefoneCliente.getString("tipo_telefone"));
+					t.setFk_cliente(telefoneCliente.getInt("fk_cliente"));
+					telefones.add(t);
+				}
+				telefoneCliente.close();
+				p.setTelefones(telefones);
 				
 				pst = connection.prepareStatement("SELECT * FROM cartao WHERE pk_cliente = " + idCliente);
 				ResultSet cartoesCliente = pst.executeQuery();

@@ -72,24 +72,9 @@ public class ClienteViewHelper implements IViewHelper{
 			return p;
 			
 		}
-		if(operacao.equals("CONSULTARCLIENTE")) 
-		{
-			p = new PessoaFisica();
-			
-			String nome_cli = request.getParameter("txtNomeCli");
-			String genero = request.getParameter("txtGenero");
-			String dtNascimentoTxt = request.getParameter("txtDtNascimento");
-			Date dtNascimento = ConverteDate.converteStringDate(dtNascimentoTxt);
-			String cpf = request.getParameter("txtCpf");
-			String email = request.getParameter("txtEmail");	
-			
-			p.setNome(nome_cli);
-			p.setGenero(genero);
-			p.setDtNascimento(dtNascimento);
-			p.setCpf(cpf);
-			p.setEmail(email);
-			
-			return p;
+		if(operacao.equals("CONSULTAR")) 
+		{			
+			return new PessoaFisica();
 
 		}
 		if(operacao.equals("VISUALIZAR"))
@@ -259,16 +244,22 @@ public class ClienteViewHelper implements IViewHelper{
 			d = request.getRequestDispatcher(url); 		
 			d.forward(request, response);
 		}
-		
-		
-		
-		
-		
-		
-		if(operacao.equals("CONSULTARCLIENTE")){
-			
-			request.getSession().setAttribute("resultado", resultado);
-			d= request.getRequestDispatcher("ConsultarCliente.jsp");  
+				
+		if(operacao.equals("CONSULTAR")){
+
+			if(request.getParameter("local") == null)
+			{
+				request.getSession().setAttribute("resultado", resultado);
+				d= request.getRequestDispatcher("ConsultarCliente.jsp");  
+				d.forward(request, response);
+			}				
+			else
+			{
+				request.getSession().setAttribute("resultadoTodosClientes", resultado);
+				d = request.getRequestDispatcher("/iframes/listapedidos.jsp");	
+				d.forward(request, response);
+			}
+
 		}
 				
 		if(resultado.getMsg() != null){

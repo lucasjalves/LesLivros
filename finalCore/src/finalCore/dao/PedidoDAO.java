@@ -5,12 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import finalDominio.CartoesCompra;
 import finalDominio.Cupom;
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
+import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.Pedido;
 
@@ -88,7 +90,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 		try {
 			connection.setAutoCommit(false);
 
-			pst = connection.prepareStatement("UPDATE PEDIDO SET status = ?");
+			pst = connection.prepareStatement("UPDATE PEDIDO SET status = ? WHERE id = " + idPedido);
 			pst.setString(1, pedido.getStatus());
 			pst.executeUpdate();
 			if(pedido.getCartoesCompra() != null)
@@ -140,7 +142,51 @@ public class PedidoDAO extends AbstractJdbcDAO{
 
 	@Override
 	public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
-
+		try {
+			openConnection();
+			Pedido p = (Pedido)entidade;
+			int idPedido = p.getId();
+			PreparedStatement pst = null;
+			pst = connection.prepareStatement("SELECT * FROM PEDIDO WHERE id = " + idPedido);
+			ResultSet pedidosCliente = pst.executeQuery();
+			List<EntidadeDominio> pedidos = new ArrayList<EntidadeDominio>();
+			while(pedidosCliente.next())
+			{
+				Pedido pedido = new Pedido();
+				pedido.setId(pedidosCliente.getInt("id"));
+				pedido.setDtPedido(pedidosCliente.getDate("dtPedido"));
+				pedido.setStatus(pedidosCliente.getString("status"));
+				pedido.setFrete(pedidosCliente.getDouble("frete"));
+				pedido.setPrecoTotal(pedidosCliente.getDouble("precoTotal"));
+				
+				
+				pst = connection.prepareStatement("SELECT * FROM ITEM_PEDIDO"
+						+ " INNER JOIN LIVROS ON "
+						+ "(ITEM_PEDIDO.FK_LIVRO = LIVROS.ID) WHERE PK_PEDIDO = " + idPedido);
+				ResultSet itensPedido = pst.executeQuery();
+				List<Item> itens = new ArrayList<Item>();
+				while(itensPedido.next())
+				{
+					Livro l = new Livro();
+					Item i = new Item();
+					i.setQtde(itensPedido.getInt("quantidade"));
+					l.setNome(itensPedido.getString("nome"));
+					l.setPreco(itensPedido.getDouble("preco_livro"));
+					i.setLivro(l);
+					itens.add(i);
+				}
+				itensPedido.close();
+				pedido.setItem(itens);
+				pedidos.add(pedido);
+			}
+			pedidosCliente.close();
+	
+			return pedidos;
+		}catch(SQLException e){
+			e.printStackTrace();
+		} finally {
+			connection.close();
+		}
 		return null;
 	}
 
