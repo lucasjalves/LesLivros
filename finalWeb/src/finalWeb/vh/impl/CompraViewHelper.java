@@ -71,6 +71,35 @@ public class CompraViewHelper implements IViewHelper{
 		
 			return pedido;
 		}
+		if(operacao.equals("ALTERAR"))
+		{
+			Resultado resultado = (Resultado) request.getSession().getAttribute("resultadoLogin");
+			List<EntidadeDominio> e = resultado.getEntidades();
+			PessoaFisica pf = (PessoaFisica)e.get(0);
+			
+			String indicePedidoTxt = request.getParameter("indicePedido");	
+			
+			int indicePedido = Integer.parseInt(indicePedidoTxt);
+			
+			Pedido pedido = pf.getPedidos().get(indicePedido);
+			
+
+					
+			String qtdeCartoesTxt = request.getParameter("qtdeCartoes");
+			int qtdeCartoes = Integer.parseInt(qtdeCartoesTxt);
+			for(int i = 0; i < qtdeCartoes; i++)
+			{
+				double v = pedido.getPrecoTotal() / qtdeCartoes;
+				Cartao c = new Cartao();
+				CartoesCompra cc = new CartoesCompra();
+				
+				String txtId = request.getParameter("cartaoHidden" + i);
+				int id = Integer.parseInt(txtId);
+				c.setId(id);
+				cc.setValorPago(v);
+				cc.setCartao(c);
+			}
+		}
 		return null;
 	}
 

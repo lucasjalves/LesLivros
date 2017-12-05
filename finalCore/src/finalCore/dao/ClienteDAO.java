@@ -6,8 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 import finalDominio.Cartao;
 import finalDominio.Endereco;
@@ -206,6 +207,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				pst = connection.prepareStatement("SELECT * FROM endereco WHERE pk_cliente = " + idCliente);
 				ResultSet enderecosCliente = pst.executeQuery();
 				List<Endereco> enderecos = new ArrayList<Endereco>();
+				Map<Integer, Endereco> m = new HashMap<Integer, Endereco>();
 				while(enderecosCliente.next())
 				{
 					Endereco e = new Endereco();
@@ -222,6 +224,8 @@ public class ClienteDAO extends AbstractJdbcDAO {
 					e.setPais(enderecosCliente.getString("pais"));
 					e.setNome(enderecosCliente.getString("nome_id"));
 					e.setFk_pessoa(enderecosCliente.getInt("pk_cliente"));
+					
+					m.put(e.getId(), e);
 					enderecos.add(e);
 				}
 				enderecosCliente.close();
@@ -255,6 +259,9 @@ public class ClienteDAO extends AbstractJdbcDAO {
 					pedido.setStatus(pedidosCliente.getString("status"));
 					pedido.setFrete(pedidosCliente.getDouble("frete"));
 					pedido.setPrecoTotal(pedidosCliente.getDouble("precoTotal"));
+					int idEndereco = pedidosCliente.getInt("fk_endereco");
+					pedido.setEndereco(m.get(idEndereco));	
+					
 					
 					pst = connection.prepareStatement("SELECT * FROM ITEM_PEDIDO"
 							+ " INNER JOIN LIVROS ON "
@@ -267,6 +274,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 						Item i = new Item();
 						i.setQtde(itensPedido.getInt("quantidade"));
 						l.setNome(itensPedido.getString("nome"));
+						l.setPreco(itensPedido.getDouble("preco_livro"));
 						i.setLivro(l);
 						itens.add(i);
 					}

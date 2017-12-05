@@ -38,24 +38,39 @@
 			return;
 		}
 		String txtIndiceEndereco = request.getParameter("txtIndiceEnderecos");
-
+		String indicePedido = request.getParameter("pedido");
 		
 		
 		Resultado resultado = (Resultado) session.getAttribute("resultadoLogin");
 		Map<Integer, Pedido> map = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
 		List<EntidadeDominio> entidades = null;
 		PessoaFisica pf = null;
+		Pedido pedido = null;
+		Endereco enderecoSelecionado = null;
+		
+		
 		if(resultado != null)
 		{
 			entidades = resultado.getEntidades();
 			pf = (PessoaFisica) entidades.get(0);			
 		}
-		
+		if(indicePedido != null)
+		{
+			int ind = Integer.parseInt(indicePedido);
+			entidades = resultado.getEntidades();
+			pf = (PessoaFisica)entidades.get(0);
+			int iPedido = Integer.parseInt(indicePedido);
+			pedido = pf.getPedidos().get(ind);
+			enderecoSelecionado = pedido.getEndereco();
+		}
+		else
+		{
+			int indiceEndereco = Integer.parseInt(txtIndiceEndereco);
+			enderecoSelecionado = pf.getEndereco().get(indiceEndereco);
+			pedido = map.get(id);
+			pedido.setEndereco(enderecoSelecionado);			
+		}
 
-		int indiceEndereco = Integer.parseInt(txtIndiceEndereco);
-		Endereco enderecoSelecionado = pf.getEndereco().get(indiceEndereco);
-		Pedido pedido = map.get(id);
-		pedido.setEndereco(enderecoSelecionado);
 		
 		List<Cartao> cartoes = pf.getCartao();
 		
@@ -65,12 +80,7 @@
 	<script>
 		function colocarInput(indice, precoTotal, id)
 		{
-			//var td = document.getElementById("cartao" + indice);
-			//var input = document.createElement('input');
-			//input.type = 'number';
-			//input.setAttribute("id", "input" + indice);
-			//input.setAttribute("disabled", "true");
-			
+
 			
 			var formulario = document.getElementById("formulario");
 			
@@ -79,14 +89,7 @@
 			hidden.setAttribute("name", "cartaoHidden" + indice);
 			hidden.setAttribute("id", "cartaoHidden" + indice);
 			hidden.setAttribute("value", id)
-			//input.setAttribute("value", precoTotal);
-			
-			/*
-			var hiddenValor = document.createElement('input');
-			hiddenValor.type = "hidden";
-			hiddenValor.setAttribute("name", "cartaoValor" + indice);
-			hiddenValor.setAttribute("id", "cartaoValor" + indice);
-			*/
+
 
 			var chkbox = document.getElementById("chkbox" + indice).checked;
 			if(!chkbox)
@@ -94,13 +97,7 @@
 				
 				var formInputHidden = document.getElementById("cartaoHidden"+indice);
 				var formInputNumber = document.getElementById("input"+indice);
-				//var formInputValor = document.getElementById("cartaoValor"+indice);
 
-				
-				//formulario.removeChild(formInputHidden);
-				//formulario.removeChild(formInputValor);
-				//td.removeChild(formInputNumber);
-				
 				
 				var qtdeCartoesInput = document.getElementById("qtdeCartoes").value;
 				var qtdeCartoesInt = parseInt(qtdeCartoesInput);
@@ -119,19 +116,16 @@
 			}
 			else
 			{
-				//td.appendChild(input);
+
 				formulario.appendChild(hidden);
-				//formulario.appendChild(hiddenValor);
+
 				
 				var qtdeCartoesInput = document.getElementById("qtdeCartoes").value;
 				var qtdeCartoesInt = parseInt(qtdeCartoesInput);
 				
 				qtdeCartoesInt = qtdeCartoesInt + 1;
 				qtdeCartoesInput = document.getElementById("qtdeCartoes").value = qtdeCartoesInt;
-				
-				//var formInputValor = document.getElementById("cartaoValor"+indice);
-				
-				//alert(formInputValor);
+
 				var qtdeCartoesInput = document.getElementById("qtdeCartoes").value;
 				qtdeCartoesInput = parseInt(qtdeCartoesInput);
 				precoTotal = parseFloat(precoTotal);
@@ -334,7 +328,11 @@
 			     
 			       <form action="ComprarItens" method="POST" id="formulario">
 			 			<input type='hidden' name='qtdeCartoes' id = 'qtdeCartoes' value='0'/>
-			 			<button type='submit' name='operacao' value='SALVAR'  class ="btn btn-primary">
+			 			<%
+			 				if(indicePedido != null)
+			 					out.print("<input type='hidden' name='indicePedido' value='" + indicePedido + "'/>");
+			 			%>
+			 			<button type='submit' name='operacao' value='ALTERAR'  class ="btn btn-primary">
 			 				<span>Finalizar Compra</span>
 			 			</button>
 			 			<input type='hidden' name="precoCartaoCompra" value="" />

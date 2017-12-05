@@ -9,6 +9,7 @@ import java.util.List;
 
 import finalDominio.CartoesCompra;
 import finalDominio.Cupom;
+import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalDominio.Livro;
 import finalDominio.Pedido;
@@ -34,7 +35,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 			
 			
 			pst.setDate(1, new Date(pedido.getDtPedido().getTime()));
-			pst.setString(2, "1");
+			pst.setString(2, "EM PROCESSAMENTO");
 			pst.setInt(3, pedido.getIdCliente());
 			pst.setDouble(4, pedido.getPrecoTotal());
 			pst.setDouble(5, pedido.getFrete());
@@ -59,29 +60,6 @@ public class PedidoDAO extends AbstractJdbcDAO{
 				
 			}
 			
-			if(pedido.getCartoesCompra() != null)
-			{
-				for(int i = 0; i < pedido.getCartoesCompra().size() ; i ++)
-				{
-					CartoesCompra c = pedido.getCartoesCompra().get(i);
-					pst = connection.prepareStatement("INSERT INTO pagamento_cartao (fk_cartao, fk_pedido, valor) VALUES(?,?,?)");
-					pst.setInt(1, c.getCartao().getId());
-					pst.setInt(2, idPedido);
-					pst.setDouble(3, c.getValorPago());
-					pst.executeUpdate();
-				}
-			}
-			if(pedido.getCupomPromocional() != null)
-			{
-
-				Cupom c = pedido.getCupomPromocional();
-				pst = connection.prepareStatement("INSERT INTO cupom_pedido (fk_cupom, fk_pedido) VALUES(?,?)");
-				pst.setInt(1, c.getId());
-				pst.setInt(2, idPedido);
-				pst.executeUpdate();
-								
-			}
-
 			connection.commit();
 
 		} catch (SQLException e) {
@@ -103,6 +81,54 @@ public class PedidoDAO extends AbstractJdbcDAO{
 	@Override
 	public void alterar(EntidadeDominio entidade) throws SQLException {
 		
+		openConnection();
+		PreparedStatement pst = null;
+		Pedido pedido = (Pedido)entidade;
+		int idPedido = pedido.getId();
+		try {
+			connection.setAutoCommit(false);
+
+			pst = connection.prepareStatement("UPDATE PEDIDO SET status = ?");
+			pst.setString(1, pedido.getStatus());
+			pst.executeUpdate();
+			if(pedido.getCartoesCompra() != null)
+			{
+				for(int i = 0; i < pedido.getCartoesCompra().size() ; i ++)
+				{
+					CartoesCompra c = pedido.getCartoesCompra().get(i);
+					pst = connection.prepareStatement("INSERT INTO pagamento_cartao (fk_cartao, fk_pedido, valor) VALUES(?,?,?)");
+					pst.setInt(1, c.getCartao().getId());
+					pst.setInt(2, idPedido);
+					pst.setDouble(3, c.getValorPago());
+					pst.executeUpdate();
+				}
+			}
+			if(pedido.getCupomPromocional() != null)
+			{
+
+				Cupom c = pedido.getCupomPromocional();
+				pst = connection.prepareStatement("INSERT INTO cupom_pedido (fk_cupom, fk_pedido) VALUES(?,?)");
+				pst.setInt(1, c.getId());
+				pst.setInt(2, idPedido);
+				pst.executeUpdate();
+								
+			}		
+			connection.commit();		
+		} catch (SQLException e) {
+			try {
+				pst.close();
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();			
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}				
 		
 	}
 

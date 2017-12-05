@@ -46,6 +46,12 @@
 										out.print("<p>Data: " + 
 											ConverteDate.converteDateString(pe.getDtPedido()) + "</p>");
 										out.print("<p>Valor: " + String.format("%.2f", pe.getPrecoTotal()) + " R$ </p>");
+										out.print("<p>Status: " + pe.getStatus() + "</p>" );
+										if(pe.getStatus().equals("EM PROCESSAMENTO"))	
+										{
+											out.print("<a href='../Compra.jsp?pedido=" + i + "' " +
+											"class='btn btn-danger' style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F' target='_parent'>Realizar Pagamento</a>");
+										}
 										out.print("</td></tr>");
 									}									
 								}
