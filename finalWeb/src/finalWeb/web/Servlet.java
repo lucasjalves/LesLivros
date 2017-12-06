@@ -30,6 +30,7 @@ import finalWeb.vh.impl.CupomViewHelper;
 import finalWeb.vh.impl.EnderecoViewHelper;
 import finalWeb.vh.impl.GrupoPrecificacaoViewHelper;
 import finalWeb.vh.impl.LivroViewHelper;
+import finalWeb.vh.impl.TrocaViewHelper;
 
 
 public class Servlet extends HttpServlet {
@@ -74,6 +75,7 @@ public class Servlet extends HttpServlet {
     	vhs.put("/finalWeb/SalvarCarrinho", new CarrinhoViewHelper());
     	vhs.put("/finalWeb/ValidarCupom", new CupomViewHelper());
     	vhs.put("/finalWeb/ComprarItens", new CompraViewHelper());
+    	vhs.put("/finalWeb/RealizarTroca", new TrocaViewHelper());
     }
     
 

@@ -279,9 +279,10 @@ public class ClienteDAO extends AbstractJdbcDAO {
 					{
 						Livro l = new Livro();
 						Item i = new Item();
+						l.setId(itensPedido.getInt("id"));
 						i.setQtde(itensPedido.getInt("quantidade"));
 						l.setNome(itensPedido.getString("nome"));
-						l.setPreco(itensPedido.getDouble("preco_livro"));
+						i.setPrecoLivro(itensPedido.getDouble("preco_livro"));
 						i.setLivro(l);
 						itens.add(i);
 					}

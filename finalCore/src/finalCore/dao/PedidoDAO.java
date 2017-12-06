@@ -169,6 +169,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 				{
 					Livro l = new Livro();
 					Item i = new Item();
+					l.setId(itensPedido.getInt("id"));
 					i.setQtde(itensPedido.getInt("quantidade"));
 					l.setNome(itensPedido.getString("nome"));
 					l.setPreco(itensPedido.getDouble("preco_livro"));

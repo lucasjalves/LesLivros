@@ -11,7 +11,14 @@ public class Pessoa extends EntidadeDominio{
 	private List<Cartao> cartao;
 	private List<Pedido> pedidos;
 	private List<Telefone> telefones;
+	private List<PedidoTroca> trocas;
 	
+	public List<PedidoTroca> getTrocas() {
+		return trocas;
+	}
+	public void setTrocas(List<PedidoTroca> trocas) {
+		this.trocas = trocas;
+	}
 	public List<Telefone> getTelefones() {
 		return telefones;
 	}

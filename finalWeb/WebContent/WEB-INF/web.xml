@@ -62,5 +62,10 @@
     <servlet-name>Servlet</servlet-name>
     <url-pattern>/ComprarItens</url-pattern>
   </servlet-mapping>    
+
+  <servlet-mapping>
+    <servlet-name>Servlet</servlet-name>
+    <url-pattern>/RealizarTroca</url-pattern>
+  </servlet-mapping>    
  
 </web-app>

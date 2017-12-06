@@ -18,9 +18,11 @@ import finalCore.dao.EnderecoDAO;
 import finalCore.dao.GrupoPrecificacaoDAO;
 import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
+import finalCore.dao.PedidoTrocaDAO;
 import finalCore.negocio.AprovarCompraCartao;
 import finalCore.negocio.AtualizarStatusPedidoEntregue;
 import finalCore.negocio.AtualizarStatusPedidoTransporte;
+import finalCore.negocio.AtualizarStatusPedidoTroca;
 import finalCore.negocio.ValidacaoSolicitarTroca;
 import finalCore.negocio.ValidarCupomData;
 import finalCore.negocio.ValidarCupomVeridico;
@@ -36,6 +38,7 @@ import finalDominio.EntidadeDominio;
 import finalDominio.GrupoPrecificacao;
 import finalDominio.Livro;
 import finalDominio.Pedido;
+import finalDominio.PedidoTroca;
 import finalDominio.PessoaFisica;
 
 public class Fachada implements IFachada{
@@ -62,7 +65,7 @@ public class Fachada implements IFachada{
 		GrupoPrecificacaoDAO gpDAO = new GrupoPrecificacaoDAO();
 		CupomDAO cupDAO = new CupomDAO();
 		PedidoDAO pedidoDAO = new PedidoDAO();
-		
+		PedidoTrocaDAO trocaDAO = new PedidoTrocaDAO();
 
 		daos.put(Livro.class.getName(), livroDAO);
 		daos.put(Endereco.class.getName(), endDAO);
@@ -72,7 +75,7 @@ public class Fachada implements IFachada{
 		daos.put(GrupoPrecificacao.class.getName(), gpDAO);
 		daos.put(CupomPromocional.class.getName(), cupDAO);
 		daos.put(Pedido.class.getName(),pedidoDAO);
-		
+		daos.put(PedidoTroca.class.getName(), trocaDAO);
 
 		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	
 		VerificarQtdeLivroEstoque vQtdeEstoqueLivro = new VerificarQtdeLivroEstoque();
@@ -83,12 +86,13 @@ public class Fachada implements IFachada{
 		AtualizarStatusPedidoTransporte aStatusPedidoTransporte = new AtualizarStatusPedidoTransporte();
 		AtualizarStatusPedidoEntregue aStatusPedidoEntregue = new AtualizarStatusPedidoEntregue();
 		ValidacaoSolicitarTroca vSolicitarTroca = new ValidacaoSolicitarTroca();
-		
+		AtualizarStatusPedidoTroca aStatusPedidoTroca = new AtualizarStatusPedidoTroca();
 		
 		List<IStrategy> rnsValidarCupom = new ArrayList<IStrategy>();
 		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
 		List<IStrategy> rnsSalvarLivro = new ArrayList<IStrategy>();
 		List<IStrategy> rnsAprovarCompra = new ArrayList<IStrategy>();
+		List<IStrategy> rnsTrocaCompra = new ArrayList<IStrategy>();
 		
 		rnsSalvarLivro.add(vdObrigatoriosLivro);
 		
@@ -99,26 +103,28 @@ public class Fachada implements IFachada{
 		
 		rnsValidarPedido.add(vPagamentoCartao);
 		rnsValidarPedido.add(vQtdeEstoqueLivro);
-		
+		rnsValidarPedido.add(vSolicitarTroca);
 		
 		rnsValidarCupom.add(vCupVeridico);
 		rnsValidarCupom.add(vCupomData);
 		
+		rnsTrocaCompra.add(aStatusPedidoTroca);
+		
 		Map<String, List<IStrategy>> rnsLivro = new HashMap<String, List<IStrategy>>();
 		Map<String, List<IStrategy>> rnsPedido = new HashMap<String, List<IStrategy>>();
 		Map<String, List<IStrategy>> rnsCupom = new HashMap<String, List<IStrategy>>();
-		
+		Map<String, List<IStrategy>> rnsTroca = new HashMap<String, List<IStrategy>>();
 
 		rnsLivro.put("SALVAR", rnsSalvarLivro);	
 		rnsPedido.put("ValidarCarrinho", rnsValidarPedido);
 		rnsCupom.put("CONSULTAR", rnsValidarCupom);
 		rnsPedido.put("CONSULTAR", rnsAprovarCompra);
-		
+		rnsTroca.put("SALVAR", rnsTrocaCompra);
 		
 		rns.put(Livro.class.getName(), rnsLivro);
 		rns.put(Pedido.class.getName(), rnsPedido);
 		rns.put(CupomPromocional.class.getName(), rnsCupom);
-	
+		rns.put(PedidoTroca.class.getName(), rnsTroca);
 	}
 	
 	
