@@ -19,7 +19,9 @@ import finalCore.dao.GrupoPrecificacaoDAO;
 import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
 import finalCore.negocio.AprovarCompraCartao;
-import finalCore.negocio.AtualizarStatusPedidoEntrega;
+import finalCore.negocio.AtualizarStatusPedidoEntregue;
+import finalCore.negocio.AtualizarStatusPedidoTransporte;
+import finalCore.negocio.ValidacaoSolicitarTroca;
 import finalCore.negocio.ValidarCupomData;
 import finalCore.negocio.ValidarCupomVeridico;
 import finalCore.negocio.ValidarDadosObrigatoriosLivro;
@@ -78,7 +80,10 @@ public class Fachada implements IFachada{
 		AprovarCompraCartao aCompraCartao = new AprovarCompraCartao();
 		ValidarCupomData vCupomData = new ValidarCupomData();
 		ValidarPagamentoCartoes vPagamentoCartao = new ValidarPagamentoCartoes();
-		AtualizarStatusPedidoEntrega aStatusPedidoEntrega = new AtualizarStatusPedidoEntrega();
+		AtualizarStatusPedidoTransporte aStatusPedidoTransporte = new AtualizarStatusPedidoTransporte();
+		AtualizarStatusPedidoEntregue aStatusPedidoEntregue = new AtualizarStatusPedidoEntregue();
+		ValidacaoSolicitarTroca vSolicitarTroca = new ValidacaoSolicitarTroca();
+		
 		
 		List<IStrategy> rnsValidarCupom = new ArrayList<IStrategy>();
 		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
@@ -89,7 +94,8 @@ public class Fachada implements IFachada{
 		
 
 		rnsAprovarCompra.add(aCompraCartao);
-		rnsAprovarCompra.add(aStatusPedidoEntrega);
+		rnsAprovarCompra.add(aStatusPedidoTransporte);
+		rnsAprovarCompra.add(aStatusPedidoEntregue);
 		
 		rnsValidarPedido.add(vPagamentoCartao);
 		rnsValidarPedido.add(vQtdeEstoqueLivro);

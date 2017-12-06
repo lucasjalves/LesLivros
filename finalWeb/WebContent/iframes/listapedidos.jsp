@@ -32,13 +32,13 @@
 				<h4 class="card-tyle">
 					Todos os Pedidos
 				</h4>
-				<table class="table-striped" width="50%" cellpadding="10" cellspacing="8">
+				<table class="table-striped" width="50%" cellpadding="10" cellspacing="4">
 				<thead class="thead-inverse">
 					<th style="text-align: center;">ID</th>
 					<th style="text-align: center;">Data</th>
 					<th style="text-align: center;">Valor</th>
 					<th style="text-align: center;">CPF cliente</th>
-					<th style="text-align: center;">Status</th>
+					<th style="text-align: center;">Status pedido</th>
 					<th style="text-align: center;">Operação</th>
 				</thead>
 				<tbody>
@@ -79,14 +79,19 @@
 										sb.append("<td>");
 										sb.append(pe.getStatus());
 										sb.append("</td>");
-										System.out.println();
 										if(pe.getStatus().trim().equals("APROVADO"))	
 										{
-											System.out.println("a");
 											sb.append("<td>");
 											sb.append("<a href='../ComprarItens?operacao=CONSULTAR&local=listapedidos&id=" + pe.getId());
-											sb.append("' class='btn btn-success'>Confirmar Entrega</a>");
+											sb.append("' class='btn btn-success'>Confirmar Transporte</a>");
 											sb.append("</td>");
+										}
+										if(pe.getStatus().trim().equals("EM TRANSPORTE"))
+										{
+											sb.append("<td>");
+											sb.append("<a href='../ComprarItens?operacao=CONSULTAR&entregado=true&local=listapedidos&id=" + pe.getId());
+											sb.append("' class='btn btn-success'>Confirmar Entrega</a>");
+											sb.append("</td>");											
 										}
 										sb.append("</tr>");
 										out.print(sb.toString());

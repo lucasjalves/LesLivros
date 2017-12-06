@@ -1,7 +1,6 @@
 package finalWeb.vh.impl;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,11 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import finalCore.aplicacao.Resultado;
-import finalCore.util.ValidarCartao;
+
 import finalDominio.Pedido;
 import finalDominio.PessoaFisica;
-import finalDominio.Item;
-import finalDominio.Livro;
+
 
 import java.util.Map;
 import java.util.ArrayList;
@@ -24,7 +22,6 @@ import java.util.List;
 
 import finalDominio.Cartao;
 import finalDominio.CartoesCompra;
-import finalDominio.Cupom;
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalWeb.vh.IViewHelper;
@@ -132,8 +129,12 @@ public class CompraViewHelper implements IViewHelper{
 			String idTxt = request.getParameter("id");
 			int id = Integer.parseInt(idTxt);
 			
-			p.setId(id);
 			p.setStatus("entregar");
+			p.setId(id);
+			String status = request.getParameter("entregado");
+			if(status != null)
+				p.setStatus("entregado");
+			
 			
 			return p;
 			

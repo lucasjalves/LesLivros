@@ -213,7 +213,7 @@
 							<%out.print(pedido.getEndereco().getEstado()); %>,	
 							CEP: <%out.print(pedido.getEndereco().getCep()); %>,
 							<%out.print(pedido.getEndereco().getPais()); %></p>	
-							<p>T: (<%out.print(pf.getTelefone().getDdd()); %>) <%out.print(pf.getTelefone().getNumero());%></p>
+							<p>T: (<%out.print(pf.getTelefones().get(0).getDdd()); %>) <%out.print(pf.getTelefones().get(0).getNumero());%></p>
 							<hr>
 
 							<p class="h5">Livros</p>
