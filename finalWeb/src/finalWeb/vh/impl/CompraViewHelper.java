@@ -131,11 +131,12 @@ public class CompraViewHelper implements IViewHelper{
 			
 			p.setStatus("entregar");
 			p.setId(id);
+			String realizarTroca = request.getParameter("realizarTroca");
 			String status = request.getParameter("entregado");
 			if(status != null)
 				p.setStatus("entregado");
-			
-			
+			if(realizarTroca != null)
+				p.setStatus("trocaritens");
 			return p;
 			
 		}

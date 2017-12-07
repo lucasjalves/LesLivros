@@ -51,7 +51,8 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 			
 			pst.close();
 			Livro l = itemTroca.getLivro();
-			pst = connection.prepareStatement("INSERT INTO pedido_troca_itens (fk_pedido_troca, fk_livro, qtde_livro, preco_troca) VALUES (?,?,?,?)");
+			pst = connection.prepareStatement("INSERT INTO pedido_troca_itens "
+					+ "(fk_pedido_troca, fk_livro, qtde_livro, preco_troca) VALUES (?,?,?,?)");
 			pst.setInt(1, id);
 			pst.setInt(2, l.getId());
 			pst.setInt(3, itemTroca.getQtde());
@@ -116,7 +117,8 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 				pedido.setDtTroca(rs.getDate("dtTroca"));
 				pedido.setStatus(rs.getString("status"));
 				
-				pst = connection.prepareStatement("SELECT * FROM pedido_troca_itens INNER JOIN livros on (fk_livro = livros.id) WHERE fk_pedido_troca = " + pedido.getId());
+				pst = connection.prepareStatement("SELECT * FROM pedido_troca_itens INNER JOIN "
+						+ "livros on (fk_livro = livros.id) WHERE fk_pedido_troca = " + pedido.getId());
 				ResultSet itensPedido = pst.executeQuery();
 				List<ItemTroca> itens = new ArrayList<ItemTroca>();
 				while(itensPedido.next())
@@ -124,7 +126,7 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 					Livro l = new Livro();
 					ItemTroca i = new ItemTroca();
 					l.setId(itensPedido.getInt("id"));
-					i.setQtde(itensPedido.getInt("quantidade"));
+					i.setQtde(itensPedido.getInt("qtde_livro"));
 					l.setNome(itensPedido.getString("nome"));
 					i.setPrecoLivro(itensPedido.getDouble("preco_troca"));
 					i.setLivro(l);

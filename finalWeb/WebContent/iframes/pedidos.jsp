@@ -31,7 +31,11 @@
                   <h4 class="card-title">
                     Meus Pedidos
                   </h4>				
-					<table class="table">
+					<table class="table table-hover table-bordered">
+					<th>Data</th>
+					<th>Valor</th>
+					<th>Status</th>
+					<th>Operação</th>
 						<% 
 							if(p.getPedidos() != null)
 							{
@@ -42,22 +46,22 @@
 									for(int i = 0; i < pedidos.size(); i++)
 									{
 										Pedido pe = p.getPedidos().get(i);
-										out.print("<tr><td>");
-										out.print("<p>Data: " + 
-											ConverteDate.converteDateString(pe.getDtPedido()) + "</p>");
-										out.print("<p>Valor: " + String.format("%.2f", pe.getPrecoTotal()) + " R$ </p>");
-										out.print("<p>Status: " + pe.getStatus() + "</p>" );
+										out.print("<tr>");
+										out.print("<td><p> " + 
+											ConverteDate.converteDateString(pe.getDtPedido()) + "</p></td>");
+										out.print("<td><p>" + String.format("%.2f", pe.getPrecoTotal()) + " R$ </p></td>");
+										out.print("<td><p>" + pe.getStatus() + "</p></td>" );
 										if(pe.getStatus().equals("EM PROCESSAMENTO"))	
 										{
-											out.print("<a href='../Compra.jsp?pedido=" + i + "' " +
-											"class='btn btn-danger' style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F' target='_parent'>Realizar Pagamento</a>");
+											out.print("<td><a href='../Compra.jsp?pedido=" + i + "' " +
+											"class='btn btn-danger' style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F' target='_parent'>Realizar Pagamento</a></td>");
 										}
 										if(pe.getStatus().trim().equals("ENTREGUE"))
 										{
-											out.print("<a href='pedidoTroca.jsp?indicepedido=" + i + "' " +
-													"class='btn btn-danger' style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F'>Solicitar Troca</a>");											
+											out.print("<td><a href='pedidoTroca.jsp?indicepedido=" + i + "' " +
+													"class='btn btn-danger' style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F'>Solicitar Troca</a></td>");											
 										}
-										out.print("</td></tr>");
+										out.print("</tr>");
 									}									
 								}
 								else

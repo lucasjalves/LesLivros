@@ -23,6 +23,7 @@ public class TrocaViewHelper implements IViewHelper{
 	@Override
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		String operacao = request.getParameter("operacao");
+		System.out.println(operacao);
 		if(operacao.equals("SALVAR"))
 		{
 			ItemTroca it = new ItemTroca();
@@ -68,6 +69,10 @@ public class TrocaViewHelper implements IViewHelper{
 			
 			
 		}
+		if(operacao.equals("CONSULTAR"))
+		{
+			return new PedidoTroca();
+		}
 		return null;
 	}
 
@@ -86,6 +91,12 @@ public class TrocaViewHelper implements IViewHelper{
 				d = request.getRequestDispatcher("iframes/pedidos.jsp");
 			
 			d.forward(request, response);			
+		}
+		if(operacao.equals("CONSULTAR"))
+		{
+			request.getSession().setAttribute("resultadoTrocas", resultado);
+			d = request.getRequestDispatcher("iframes/listatrocas.jsp");
+			d.forward(request, response);
 		}
 
 		

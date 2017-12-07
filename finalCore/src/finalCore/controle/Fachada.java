@@ -14,6 +14,7 @@ import finalCore.dao.CartaoDAO;
 import finalCore.dao.CategoriaDAO;
 import finalCore.dao.ClienteDAO;
 import finalCore.dao.CupomDAO;
+import finalCore.dao.CupomTrocaClienteDAO;
 import finalCore.dao.EnderecoDAO;
 import finalCore.dao.GrupoPrecificacaoDAO;
 import finalCore.dao.LivroDAO;
@@ -66,7 +67,8 @@ public class Fachada implements IFachada{
 		CupomDAO cupDAO = new CupomDAO();
 		PedidoDAO pedidoDAO = new PedidoDAO();
 		PedidoTrocaDAO trocaDAO = new PedidoTrocaDAO();
-
+		CupomTrocaClienteDAO cupTrocaDAO = new CupomTrocaClienteDAO();
+		
 		daos.put(Livro.class.getName(), livroDAO);
 		daos.put(Endereco.class.getName(), endDAO);
 		daos.put(PessoaFisica.class.getName(), cliDAO);
@@ -76,6 +78,7 @@ public class Fachada implements IFachada{
 		daos.put(CupomPromocional.class.getName(), cupDAO);
 		daos.put(Pedido.class.getName(),pedidoDAO);
 		daos.put(PedidoTroca.class.getName(), trocaDAO);
+		daos.put(CupomTrocaClienteDAO.class.getName(), cupTrocaDAO);
 
 		ValidarDadosObrigatoriosLivro vdObrigatoriosLivro = new ValidarDadosObrigatoriosLivro();	
 		VerificarQtdeLivroEstoque vQtdeEstoqueLivro = new VerificarQtdeLivroEstoque();

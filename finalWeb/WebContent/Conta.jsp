@@ -99,13 +99,16 @@
 					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/enderecos.jsp')">Meus Endereços</a>
 					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/cartoes.jsp')">Meus Cartões</a>	
 					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/pedidos.jsp')">Meus Pedidos</a>
-					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/pedidostroca.jsp')">Minhas Trocas</a>							
+					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/minhastrocas.jsp')">Minhas Trocas</a>							
 					<%
 						if(p.getTipo() == 1)
 						{
 							out.print("<p class='list-group-item'>Opções administrativas</p>");
 							out.print("<a href='#' class='list-group-item' "
 									+ "onclick=\"mudarIframe('iframes/listapedidos.jsp')\">Todos os Pedidos</a>");
+							
+							out.print("<a href='#' class='list-group-item nav-link' " +
+									"onclick=\"mudarIframe('iframes/listatrocas.jsp')\">Todas as Trocas</a>");
 						}
 					%>	
 		          </div>
