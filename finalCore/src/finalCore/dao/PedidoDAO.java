@@ -145,9 +145,15 @@ public class PedidoDAO extends AbstractJdbcDAO{
 		try {
 			openConnection();
 			Pedido p = (Pedido)entidade;
-			int idPedido = p.getId();
+			Integer idPedido = p.getId();
 			PreparedStatement pst = null;
-			pst = connection.prepareStatement("SELECT * FROM PEDIDO WHERE id = " + idPedido);
+			if(p.getIdCliente() == null)
+				pst = connection.prepareStatement("SELECT * FROM PEDIDO WHERE id = " + idPedido);
+			else
+				pst = connection.prepareStatement("SELECT * FROM PEDIDO WHERE pk_cliente = " + p.getIdCliente());
+			
+			System.out.println(p.getIdCliente());
+			
 			ResultSet pedidosCliente = pst.executeQuery();
 			List<EntidadeDominio> pedidos = new ArrayList<EntidadeDominio>();
 			while(pedidosCliente.next())
@@ -162,7 +168,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 				
 				pst = connection.prepareStatement("SELECT * FROM ITEM_PEDIDO"
 						+ " INNER JOIN LIVROS ON "
-						+ "(ITEM_PEDIDO.FK_LIVRO = LIVROS.ID) WHERE PK_PEDIDO = " + idPedido);
+						+ "(ITEM_PEDIDO.FK_LIVRO = LIVROS.ID) WHERE PK_PEDIDO = " + pedido.getId());
 				ResultSet itensPedido = pst.executeQuery();
 				List<Item> itens = new ArrayList<Item>();
 				while(itensPedido.next())
@@ -172,7 +178,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 					l.setId(itensPedido.getInt("id"));
 					i.setQtde(itensPedido.getInt("quantidade"));
 					l.setNome(itensPedido.getString("nome"));
-					l.setPreco(itensPedido.getDouble("preco_livro"));
+					i.setPrecoLivro(itensPedido.getDouble("preco"));
 					i.setLivro(l);
 					itens.add(i);
 				}

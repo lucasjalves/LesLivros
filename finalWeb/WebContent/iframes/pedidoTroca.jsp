@@ -13,7 +13,6 @@
 			<script src="../bootstrap/popper.js"></script>
 			<script src="../bootstrap/jquery-3.2.1.min.js"></script>
 			<script src="../bootstrap/bootstrap.min.js"></script>
-			<link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
 		
 		<title>Minha conta</title>
 		<%
@@ -58,6 +57,7 @@
 							out.print("<input type='hidden' name='idPedido' value='" + p.getId() + "'/>");
 							out.print("<input type='hidden' name='idLivro' value='" + l.getId() + "'/>");
 							out.print("<input type='hidden' name='idUsuario' value='" + id + "'/>");
+							out.print("<input type='hidden' name='preco' value='" + item.getPrecoLivro() +"'/>");
 							out.print("</form>");
 						}
 				%>

@@ -34,17 +34,21 @@ public class TrocaViewHelper implements IViewHelper{
 			String idPedido = request.getParameter("idPedido");
 			String idLivro = request.getParameter("idLivro");
 			String idUsuario = request.getParameter("idUsuario");
+			String precoTxt = request.getParameter("preco");
 			
 			int qtde = Integer.parseInt(qtdeLivro);
 			int idP = Integer.parseInt(idPedido);
 			int idL = Integer.parseInt(idLivro);
 			int idC = Integer.parseInt(idUsuario);
+			double preco = Double.parseDouble(precoTxt);
 			
 			pd.setIdCliente(idC);
 			pd.setIdPedido(idP);
-			
+		
 			l.setId(idL);
 			it.setLivro(l);
+			it.setPrecoLivro(preco);
+			
 			
 			it.setQtde(qtde);
 			listTroca.add(it);
@@ -54,7 +58,6 @@ public class TrocaViewHelper implements IViewHelper{
 			String sts = request.getParameter("resultado");
 			if(sts != null)
 				pd.setStatus(sts);
-			
 			
 			Calendar cal = Calendar.getInstance();
 			Date date;
@@ -77,11 +80,10 @@ public class TrocaViewHelper implements IViewHelper{
 		if(operacao.equals("SALVAR"))
 		{
 			
-			String validar = request.getParameter("valdidar");
-			if(validar == null)
+			if(resultado.getMsg() != null)
 				d = request.getRequestDispatcher("RealizarTroca?operacao=SALVAR&validar=true&resultado="+resultado.getMsg());
 			else
-				d = request.getRequestDispatcher("pedidoTroca.jsp");
+				d = request.getRequestDispatcher("iframes/pedidos.jsp");
 			
 			d.forward(request, response);			
 		}

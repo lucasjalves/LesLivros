@@ -16,6 +16,7 @@ import finalDominio.EntidadeDominio;
 import finalDominio.Item;
 import finalDominio.Livro;
 import finalDominio.Pedido;
+import finalDominio.PedidoTroca;
 import finalDominio.PessoaFisica;
 import finalDominio.Telefone;
 
@@ -255,49 +256,41 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				}				
 				cartoesCliente.close();
 				
-				pst = connection.prepareStatement("SELECT * FROM PEDIDO WHERE pk_cliente = " + idCliente);
-				ResultSet pedidosCliente = pst.executeQuery();
-				List<Pedido> pedidos = new ArrayList<Pedido>();
-				while(pedidosCliente.next())
+				PedidoDAO daoPedido = new PedidoDAO();
+				Pedido ped = new Pedido();
+				ped.setIdCliente(p.getId());
+				List<EntidadeDominio> pedidos = daoPedido.consultar(ped);
+				if(pedidos != null)
 				{
-					Pedido pedido = new Pedido();
-					pedido.setId(pedidosCliente.getInt("id"));
-					pedido.setDtPedido(pedidosCliente.getDate("dtPedido"));
-					pedido.setStatus(pedidosCliente.getString("status"));
-					pedido.setFrete(pedidosCliente.getDouble("frete"));
-					pedido.setPrecoTotal(pedidosCliente.getDouble("precoTotal"));
-					int idEndereco = pedidosCliente.getInt("fk_endereco");
-					pedido.setEndereco(m.get(idEndereco));	
-					
-					
-					pst = connection.prepareStatement("SELECT * FROM ITEM_PEDIDO"
-							+ " INNER JOIN LIVROS ON "
-							+ "(ITEM_PEDIDO.FK_LIVRO = LIVROS.ID) WHERE PK_PEDIDO = " + pedido.getId());
-					ResultSet itensPedido = pst.executeQuery();
-					List<Item> itens = new ArrayList<Item>();
-					while(itensPedido.next())
+					List<Pedido> listaPedidos = new ArrayList<Pedido>();
+					for(int i = 0; i < pedidos.size(); i++)
 					{
-						Livro l = new Livro();
-						Item i = new Item();
-						l.setId(itensPedido.getInt("id"));
-						i.setQtde(itensPedido.getInt("quantidade"));
-						l.setNome(itensPedido.getString("nome"));
-						i.setPrecoLivro(itensPedido.getDouble("preco_livro"));
-						i.setLivro(l);
-						itens.add(i);
+						ped = (Pedido)pedidos.get(i);
+						listaPedidos.add(ped);
 					}
-					itensPedido.close();
-					pedido.setItem(itens);
-					pedidos.add(pedido);
+					p.setPedidos(listaPedidos);
+				
 				}
-				pedidosCliente.close();
-	
-				p.setPedidos(pedidos);
-				p.setEndereco(enderecos);
+				
+				PedidoTrocaDAO daoTroca = new PedidoTrocaDAO();
+				PedidoTroca pt = new PedidoTroca();
+				pt.setIdCliente(p.getId());
+				List<EntidadeDominio> trocas = daoTroca.consultar(pt);
+				if(trocas != null)
+				{
+					List<PedidoTroca> listaTrocas = new ArrayList<PedidoTroca>();
+					for(int i = 0; i < trocas.size(); i++)
+					{
+						pt = (PedidoTroca)trocas.get(i);
+						listaTrocas.add(pt);
+					}
+					p.setTrocas(listaTrocas);
+				}
 				p.setCartao(cartoes);
+				p.setEndereco(enderecos);
 				pessoas.add(p);
 			}
-		
+			
 			return pessoas;
 		}catch(SQLException e){
 			e.printStackTrace();

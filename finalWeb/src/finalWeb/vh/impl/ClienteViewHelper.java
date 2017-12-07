@@ -200,7 +200,6 @@ public class ClienteViewHelper implements IViewHelper{
 				mapaUsuarios.put(p.getId(), pedido);	
 				request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);
 			}if(mapaUsuarios.containsKey(0)){
-				System.out.println("usuario n logado porra");
 				Pedido pedido = mapaUsuarios.get(0);
 				
 				mapaUsuarios.remove(0);
@@ -221,12 +220,6 @@ public class ClienteViewHelper implements IViewHelper{
 			request.getSession().setAttribute("resultadoLogin", resultado);  
 			d.forward(request, response);
 		}
-		
-		
-		
-		
-		
-		
 		
 		if(operacao.equals("ALTERAR") || operacao.equals("VISUALIZAR"))
 		{

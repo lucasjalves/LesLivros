@@ -479,7 +479,7 @@
 					<td><input type="text" id="txtPais" name="txtPais" /></td></tr>
 				
 				<input type="hidden" name="txtIdFkEndereco" value="<%out.print(id); %>"/>				
-				<input type="hidden" name="local" value="carrinho">																				
+				<input type="hidden" name="local" value="carrinho"/>																				
 			</table>
 		      </div>
 		      <div class="modal-footer">

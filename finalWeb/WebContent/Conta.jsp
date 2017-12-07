@@ -98,7 +98,8 @@
 		            <a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/MinhaConta.jsp')">Minha Conta</a>
 					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/enderecos.jsp')">Meus Endereços</a>
 					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/cartoes.jsp')">Meus Cartões</a>	
-					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/pedidos.jsp')">Meus Pedidos</a>	
+					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/pedidos.jsp')">Meus Pedidos</a>
+					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/pedidostroca.jsp')">Minhas Trocas</a>							
 					<%
 						if(p.getTipo() == 1)
 						{

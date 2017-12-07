@@ -5,8 +5,8 @@ import java.util.List;
 
 public class PedidoTroca extends EntidadeDominio {
 	private List<ItemTroca> itensTroca;
-	private int idCliente;
-	private int idPedido;
+	private Integer idCliente;
+	private Integer idPedido;
 	private String status;
 	private Date dtTroca;
 	
@@ -23,16 +23,16 @@ public class PedidoTroca extends EntidadeDominio {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public int getIdPedido() {
+	public Integer getIdPedido() {
 		return idPedido;
 	}
-	public void setIdPedido(int idPedido) {
+	public void setIdPedido(Integer idPedido) {
 		this.idPedido = idPedido;
 	}
-	public int getIdCliente() {
+	public Integer getIdCliente() {
 		return idCliente;
 	}
-	public void setIdCliente(int idCliente) {
+	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
 	}
 

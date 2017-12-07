@@ -14,12 +14,12 @@ public class Pedido extends EntidadeDominio{
 	private List<CartoesCompra> cartoesCompra;
 	private CupomPromocional cupomPromocional;
 	private Endereco endereco;
-	private int idCliente;
+	private Integer idCliente;
 	
-	public int getIdCliente() {
+	public Integer getIdCliente() {
 		return idCliente;
 	}
-	public void setIdCliente(int idCliente) {
+	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
 	}
 	public CupomPromocional getCupomPromocional() {
