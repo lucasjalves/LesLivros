@@ -46,11 +46,11 @@
 							PedidoTroca p = (PedidoTroca)trocas.get(i);
 							ItemTroca it  = p.getItensTroca().get(0);
 							Livro l = p.getItensTroca().get(0).getLivro();
-							out.print("<form action='ComprarItens' method='POST'>");
+							out.print("<form action='RealizarTroca' method='POST'>");
 							out.print("<input type='hidden' name='idPedidoTroca' value='" + p.getId() +"'>");
 							out.print("<input type='hidden' name='desconto' value='" + String.format("%.2f", it.getPrecoLivro())+ "'>");
 							out.print("<input type='hidden' name='fk_cliente' value='" + p.getIdCliente()+ "'>");
-							out.print("<input type='hidden' name='realizartroca' value='1'>");
+							out.print("<input type='hidden' name='atualizarStatus' value='trocarItens'>");
 							out.print("<tr>");
 							out.print("<td><p>" + l.getNome() + "</p></td>");
 							out.print("<td><p>" + it.getQtde()  + "</p></td>");

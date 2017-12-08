@@ -23,11 +23,14 @@ public class TrocaViewHelper implements IViewHelper{
 	@Override
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		String operacao = request.getParameter("operacao");
-		System.out.println(operacao);
-		if(operacao.equals("SALVAR"))
+		if(operacao.equals("CONSULTAR"))
+		{
+			return new PedidoTroca();
+		}
+		if(operacao.equals("ALTERAR"))
 		{
 			ItemTroca it = new ItemTroca();
-			PedidoTroca pd = new PedidoTroca();
+			PedidoTroca pt = new PedidoTroca();
 			Livro l = new Livro();
 			List<ItemTroca> listTroca = new ArrayList<ItemTroca>();
 			
@@ -43,8 +46,8 @@ public class TrocaViewHelper implements IViewHelper{
 			int idC = Integer.parseInt(idUsuario);
 			double preco = Double.parseDouble(precoTxt);
 			
-			pd.setIdCliente(idC);
-			pd.setIdPedido(idP);
+			pt.setIdCliente(idC);
+			pt.setIdPedido(idP);
 		
 			l.setId(idL);
 			it.setLivro(l);
@@ -54,24 +57,21 @@ public class TrocaViewHelper implements IViewHelper{
 			it.setQtde(qtde);
 			listTroca.add(it);
 			
-			pd.setItensTroca(listTroca);
-			pd.setStatus("trocar");
-			String sts = request.getParameter("resultado");
-			if(sts != null)
-				pd.setStatus(sts);
-			
+			pt.setItensTroca(listTroca);
 			Calendar cal = Calendar.getInstance();
 			Date date;
 			
 			date = cal.getTime();
-			pd.setDtTroca(date);
-			return pd;
+			pt.setDtTroca(date);
 			
-			
-		}
-		if(operacao.equals("CONSULTAR"))
-		{
-			return new PedidoTroca();
+			String idPedidoTxt = request.getParameter("idPedidoTroca");
+			String status = request.getParameter("atualizarStatus");
+			if(status != null)
+				pt.setStatus(status);
+			int id = Integer.parseInt(idPedidoTxt);
+			pt.setIdPedido(id);
+			request.getSession().setAttribute("pedidoTroca", pt);
+			return pt;
 		}
 		return null;
 	}
@@ -97,6 +97,13 @@ public class TrocaViewHelper implements IViewHelper{
 			request.getSession().setAttribute("resultadoTrocas", resultado);
 			d = request.getRequestDispatcher("iframes/listatrocas.jsp");
 			d.forward(request, response);
+		}
+		if(operacao.equals("ALTERAR"))
+		{
+			if(resultado.getMsg() != null)
+				d = request.getRequestDispatcher("RealizarTroca?operacao=ALTERAR&atualizarStatus="+resultado.getMsg());
+			else
+				d = request.getRequestDispatcher("ValidarCupom?operacao=SALVAR&tipoCupom=troca");
 		}
 
 		

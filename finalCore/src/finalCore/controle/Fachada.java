@@ -21,6 +21,7 @@ import finalCore.dao.LivroDAO;
 import finalCore.dao.PedidoDAO;
 import finalCore.dao.PedidoTrocaDAO;
 import finalCore.negocio.AprovarCompraCartao;
+import finalCore.negocio.AtualizarStatusCompraTrocado;
 import finalCore.negocio.AtualizarStatusPedidoEntregue;
 import finalCore.negocio.AtualizarStatusPedidoTransporte;
 import finalCore.negocio.AtualizarStatusPedidoTroca;
@@ -90,6 +91,7 @@ public class Fachada implements IFachada{
 		AtualizarStatusPedidoEntregue aStatusPedidoEntregue = new AtualizarStatusPedidoEntregue();
 		ValidacaoSolicitarTroca vSolicitarTroca = new ValidacaoSolicitarTroca();
 		AtualizarStatusPedidoTroca aStatusPedidoTroca = new AtualizarStatusPedidoTroca();
+		AtualizarStatusCompraTrocado aStatusCompraTrocado = new AtualizarStatusCompraTrocado();
 		
 		List<IStrategy> rnsValidarCupom = new ArrayList<IStrategy>();
 		List<IStrategy> rnsValidarPedido = new ArrayList<IStrategy>();
@@ -112,7 +114,7 @@ public class Fachada implements IFachada{
 		rnsValidarCupom.add(vCupomData);
 		
 		rnsTrocaCompra.add(aStatusPedidoTroca);
-		
+		rnsTrocaCompra.add(aStatusCompraTrocado);
 		Map<String, List<IStrategy>> rnsLivro = new HashMap<String, List<IStrategy>>();
 		Map<String, List<IStrategy>> rnsPedido = new HashMap<String, List<IStrategy>>();
 		Map<String, List<IStrategy>> rnsCupom = new HashMap<String, List<IStrategy>>();
@@ -122,6 +124,7 @@ public class Fachada implements IFachada{
 		rnsPedido.put("ValidarCarrinho", rnsValidarPedido);
 		rnsCupom.put("CONSULTAR", rnsValidarCupom);
 		rnsPedido.put("CONSULTAR", rnsAprovarCompra);
+		rnsPedido.put("ALTERAR", rnsAprovarCompra);
 		rnsTroca.put("SALVAR", rnsTrocaCompra);
 		
 		rns.put(Livro.class.getName(), rnsLivro);

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import finalDominio.Cartao;
+import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalDominio.Item;
 import finalDominio.ItemTroca;
@@ -80,7 +81,41 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 	@Override
 	public void alterar(EntidadeDominio entidade) throws SQLException {
 		// TODO Auto-generated method stub
-		
+		openConnection();
+		PreparedStatement pst = null;
+		PedidoTroca p = (PedidoTroca)entidade;
+		try {
+			connection.setAutoCommit(false);
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("UPDATE `pedido_troca` "
+					+ "SET `status`= ? WHERE id = ?");		
+			
+			
+			pst = connection.prepareStatement(sql.toString());
+			pst.setString(1, p.getStatus());
+			pst.setInt(2, p.getId());
+			
+			System.out.println(sql.toString());
+			pst.executeUpdate();			
+			connection.commit();
+			pst.executeUpdate();			
+			connection.commit();
+		} catch (SQLException e) {
+			try {
+				pst.close();
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();			
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}				
 	}
 
 	@Override

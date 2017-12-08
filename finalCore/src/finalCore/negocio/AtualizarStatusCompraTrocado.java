@@ -10,7 +10,7 @@ public class AtualizarStatusCompraTrocado implements IStrategy{
 	public String processar(EntidadeDominio entidade) {
 		Pedido p = (Pedido)entidade;
 		if(p.getStatus() != null)
-			if(p.getStatus().trim().equals("trocaritens"))
+			if(p.getStatus().trim().equals("trocarItens"))
 				return "TROCADO";
 		return null;
 	}

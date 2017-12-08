@@ -18,6 +18,7 @@ import finalDominio.CupomPromocional;
 import finalDominio.CupomTroca;
 import finalDominio.EntidadeDominio;
 import finalDominio.Pedido;
+import finalDominio.PedidoTroca;
 import finalDominio.PessoaFisica;
 import finalWeb.vh.IViewHelper;
 
@@ -31,28 +32,27 @@ public class CupomViewHelper implements IViewHelper {
 		
 		if(operacao.equals("SALVAR"))
 		{
-			CupomTroca cupomTroca = new CupomTroca();
-			String idPedidoTroca = request.getParameter("idPedidoTroca");
-			String desconto = request.getParameter("desconto");
-			String fkCliente = request.getParameter("fk_cliente");
-			
-			int id = Integer.parseInt(idPedidoTroca);
-			double valor = Double.parseDouble(desconto);
-			int fkCli = Integer.parseInt(fkCliente);
-			
-			cupomTroca.setDesconto(valor);
-			cupomTroca.setIdCliente(fkCli);
-			Calendar cal = Calendar.getInstance();
-			Date dtCadastro = cal.getTime();
-			
-			cupomTroca.setDtCriacao(dtCadastro);
-			dtCadastro.setMonth(dtCadastro.getMonth() + 1);
-			
-			
-			cupomTroca.setDtValidade(dtCadastro);
-			
-			return cupomTroca;
-			
+			String tipoCupom = request.getParameter("tipoCupom");
+			if(tipoCupom.equals("troca"))
+			{
+				CupomTroca cupomTroca = new CupomTroca();
+				PedidoTroca pt = (PedidoTroca)request.getSession().getAttribute("pedidoTroca");
+				
+				cupomTroca.setDesconto(pt.getItensTroca().get(0).getPrecoLivro());
+				cupomTroca.setIdCliente(pt.getIdCliente());
+				Calendar cal = Calendar.getInstance();
+				Date dtCadastro = cal.getTime();
+				
+				cupomTroca.setDtCriacao(dtCadastro);
+				dtCadastro.setMonth(dtCadastro.getMonth() + 1);
+				
+				
+				cupomTroca.setDtValidade(dtCadastro);
+				
+				return cupomTroca;
+								
+			}
+			return null;
 		}
 		else
 		{
