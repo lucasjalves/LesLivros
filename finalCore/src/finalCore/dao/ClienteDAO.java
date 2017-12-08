@@ -175,7 +175,6 @@ public class ClienteDAO extends AbstractJdbcDAO {
 			sb.append("AND email LIKE '%" + pf.getEmail() + "%'");
 		}	
 		*/	
-		System.out.println(sb.toString());
 		try{
 			openConnection();
 			pst = connection.prepareStatement(sb.toString());
@@ -199,7 +198,6 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				pst = connection.prepareStatement("SELECT * FROM endereco WHERE pk_cliente = " + idCliente);
 				ResultSet enderecosCliente = pst.executeQuery();
 				List<Endereco> enderecos = new ArrayList<Endereco>();
-				Map<Integer, Endereco> m = new HashMap<Integer, Endereco>();
 				while(enderecosCliente.next())
 				{
 					Endereco e = new Endereco();
@@ -217,7 +215,6 @@ public class ClienteDAO extends AbstractJdbcDAO {
 					e.setNome(enderecosCliente.getString("nome_id"));
 					e.setFk_pessoa(enderecosCliente.getInt("pk_cliente"));
 					
-					m.put(e.getId(), e);
 					enderecos.add(e);
 				}
 				enderecosCliente.close();
@@ -258,6 +255,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				
 				PedidoDAO daoPedido = new PedidoDAO();
 				Pedido ped = new Pedido();
+				
 				ped.setIdCliente(p.getId());
 				List<EntidadeDominio> pedidos = daoPedido.consultar(ped);
 				if(pedidos != null)

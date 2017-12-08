@@ -68,7 +68,7 @@ public class CompraViewHelper implements IViewHelper{
 			date = cal.getTime();
 			pedido.setDtPedido(date);
 			pedido.setIdCliente(id);
-		
+			
 			return pedido;
 		}
 		if(operacao.equals("ALTERAR"))
@@ -95,11 +95,8 @@ public class CompraViewHelper implements IViewHelper{
 			List<EntidadeDominio> e = resultado.getEntidades();
 			PessoaFisica pf = (PessoaFisica)e.get(0);
 			
-			String indicePedidoTxt = request.getParameter("indicePedido");	
 			
-			int indicePedido = Integer.parseInt(indicePedidoTxt);
-			
-			Pedido pedido = pf.getPedidos().get(indicePedido);
+			Pedido pedido = (Pedido)request.getSession().getAttribute("pedidoUser");
 			
 			String qtdeCartoesTxt = request.getParameter("qtdeCartoes");
 			int qtdeCartoes = Integer.parseInt(qtdeCartoesTxt);
@@ -120,6 +117,8 @@ public class CompraViewHelper implements IViewHelper{
 				pedido.setCartoesCompra(cartoes);
 			}
 			request.getSession().setAttribute("pedido", pedido);
+			if(pedido.getStatus() == null)
+				pedido.setStatus("EM PROCESSAMENTO");
 			return pedido;
 		}
 		
@@ -129,11 +128,9 @@ public class CompraViewHelper implements IViewHelper{
 			String idTxt = request.getParameter("id");
 			int id = Integer.parseInt(idTxt);
 			
-			p.setStatus("entregar");
 			p.setId(id);
-			String status = request.getParameter("entregado");
-			if(status != null)
-				p.setStatus("entregado");
+			String status = request.getParameter("status");
+			p.setStatus(status);
 			return p;
 			
 		}
@@ -160,6 +157,7 @@ public class CompraViewHelper implements IViewHelper{
 		
 		if(operacao.equals("CONSULTAR"))
 		{	
+			request.getSession().removeAttribute("pedidoUser");
 			if(local == null)
 				d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR&status="+resultado.getMsg());
 			else
@@ -172,13 +170,13 @@ public class CompraViewHelper implements IViewHelper{
 		}
 		if(operacao.equals("ALTERAR"))
 		{
-			String url = null;
-			
-			if(local != null)
-				url = "iframes/listapedidos.jsp";
-			else
-				url = "Conta.jsp";
-			
+			Resultado r = (Resultado)request.getSession().getAttribute("resultadoLogin");
+			List<EntidadeDominio> e = r.getEntidades();
+			PessoaFisica pf = (PessoaFisica)e.get(0);
+			String email = pf.getEmail();
+			String senha = pf.getSenha();
+			String url = "SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha;
+		
 			d = request.getRequestDispatcher(url);
 			d.forward(request, response);
 		}

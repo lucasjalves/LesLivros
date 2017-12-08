@@ -115,6 +115,8 @@ public class Fachada implements IFachada{
 		
 		rnsTrocaCompra.add(aStatusPedidoTroca);
 		rnsTrocaCompra.add(aStatusCompraTrocado);
+		
+		
 		Map<String, List<IStrategy>> rnsLivro = new HashMap<String, List<IStrategy>>();
 		Map<String, List<IStrategy>> rnsPedido = new HashMap<String, List<IStrategy>>();
 		Map<String, List<IStrategy>> rnsCupom = new HashMap<String, List<IStrategy>>();
@@ -125,7 +127,7 @@ public class Fachada implements IFachada{
 		rnsCupom.put("CONSULTAR", rnsValidarCupom);
 		rnsPedido.put("CONSULTAR", rnsAprovarCompra);
 		rnsPedido.put("ALTERAR", rnsAprovarCompra);
-		rnsTroca.put("SALVAR", rnsTrocaCompra);
+		rnsTroca.put("ALTERAR", rnsTrocaCompra);
 		
 		rns.put(Livro.class.getName(), rnsLivro);
 		rns.put(Pedido.class.getName(), rnsPedido);

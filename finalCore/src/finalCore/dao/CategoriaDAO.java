@@ -50,7 +50,6 @@ public class CategoriaDAO extends AbstractJdbcDAO{
 		{
 			sb.append(" WHERE id_categoria = " + cat.getId());
 		}
-		System.out.println(cat.getId());
 		try{
 			openConnection();
 			pst = connection.prepareStatement(sb.toString());

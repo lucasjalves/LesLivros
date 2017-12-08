@@ -92,7 +92,6 @@ public class EnderecoDAO extends AbstractJdbcDAO{
 			pst.setString(10, en.getNome());
 			pst.setInt(11, en.getId());
 			
-			System.out.println(sql.toString());
 			pst.executeUpdate();			
 			connection.commit();
 			pst.executeUpdate();			

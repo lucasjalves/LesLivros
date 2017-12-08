@@ -10,7 +10,8 @@ public class AprovarCompraCartao implements IStrategy{
 	@Override
 	public String processar(EntidadeDominio entidade) {
 		Pedido p = (Pedido)entidade;
-		if(p.getId() != null)
+		System.out.println(p.getStatus());
+		if(p.getId() != null && p.getStatus() != null)
 			if(p.getStatus().equals("EM PROCESSAMENTO"))
 				return ValidarCartao.validarCompra(p);
 		return null;

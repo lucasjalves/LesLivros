@@ -164,7 +164,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 				pedido.setStatus(pedidosCliente.getString("status"));
 				pedido.setFrete(pedidosCliente.getDouble("frete"));
 				pedido.setPrecoTotal(pedidosCliente.getDouble("precoTotal"));
-				
+				int idEndereco = pedidosCliente.getInt("fK_endereco");
 				
 				pst = connection.prepareStatement("SELECT * FROM ITEM_PEDIDO"
 						+ " INNER JOIN LIVROS ON "
@@ -184,6 +184,27 @@ public class PedidoDAO extends AbstractJdbcDAO{
 				}
 				itensPedido.close();
 				pedido.setItem(itens);
+				pst = connection.prepareStatement("SELECT * FROM endereco WHERE id_endereco = " + idEndereco);
+				ResultSet enderecoPedido = pst.executeQuery();
+				Endereco e = null;
+				while(enderecoPedido.next())
+				{
+					e = new Endereco();
+					
+					e.setId(enderecoPedido.getInt("id_endereco"));
+					e.setTipoRes(enderecoPedido.getString("tipo_res"));
+					e.setTipoLog(enderecoPedido.getString("tipo_log"));
+					e.setLogradouro(enderecoPedido.getString("logradouro"));
+					e.setNumCasa(enderecoPedido.getString("num_casa"));
+					e.setBairro(enderecoPedido.getString("bairro"));
+					e.setCep(enderecoPedido.getString("cep"));
+					e.setCidade(enderecoPedido.getString("cidade"));
+					e.setEstado(enderecoPedido.getString("estado"));
+					e.setPais(enderecoPedido.getString("pais"));
+					e.setNome(enderecoPedido.getString("nome_id"));
+					e.setFk_pessoa(enderecoPedido.getInt("pk_cliente"));					
+				}
+				pedido.setEndereco(e);
 				pedidos.add(pedido);
 			}
 			pedidosCliente.close();

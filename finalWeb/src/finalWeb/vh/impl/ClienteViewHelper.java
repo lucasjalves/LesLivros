@@ -29,9 +29,7 @@ public class ClienteViewHelper implements IViewHelper{
 	@Override
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		String operacao = request.getParameter("operacao");
-		System.out.println(operacao);
 		PessoaFisica p = null;
-		System.out.println(operacao);
 		if(operacao.equals("LOGIN"))
 		{
 			p = new PessoaFisica();
@@ -179,7 +177,6 @@ public class ClienteViewHelper implements IViewHelper{
 			request.getSession().setAttribute("userid", p.getId());
 			@SuppressWarnings("unchecked")
 			Map<Integer, Pedido> mapaUsuarios = (Map<Integer, Pedido>) request.getSession().getAttribute("mapaUsuarios");
-			System.out.println(p.getId());
 
 						
 			if(mapaUsuarios == null)

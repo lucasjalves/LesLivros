@@ -10,7 +10,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import finalCore.util.GerarCupomTroca;
 import finalDominio.Cartao;
+import finalDominio.CupomTroca;
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalDominio.Item;
@@ -84,6 +86,7 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 		openConnection();
 		PreparedStatement pst = null;
 		PedidoTroca p = (PedidoTroca)entidade;
+		
 		try {
 			connection.setAutoCommit(false);
 			StringBuilder sql = new StringBuilder();
@@ -94,13 +97,15 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 			
 			pst = connection.prepareStatement(sql.toString());
 			pst.setString(1, p.getStatus());
-			pst.setInt(2, p.getId());
+			pst.setInt(2, p.getIdPedido());
 			
-			System.out.println(sql.toString());
-			pst.executeUpdate();			
+			pst.executeUpdate();		
+			CupomTrocaClienteDAO cupTrocaDAO = new CupomTrocaClienteDAO();
+			CupomTroca c = GerarCupomTroca.gerarCupomTroca(p);
+			cupTrocaDAO.salvar(c);
+			
 			connection.commit();
-			pst.executeUpdate();			
-			connection.commit();
+			
 		} catch (SQLException e) {
 			try {
 				pst.close();

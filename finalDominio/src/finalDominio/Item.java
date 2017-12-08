@@ -3,14 +3,14 @@ package finalDominio;
 public class Item extends EntidadeDominio {
 	private Livro livro;
 	private Integer qtde;
-	private double precoLivro;
+	private Double precoLivro;
 	
 	
-	public double getPrecoLivro() {
+	public Double getPrecoLivro() {
 		return precoLivro;
 	}
 
-	public void setPrecoLivro(double precoLivro) {
+	public void setPrecoLivro(Double precoLivro) {
 		this.precoLivro = precoLivro;
 	}
 

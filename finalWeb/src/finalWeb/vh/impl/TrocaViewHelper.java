@@ -34,27 +34,21 @@ public class TrocaViewHelper implements IViewHelper{
 			Livro l = new Livro();
 			List<ItemTroca> listTroca = new ArrayList<ItemTroca>();
 			
-			String qtdeLivro = request.getParameter("qtdeLivrosTroca");
-			String idPedido = request.getParameter("idPedido");
-			String idLivro = request.getParameter("idLivro");
-			String idUsuario = request.getParameter("idUsuario");
-			String precoTxt = request.getParameter("preco");
+			String idPedido = request.getParameter("idPedidoTroca");
+			String idUsuario = request.getParameter("fk_cliente");
+			String precoTxt = request.getParameter("desconto");
+			String status = request.getParameter("atualizarStatus");
 			
-			int qtde = Integer.parseInt(qtdeLivro);
 			int idP = Integer.parseInt(idPedido);
-			int idL = Integer.parseInt(idLivro);
 			int idC = Integer.parseInt(idUsuario);
 			double preco = Double.parseDouble(precoTxt);
 			
 			pt.setIdCliente(idC);
 			pt.setIdPedido(idP);
 		
-			l.setId(idL);
 			it.setLivro(l);
 			it.setPrecoLivro(preco);
 			
-			
-			it.setQtde(qtde);
 			listTroca.add(it);
 			
 			pt.setItensTroca(listTroca);
@@ -63,14 +57,11 @@ public class TrocaViewHelper implements IViewHelper{
 			
 			date = cal.getTime();
 			pt.setDtTroca(date);
-			
+			pt.setStatus("trocarItens");
 			String idPedidoTxt = request.getParameter("idPedidoTroca");
-			String status = request.getParameter("atualizarStatus");
-			if(status != null)
-				pt.setStatus(status);
+			pt.setStatus(status);
 			int id = Integer.parseInt(idPedidoTxt);
 			pt.setIdPedido(id);
-			request.getSession().setAttribute("pedidoTroca", pt);
 			return pt;
 		}
 		return null;
@@ -82,11 +73,11 @@ public class TrocaViewHelper implements IViewHelper{
 		// TODO Auto-generated method stub
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
-		if(operacao.equals("SALVAR"))
+		if(operacao.equals("ALTERAR"))
 		{
 			
 			if(resultado.getMsg() != null)
-				d = request.getRequestDispatcher("RealizarTroca?operacao=SALVAR&validar=true&resultado="+resultado.getMsg());
+				d = request.getRequestDispatcher("RealizarTroca?operacao=ALTERAR&atualizarStatus="+resultado.getMsg());
 			else
 				d = request.getRequestDispatcher("iframes/pedidos.jsp");
 			
@@ -98,14 +89,6 @@ public class TrocaViewHelper implements IViewHelper{
 			d = request.getRequestDispatcher("iframes/listatrocas.jsp");
 			d.forward(request, response);
 		}
-		if(operacao.equals("ALTERAR"))
-		{
-			if(resultado.getMsg() != null)
-				d = request.getRequestDispatcher("RealizarTroca?operacao=ALTERAR&atualizarStatus="+resultado.getMsg());
-			else
-				d = request.getRequestDispatcher("ValidarCupom?operacao=SALVAR&tipoCupom=troca");
-		}
-
 		
 	}
 	

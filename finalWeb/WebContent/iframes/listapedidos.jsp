@@ -82,14 +82,16 @@
 										if(pe.getStatus().trim().equals("APROVADO"))	
 										{
 											sb.append("<td>");
-											sb.append("<a href='../ComprarItens?operacao=CONSULTAR&local=listapedidos&id=" + pe.getId());
+											sb.append("<a href='../ComprarItens?operacao=CONSULTAR" +
+													"&local=listapedidos&id=" + pe.getId()+"&status="+pe.getStatus());
 											sb.append("' class='btn btn-success'>Confirmar Transporte</a>");
 											sb.append("</td>");
 										}
 										if(pe.getStatus().trim().equals("EM TRANSPORTE"))
 										{
 											sb.append("<td>");
-											sb.append("<a href='../ComprarItens?operacao=CONSULTAR&entregado=true&local=listapedidos&id=" + pe.getId());
+											sb.append("<a href='../ComprarItens?operacao=CONSULTAR&" +
+													"local=listapedidos&id=" + pe.getId() + "&status="+pe.getStatus());
 											sb.append("' class='btn btn-success'>Confirmar Entrega</a>");
 											sb.append("</td>");											
 										}

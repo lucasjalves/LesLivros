@@ -1,7 +1,7 @@
 package finalWeb.vh.impl;
 
 import java.io.IOException;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class PedidoViewHelper implements IViewHelper {
 		String operacao = request.getParameter("operacao");
 		if(operacao.equals("realizarPedido"))
 		{
-			Map<Integer, Integer> m = (Map<Integer, Integer>)request.getSession().getAttribute("mapaCarrinho");
+			Map<Integer, Pedido> m = (Map<Integer, Pedido>)request.getSession().getAttribute("mapaCarrinho");
 			List<Item> itensCarrinho = (List<Item>)request.getSession().getAttribute("livros");
 			Pedido p = new Pedido();
 			String precoTxt = String.format("%.2f", request.getParameter("precoTotal"));
@@ -35,6 +35,11 @@ public class PedidoViewHelper implements IViewHelper {
 				p.getItem().get(i).setQtde(qtde);
 				p.setPrecoTotal(precoTotal);
 			}
+			Integer iduser = (Integer)request.getSession().getAttribute("userid");
+			Pedido pedido = new Pedido();
+			pedido.setItem(new ArrayList<Item>());
+			m.replace(iduser, pedido);
+			request.getSession().setAttribute("mapaUsuarios", m);
 			return p;
 		}
 		return null;

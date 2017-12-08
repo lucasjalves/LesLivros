@@ -69,6 +69,9 @@
 			enderecoSelecionado = pf.getEndereco().get(indiceEndereco);
 			pedido = map.get(id);
 			pedido.setEndereco(enderecoSelecionado);			
+			map.remove(id);
+			request.getSession().setAttribute("mapaUsuarios", map);
+			request.getSession().setAttribute("pedidoUser", pedido);
 		}
 
 		
@@ -235,7 +238,10 @@
 									sb.append("x ");
 									sb.append(l.getNome());
 									sb.append("</td><td>");
-									sb.append(String.format("%.2f", (l.getPreco() * item.getQtde())));
+									if(l.getPreco() != null)
+										sb.append(String.format("%.2f", (l.getPreco() * item.getQtde())));
+									if(item.getPrecoLivro() != null)
+										sb.append(String.format("%.2f", (item.getPrecoLivro() * item.getQtde())));
 									sb.append("R$</td></tr>");
 									out.print(sb.toString());
 								}
@@ -330,11 +336,18 @@
 			 			<input type='hidden' name='qtdeCartoes' id = 'qtdeCartoes' value='0'/>
 			 			<%
 			 				if(indicePedido != null)
+			 				{
 			 					out.print("<input type='hidden' name='indicePedido' value='" + indicePedido + "'/>");
+			 					out.print("<input type='hidden' name='id' value='" + pedido.getId() + "'/>");
+			 					out.print("<input type='hidden' name='status' value='" + pedido.getStatus() + "'/>"); 	
+			 					out.print("<input type='hidden' name='local' value='Compra.jsp'/>"); 	
+			 				}
 			 			%>
-			 			<button type='submit' name='operacao' value='CONSULTAR'  class ="btn btn-primary">
+			 			
+			 			<button type='submit' name='operacao' value='CONSULTAR' class ="btn btn-primary">
 			 				<span>Finalizar Compra</span>
 			 			</button>
+
 			 			<input type='hidden' name="precoCartaoCompra" value="" />
 			       </form>
 		      	</div>
@@ -361,7 +374,7 @@
 					</select></td></tr>
 					<tr><td>Data de Vencimento: </td><td><input type='text' id='txtDtVencimento' name='txtDtVencimento' /></td></tr>
 					<tr><td>Código de Segurança: </td><td><input type='text' id='txtCodSeg' name='txtCodSeg' /></td></tr>
-					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<%out.print(id); %>" />	</td></tr>
+					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<% out.print(id); %>" />	</td></tr>
 					<tr><td><input type="hidden" name="local" value="compra" />	</td></tr>																				
 			</table>
 		      </div>

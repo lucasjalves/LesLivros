@@ -46,9 +46,10 @@
 							PedidoTroca p = (PedidoTroca)trocas.get(i);
 							ItemTroca it  = p.getItensTroca().get(0);
 							Livro l = p.getItensTroca().get(0).getLivro();
-							out.print("<form action='RealizarTroca' method='POST'>");
+							System.out.println(p.getId());
+							out.print("<form action='../RealizarTroca' method='POST'>");
 							out.print("<input type='hidden' name='idPedidoTroca' value='" + p.getId() +"'>");
-							out.print("<input type='hidden' name='desconto' value='" + String.format("%.2f", it.getPrecoLivro())+ "'>");
+							out.print("<input type='hidden' name='desconto' value='" + it.getPrecoLivro()+ "'>");
 							out.print("<input type='hidden' name='fk_cliente' value='" + p.getIdCliente()+ "'>");
 							out.print("<input type='hidden' name='atualizarStatus' value='trocarItens'>");
 							out.print("<tr>");
@@ -58,8 +59,8 @@
 							out.print("<td><p>" + p.getStatus() + "</p></td>");
 							if(p.getStatus().trim().equals("EM TROCA"))
 							{
-								out.print("<td><button type='button' class='btn btn-success'" + 
-										" name='operacao' value='CONSULTAR'><span>Confirmar</span></button></td>") ;								
+								out.print("<td><button type='submit' class='btn btn-success'" + 
+										" name='operacao' value='ALTERAR'><span>Confirmar</span></button></td>") ;								
 							}
 
 							out.print("</tr>");
