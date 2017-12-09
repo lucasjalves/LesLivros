@@ -18,11 +18,12 @@ public class GerarCupomTroca {
 		Calendar cal = Calendar.getInstance();
 		Date dtCriacao = cal.getTime();
 		c.setDtCriacao(dtCriacao);
-		Date dtValidade = dtCriacao;
+		Date dtValidade = cal.getTime();
 		
 		dtValidade.setMonth(dtValidade.getMonth() + 1);
 		c.setDtValidade(dtValidade);
 		c.setIdCliente(pedido.getIdCliente());
+		c.setDesconto(i.getPrecoLivro() * i.getQtde());
 		
 		return c;
 		

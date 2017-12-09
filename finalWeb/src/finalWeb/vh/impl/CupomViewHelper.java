@@ -98,7 +98,6 @@ public class CupomViewHelper implements IViewHelper {
 		}
 		
 		String operacao = request.getParameter("operacao");
-		System.out.println(resultado.getMsg());
 		if(operacao.equals("CONSULTAR"))
 		{
 			request.getSession().removeAttribute("cupomvalidado");

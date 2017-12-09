@@ -12,6 +12,7 @@ public class Pessoa extends EntidadeDominio{
 	private List<Pedido> pedidos;
 	private List<Telefone> telefones;
 	private List<PedidoTroca> trocas;
+	private List<CupomTroca> cuponsTroca;
 	
 	public List<PedidoTroca> getTrocas() {
 		return trocas;
@@ -69,6 +70,12 @@ public class Pessoa extends EntidadeDominio{
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public List<CupomTroca> getCuponsTroca() {
+		return cuponsTroca;
+	}
+	public void setCuponsTroca(List<CupomTroca> cuponsTroca) {
+		this.cuponsTroca = cuponsTroca;
 	}
 
 	

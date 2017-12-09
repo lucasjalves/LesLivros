@@ -13,7 +13,7 @@ public class AtualizarStatusCompraTrocado implements IStrategy{
 		{
 			PedidoTroca p = (PedidoTroca)entidade;
 			if(p.getStatus() != null)
-				if(p.getStatus().trim().equals("trocarItens"))
+				if(p.getStatus().equals("EM TROCA"))
 					return "TROCADO";
 			return null;			
 		}
@@ -21,7 +21,7 @@ public class AtualizarStatusCompraTrocado implements IStrategy{
 		{
 			Pedido p = (Pedido)entidade;
 			if(p.getStatus() != null)
-				if(p.getStatus().trim().equals("trocarItens"))
+				if(p.getStatus().equals("EM TROCA"))
 					return "TROCADO";
 			return null;			
 		}

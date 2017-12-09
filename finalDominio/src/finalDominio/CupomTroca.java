@@ -4,13 +4,13 @@ import java.util.Date;
 
 public class CupomTroca extends Cupom{
 	private Date dtCriacao;
-	private int idCliente;
+	private Integer idCliente;
 
-	public int getIdCliente() {
+	public Integer getIdCliente() {
 		return idCliente;
 	}
 
-	public void setIdCliente(int idCliente) {
+	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
 	}
 

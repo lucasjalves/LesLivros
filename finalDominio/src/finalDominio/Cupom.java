@@ -7,7 +7,14 @@ public class Cupom extends EntidadeDominio {
 	private String codigo;
 	private double desconto;
 	private Date dtValidade;
+	private int status;
 	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	public Date getDtValidade() {
 		return dtValidade;
 	}

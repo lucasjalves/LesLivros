@@ -6,7 +6,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+		
 <title>Insert title here</title>
 </head>
 <body>
@@ -46,12 +53,7 @@
 							PedidoTroca p = (PedidoTroca)trocas.get(i);
 							ItemTroca it  = p.getItensTroca().get(0);
 							Livro l = p.getItensTroca().get(0).getLivro();
-							System.out.println(p.getId());
-							out.print("<form action='../RealizarTroca' method='POST'>");
-							out.print("<input type='hidden' name='idPedidoTroca' value='" + p.getId() +"'>");
-							out.print("<input type='hidden' name='desconto' value='" + it.getPrecoLivro()+ "'>");
-							out.print("<input type='hidden' name='fk_cliente' value='" + p.getIdCliente()+ "'>");
-							out.print("<input type='hidden' name='atualizarStatus' value='trocarItens'>");
+
 							out.print("<tr>");
 							out.print("<td><p>" + l.getNome() + "</p></td>");
 							out.print("<td><p>" + it.getQtde()  + "</p></td>");
@@ -59,12 +61,19 @@
 							out.print("<td><p>" + p.getStatus() + "</p></td>");
 							if(p.getStatus().trim().equals("EM TROCA"))
 							{
+								out.print("<form action='../RealizarTroca' method='POST' target='_parent'>");	
+								out.print("<input type='hidden' name='idPedidoTroca' value='" + p.getId() +"'/>");
+								out.print("<input type='hidden' name='desconto' value='" + it.getPrecoLivro()+ "'/>");
+								out.print("<input type='hidden' name='fk_cliente' value='" + p.getIdCliente()+ "'/>");
+								out.print("<input type='hidden' name='status' value='EM TROCA'/>");
+								out.print("<input type='hidden' name='qtde' value='" + it.getQtde() +"'/>");
 								out.print("<td><button type='submit' class='btn btn-success'" + 
-										" name='operacao' value='ALTERAR'><span>Confirmar</span></button></td>") ;								
+										" name='operacao' value='ALTERAR'><span>Confirmar</span></button></td>") ;									
+								out.print("</form>");
 							}
 
 							out.print("</tr>");
-							out.print("</form>");
+
 						}
 					}
 					else

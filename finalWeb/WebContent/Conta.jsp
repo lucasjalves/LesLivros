@@ -23,15 +23,11 @@
 </head>
 <body>
 	<%
-		if(request.getSession().getAttribute("redirecionar") == null)
-		{
-			request.getSession().setAttribute("redirecionar", "redirecionar");
-			response.sendRedirect("Conta.jsp");
-			return;
-		}
-		request.getSession().setAttribute("redirecionar", null);
+
+		
 		
 		Resultado resultado = (Resultado) session.getAttribute("resultadoLogin");
+		
 		if(resultado == null)
 		{
 			pageContext.forward("Index.jsp");
@@ -40,6 +36,18 @@
 		
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		PessoaFisica p = (PessoaFisica) entidades.get(0);
+		
+		if(request.getSession().getAttribute("redirecionar") == null)
+		{
+			PessoaFisica pf = (PessoaFisica)entidades.get(0);
+			String email = pf.getEmail();
+			String senha = pf.getSenha();
+			String url = "SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha;
+			request.getSession().setAttribute("redirecionar", "redirecionar");
+			pageContext.forward(url);
+			return;
+		}	
+		request.getSession().setAttribute("redirecionar", null);
 
 
 	%>
@@ -99,7 +107,8 @@
 					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/enderecos.jsp')">Meus Endereços</a>
 					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/cartoes.jsp')">Meus Cartões</a>	
 					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/pedidos.jsp')">Meus Pedidos</a>
-					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/minhastrocas.jsp')">Minhas Trocas</a>							
+					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/minhastrocas.jsp')">Minhas Trocas</a>		
+					<a href="#" class="list-group-item nav-link" onclick="mudarIframe('iframes/meusCupons.jsp')">Meus Cupons</a>					
 					<%
 						if(p.getTipo() == 1)
 						{

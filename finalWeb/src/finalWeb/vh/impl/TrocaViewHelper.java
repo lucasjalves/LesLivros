@@ -16,6 +16,7 @@ import finalDominio.EntidadeDominio;
 import finalDominio.ItemTroca;
 import finalDominio.Livro;
 import finalDominio.PedidoTroca;
+import finalDominio.PessoaFisica;
 import finalWeb.vh.IViewHelper;
 
 public class TrocaViewHelper implements IViewHelper{
@@ -27,42 +28,95 @@ public class TrocaViewHelper implements IViewHelper{
 		{
 			return new PedidoTroca();
 		}
+		if(operacao.equals("SALVAR"))
+		{
+			if(request.getSession().getAttribute("pedidoTroca") != null)
+			{
+				String status = request.getParameter("status");
+				PedidoTroca pt = (PedidoTroca)request.getSession().getAttribute("pedidoTroca");
+				pt.setStatus(status);
+				request.getSession().removeAttribute("pedidoTroca");
+				return pt;
+			}
+			else
+			{
+				ItemTroca itemTroca = new ItemTroca();
+				PedidoTroca pedidoTroca = new PedidoTroca();
+				Livro l = new Livro();
+				List<ItemTroca> listTroca = new ArrayList<ItemTroca>();
+				
+				String idPedidoTxt = request.getParameter("idPedido");
+				String idUsuarioTxt = request.getParameter("idUsuario");
+				String precoTxt = request.getParameter("preco");
+				String status = request.getParameter("status");
+				String idLivroTxt = request.getParameter("idLivro");
+				String qtdeLivrosTxt = request.getParameter("qtdeLivrosTroca");
+				
+				int idPedido = Integer.parseInt(idPedidoTxt);
+				int idUsuario = Integer.parseInt(idUsuarioTxt);
+				double preco = Double.parseDouble(precoTxt);
+				int idLivro = Integer.parseInt(idLivroTxt);
+				int qtdeLivros = Integer.parseInt(qtdeLivrosTxt);
+				
+				l.setId(idLivro);
+				
+				itemTroca.setQtde(qtdeLivros);
+				itemTroca.setLivro(l);
+				itemTroca.setPrecoLivro(preco);
+				listTroca.add(itemTroca);
+				
+				pedidoTroca.setItensTroca(listTroca);
+				
+				Calendar cal = Calendar.getInstance();
+				Date date;			
+				date = cal.getTime();
+				
+				pedidoTroca.setDtTroca(date);			
+				pedidoTroca.setIdCliente(idUsuario);
+				pedidoTroca.setIdPedido(idPedido);
+				pedidoTroca.setStatus(status);
+
+				request.getSession().setAttribute("pedidoTroca", pedidoTroca);
+				return pedidoTroca;				
+			}
+
+		}
 		if(operacao.equals("ALTERAR"))
 		{
-			ItemTroca it = new ItemTroca();
-			PedidoTroca pt = new PedidoTroca();
-			Livro l = new Livro();
-			List<ItemTroca> listTroca = new ArrayList<ItemTroca>();
+			if(request.getSession().getAttribute("pedidoTroca") != null)
+			{
+				String status = request.getParameter("status");
+				PedidoTroca pt = (PedidoTroca)request.getSession().getAttribute("pedidoTroca");
+				pt.setStatus(status);
+				request.getSession().removeAttribute("pedidoTroca");
+				return pt;
+			}
+			String idPedidoTroca = request.getParameter("idPedidoTroca");
+			String descontoTxt = request.getParameter("desconto");
+			String fkClienteTxt = request.getParameter("fk_cliente");
+			String qtdeTxt = request.getParameter("qtde");
+			String status = request.getParameter("status");
 			
-			String idPedido = request.getParameter("idPedidoTroca");
-			String idUsuario = request.getParameter("fk_cliente");
-			String precoTxt = request.getParameter("desconto");
-			String status = request.getParameter("atualizarStatus");
+			int id = Integer.parseInt(idPedidoTroca);
+			double valor = Double.parseDouble(descontoTxt);
+			int idCliente = Integer.parseInt(fkClienteTxt);
+			int qtde = Integer.parseInt(qtdeTxt);
 			
-			int idP = Integer.parseInt(idPedido);
-			int idC = Integer.parseInt(idUsuario);
-			double preco = Double.parseDouble(precoTxt);
+			ItemTroca i  = new ItemTroca();
+			i.setPrecoLivro(valor);
+			i.setQtde(qtde);
 			
-			pt.setIdCliente(idC);
-			pt.setIdPedido(idP);
-		
-			it.setLivro(l);
-			it.setPrecoLivro(preco);
 			
-			listTroca.add(it);
+			List<ItemTroca> lista = new ArrayList<ItemTroca>();
+			lista.add(i);
 			
-			pt.setItensTroca(listTroca);
-			Calendar cal = Calendar.getInstance();
-			Date date;
-			
-			date = cal.getTime();
-			pt.setDtTroca(date);
-			pt.setStatus("trocarItens");
-			String idPedidoTxt = request.getParameter("idPedidoTroca");
-			pt.setStatus(status);
-			int id = Integer.parseInt(idPedidoTxt);
-			pt.setIdPedido(id);
-			return pt;
+			PedidoTroca pedidoTroca = new PedidoTroca();	
+			pedidoTroca.setIdPedido(id);
+			pedidoTroca.setIdCliente(idCliente);
+			pedidoTroca.setItensTroca(lista);
+			pedidoTroca.setStatus(status);
+			request.getSession().setAttribute("pedidoTroca", pedidoTroca);
+			return pedidoTroca;
 		}
 		return null;
 	}
@@ -73,13 +127,22 @@ public class TrocaViewHelper implements IViewHelper{
 		// TODO Auto-generated method stub
 		RequestDispatcher d = null;
 		String operacao = request.getParameter("operacao");
-		if(operacao.equals("ALTERAR"))
+		if(operacao.equals("SALVAR"))
 		{
 			
 			if(resultado.getMsg() != null)
-				d = request.getRequestDispatcher("RealizarTroca?operacao=ALTERAR&atualizarStatus="+resultado.getMsg());
+				d = request.getRequestDispatcher("RealizarTroca?operacao=SALVAR&status="+resultado.getMsg());
 			else
-				d = request.getRequestDispatcher("iframes/pedidos.jsp");
+			{
+				Resultado r = (Resultado)request.getSession().getAttribute("resultadoLogin");
+				List<EntidadeDominio> e = r.getEntidades();
+				PessoaFisica pf = (PessoaFisica)e.get(0);
+				String email = pf.getEmail();
+				String senha = pf.getSenha();
+				String url = "SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha;
+				d = request.getRequestDispatcher(url);
+			}
+				
 			
 			d.forward(request, response);			
 		}
@@ -88,6 +151,24 @@ public class TrocaViewHelper implements IViewHelper{
 			request.getSession().setAttribute("resultadoTrocas", resultado);
 			d = request.getRequestDispatcher("iframes/listatrocas.jsp");
 			d.forward(request, response);
+		}
+		
+		if(operacao.equals("ALTERAR"))
+		{
+			Resultado r = (Resultado)request.getSession().getAttribute("resultadoLogin");
+			List<EntidadeDominio> e = r.getEntidades();
+			PessoaFisica pf = (PessoaFisica)e.get(0);
+			String email = pf.getEmail();
+			String senha = pf.getSenha();
+			d = request.getRequestDispatcher("SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha);	
+			if(resultado.getMsg() != null)	
+			{
+				d = request.getRequestDispatcher("RealizarTroca?operacao=ALTERAR&status="+resultado.getMsg());				
+			}
+
+			
+			d.forward(request, response);
+				
 		}
 		
 	}

@@ -69,7 +69,6 @@ public class CartaoViewHelper implements IViewHelper{
 			String txtFkId = request.getParameter("txtIdCartaoFk");
 			
 		
-			System.out.println(txtFkId);
 			
 			c.setBandeira(bandeira);
 			c.setNumero(numCartao);

@@ -69,6 +69,8 @@ public class CompraViewHelper implements IViewHelper{
 			pedido.setDtPedido(date);
 			pedido.setIdCliente(id);
 			
+			request.getSession().setAttribute("pedidoUser", pedido);
+			mapaUsuarios.remove(id);
 			return pedido;
 		}
 		if(operacao.equals("ALTERAR"))

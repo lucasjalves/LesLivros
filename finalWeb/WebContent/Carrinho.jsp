@@ -405,6 +405,7 @@
 	    								out.print("<td><input type='radio' onclick='calcularCEP(this,  \""+ e.getCep() + "\","+ i +")' name='ra'></td></tr>");
 	    							
 	    						}
+	    						
 	    						out.print("<input type='hidden' value='" + end.get(0).getCep() +"' id='cepp'>" )	;
 	    						out.print("</table>");
 	                      		out.print("<button type='button' class='btn btn-primary' "+

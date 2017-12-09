@@ -85,6 +85,9 @@ public class CarrinhoViewHelper implements IViewHelper {
 			i.setQtde(qtdeLivros);
 			
 			Pedido pedido = mapaUsuarios.get(id);
+			if(pedido == null)
+				pedido = new Pedido();
+			
 			if(pedido.getItem() == null)
 				pedido.setItem(new ArrayList<Item>());
 			
@@ -130,7 +133,11 @@ public class CarrinhoViewHelper implements IViewHelper {
 				p.getItem().get(i).setQtde(qt);
 			}
 			
-			mapaUsuarios.replace(id, p);  
+			if(mapaUsuarios.containsKey(id))
+				mapaUsuarios.replace(id, p);  
+			
+			if(!mapaUsuarios.containsKey(id))
+				mapaUsuarios.put(id, p); 
 			
 			request.getSession().setAttribute("mapaUsuarios", mapaUsuarios);								
 			request.getSession().setAttribute("resultadoCarrinho", resultado);			

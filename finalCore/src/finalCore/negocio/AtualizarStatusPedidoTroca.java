@@ -12,13 +12,13 @@ public class AtualizarStatusPedidoTroca implements IStrategy{
 		if(entidade instanceof Pedido)
 		{
 			Pedido p = (Pedido)entidade;
-			if(p.getStatus().trim().equals("trocar"))	
+			if(p.getStatus().equals("ENTREGUE"))	
 				return "EM TROCA"; 
 		}
 		if(entidade instanceof PedidoTroca)
 		{
 			PedidoTroca p = (PedidoTroca)entidade;
-			if(p.getStatus().trim().equals("trocar"))
+			if(p.getStatus().equals("ENTREGUE"))
 				return "EM TROCA";
 		}
 		return null;

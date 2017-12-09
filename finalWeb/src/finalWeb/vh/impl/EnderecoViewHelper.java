@@ -113,12 +113,13 @@ public class EnderecoViewHelper implements IViewHelper {
 			String senha = p.getSenha();
 
 			if(local == null) {
-				url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&" ;
+				url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN" ;
 			}
 			else
 			{
-				url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&redirect=" + local ;
+				url = "SalvarCliente?txtEmail=" + email + "&txtPwd=" +senha +"&operacao=LOGIN&local=" + local ;
 			}
+			System.out.println(local);
 			d = request.getRequestDispatcher(url); 		
 			d.forward(request, response);
  

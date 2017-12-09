@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import finalDominio.Cartao;
+import finalDominio.CupomTroca;
 import finalDominio.Endereco;
 import finalDominio.EntidadeDominio;
 import finalDominio.Item;
@@ -286,6 +287,21 @@ public class ClienteDAO extends AbstractJdbcDAO {
 				}
 				p.setCartao(cartoes);
 				p.setEndereco(enderecos);
+				
+				CupomTrocaClienteDAO cupTrocaDAO = new CupomTrocaClienteDAO();
+				CupomTroca ct = new CupomTroca();
+				ct.setIdCliente(p.getId());
+				List<EntidadeDominio> cuponsTroca = cupTrocaDAO.consultar(ct);
+				if(cuponsTroca != null)
+				{
+					List<CupomTroca> cupons = new ArrayList<CupomTroca>();
+					for(int i = 0; i < cuponsTroca.size(); i ++)
+					{
+						ct = (CupomTroca)cuponsTroca.get(i);
+						cupons.add(ct);
+					}
+					p.setCuponsTroca(cupons);
+				}
 				pessoas.add(p);
 			}
 			

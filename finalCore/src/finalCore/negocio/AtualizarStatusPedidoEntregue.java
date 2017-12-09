@@ -10,7 +10,7 @@ public class AtualizarStatusPedidoEntregue implements IStrategy{
 	public String processar(EntidadeDominio entidade) {
 		Pedido p = (Pedido)entidade;
 			if(p != null  && p.getStatus() != null)
-				if(p.getStatus().trim().equals("entregado"))
+				if(p.getStatus().equals("EM TRANSPORTE"))
 					return "ENTREGUE";
 		return null;
 	}

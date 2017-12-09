@@ -65,13 +65,7 @@
 		}
 		else
 		{
-			int indiceEndereco = Integer.parseInt(txtIndiceEndereco);
-			enderecoSelecionado = pf.getEndereco().get(indiceEndereco);
-			pedido = map.get(id);
-			pedido.setEndereco(enderecoSelecionado);			
-			map.remove(id);
-			request.getSession().setAttribute("mapaUsuarios", map);
-			request.getSession().setAttribute("pedidoUser", pedido);
+			pedido = (Pedido)request.getSession().getAttribute("pedidoUser");
 		}
 
 		
@@ -86,11 +80,12 @@
 
 			
 			var formulario = document.getElementById("formulario");
-			
+			var qtdeCartoes = document.getElementById("qtdeCartoes").value;
+			var qtde = parseInt(qtdeCartoes);
 			var hidden = document.createElement('input');
 			hidden.type = "hidden";
-			hidden.setAttribute("name", "cartaoHidden" + indice);
-			hidden.setAttribute("id", "cartaoHidden" + indice);
+			hidden.setAttribute("name", "cartaoHidden" + qtde);
+			hidden.setAttribute("id", "cartaoHidden" + qtde);
 			hidden.setAttribute("value", id)
 
 
@@ -114,8 +109,11 @@
 					qtdeCartoesInput = 1;
 				precoTotal = parseFloat(precoTotal);
 				precoTotal = precoTotal / qtdeCartoesInput;
+				
 				document.getElementById("precoPorCartao").innerText = precoTotal.toFixed(2)+" R$";
 				document.getElementById("precoCartaoCompra").value = precoTotal.toFixed(2);
+				
+				formulario.removeChild("cartaoHidden"+indice);
 			}
 			else
 			{
@@ -348,7 +346,7 @@
 			 				<span>Finalizar Compra</span>
 			 			</button>
 
-			 			<input type='hidden' name="precoCartaoCompra" value="" />
+			 			<input type='hidden' id="precoCartaoCompra" name="precoCartaoCompra" value="" />
 			       </form>
 		      	</div>
 		  	</div>	

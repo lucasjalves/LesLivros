@@ -14,45 +14,55 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 		
-		
 		<title>Minha conta</title>
 		<%
 			Resultado resultado = (Resultado) session.getAttribute("resultadoLogin");
 			List<EntidadeDominio> entidades = resultado.getEntidades();
 			PessoaFisica p = (PessoaFisica) entidades.get(0);
 			
-			
-			List<Endereco> end= p.getEndereco();
-			Integer id = (Integer)request.getSession().getAttribute("userid");
+			List<CupomTroca> cuponsTroca = p.getCuponsTroca();
 		%>
 	</head>
-	<body>
-		<div class="container">
-			<div class="card">
-				<div class="card-body">
-                  <h4 class="card-title">
-                    Meus Endereços
-                  </h4>				
-					<table class="table">
-						<% 
-							StringBuilder sb = new StringBuilder();
-							for(int i = 0; i < end.size(); i++)
+<body>
+	<div class="container">
+		<div class="card">
+			<div class="card-body">
+			<h4 class="card-title">
+				Meus cupons de Troca
+			</h4>
+			<table class="table table-hover table-striped">
+				<thead>
+					<th>Código Cupom</th>
+					<th>Data de geração</th>
+					<th>Data de expiração</th>
+					<th>Valor</th>
+					<th>Status</th>
+				</thead>
+					<tbody>
+					<%
+						if(cuponsTroca != null)
+						{
+							for(int i = 0; i < cuponsTroca.size(); i++)
 							{
-								sb.setLength(0);
-								sb.append("<tr style='border-bottom: 1px solid #000; border-top: 1px solid #000'><td>");
-								sb.append("<p>RUA: ");
-								sb.append(end.get(i).getLogradouro() + ", ");
-								sb.append(end.get(i).getNumCasa() + "</p>");
-								sb.append("<p>" + end.get(i).getCidade() +", ");
-								sb.append(end.get(i).getEstado() + ", " + end.get(i).getCep() + "</p>");
-								sb.append("<p>" + end.get(i).getPais() + "</p>");
-								sb.append("<a href='#'>Editar</a></p></td></tr>");
-								out.print(sb.toString());
+								CupomTroca c = cuponsTroca.get(i);
+								out.print("<tr>");
+								out.print("<td><p> " + c.getCodigo() + "</p></td>");
+								out.print("<td><p> " + ConverteDate.converteDateString(c.getDtCriacao()) + "</p></td>");
+								out.print("<td><p> " + ConverteDate.converteDateString(c.getDtValidade()) + "</p></td>");
+								out.print("<td><p> " + String.format("%.2f", c.getDesconto()) + "</p></td>");
+								if(c.getStatus() == 1)
+									out.print("<td><p>DISPONÍVEL PARA USO</p></td>");
+								else
+									out.print("<td><p>INDISPONÍVEL PARA USO</p></td>");
+								
+								out.print("</tr>");
 							}
-						%>
-					</table>
-				</div>
+						}
+					%>
+					</tbody>
+				</table>
 			</div>
 		</div>
-	</body>
+	</div>
+</body>
 </html>

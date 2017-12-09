@@ -152,7 +152,6 @@ public class PedidoDAO extends AbstractJdbcDAO{
 			else
 				pst = connection.prepareStatement("SELECT * FROM PEDIDO WHERE pk_cliente = " + p.getIdCliente());
 			
-			System.out.println(p.getIdCliente());
 			
 			ResultSet pedidosCliente = pst.executeQuery();
 			List<EntidadeDominio> pedidos = new ArrayList<EntidadeDominio>();

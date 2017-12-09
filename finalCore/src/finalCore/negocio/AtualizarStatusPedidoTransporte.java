@@ -11,7 +11,7 @@ public class AtualizarStatusPedidoTransporte implements IStrategy{
 		Pedido p = (Pedido)entidade;
 		
 		if(p.getStatus() != null)
-			if(p.getStatus().trim().equals("APROVADO"))
+			if(p.getStatus().equals("APROVADO"))
 				return "EM TRANSPORTE";
 		return null;
 	}
