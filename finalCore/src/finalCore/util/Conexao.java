@@ -12,7 +12,7 @@ public class Conexao {
 		Class.forName("com.mysql.jdbc.Driver");
 		String url = "jdbc:mysql://localhost/leslivros?useSSL=false";
         String user = "root";
-		String password = "root";
+		String password = "";
 		conn = DriverManager.getConnection(url, user, password);
 		return conn;
 	}

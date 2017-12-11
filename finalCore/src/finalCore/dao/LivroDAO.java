@@ -30,11 +30,11 @@ public class LivroDAO extends AbstractJdbcDAO{
 			StringBuilder sql = new StringBuilder();
 			sql.append("INSERT INTO livros(nome, autor, ano, status, titulo, ");
 			sql.append("editora, edicao, isbn, num_paginas, sinopse, altura, peso, ");
-			sql.append("profundidade, pk_categoria, pk_subcategoria, pk_grupo)");
-			sql.append("VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");		
+			sql.append("profundidade, pk_categoria, pk_subcategoria, pk_grupo, qtde_estoque, preco_livro, largura)");
+			sql.append("VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");		
 			
 			pst = connection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
-			pst.setString(1, livro.getNome());
+			pst.setString(1, livro.getTitulo());
 			pst.setString(2, livro.getAutor());
 			pst.setString(3, livro.getAno());
 			pst.setString(4, livro.getStatus());
@@ -48,8 +48,14 @@ public class LivroDAO extends AbstractJdbcDAO{
 			pst.setString(12, livro.getPeso());
 			pst.setString(13, livro.getProfundidade());
 			pst.setInt(14, livro.getGp().getId());
+			pst.setInt(15, livro.getCategoria().get(0).getId());
+			pst.setInt(16, livro.getCategoria().get(0).getSubcategorias().get(0).getId());
+			pst.setDouble(17, livro.getPreco());
+			pst.setString(18, livro.getLargura());
 			ResultSet rs = pst.getGeneratedKeys();
 			pst.executeUpdate();	
+			
+			
 			int id = 0;
 			if(rs.next())
 				id = rs.getInt(1);

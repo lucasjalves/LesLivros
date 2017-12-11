@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: leslivros
+-- Host: localhost    Database: leslivros
 -- ------------------------------------------------------
 -- Server version	5.7.20-log
 
@@ -31,7 +31,7 @@ CREATE TABLE `cartao` (
   `pk_cliente` int(11) NOT NULL,
   PRIMARY KEY (`id_cartao`),
   KEY `fk_cartao` (`pk_cliente`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `cartao` (
 
 LOCK TABLES `cartao` WRITE;
 /*!40000 ALTER TABLE `cartao` DISABLE KEYS */;
-INSERT INTO `cartao` VALUES (1,'1112223334455','MasterCard','09/2022','655',5),(4,'123124124','MasterCard','09/2022','667',7),(5,'124545','MasterCard','09/2022','123',8),(15,'123124124','MasterCard','09/2022','667',9),(14,'1112223334455','American Express','01/26','655',6),(16,'1112223334455','VISA','01/26','593',9),(17,'1112223334455','American Express','01/26','657',9);
+INSERT INTO `cartao` VALUES (1,'1112223334455','MasterCard','09/2022','655',5),(4,'123124124','MasterCard','09/2022','667',7),(5,'124545','MasterCard','09/2022','123',8),(15,'123124124','MasterCard','09/2022','667',9),(14,'1112223334455','American Express','01/26','655',6),(16,'111222333444','MasterCard','09/29','667',9);
 /*!40000 ALTER TABLE `cartao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +124,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (5,'M','Marco','1965-07-23','11122233344','teste','123',1,0),(6,'M','Lucas Julio Alves','1997-07-25','11122233344','lucasjulio','123',1,0),(7,'M','Felipe','2000-08-23','4443332221100','felipe@teste.com','123',1,0),(8,'M','Fabio','1996-08-01','55544433322','fabio@teste.com','123',1,0),(9,'M','Admin','1997-07-23','11122233344','Admin','123',1,1);
+INSERT INTO `cliente` VALUES (5,'M','Marco','1965-07-23','11122233344','teste','123',1,0),(6,'M','Lucas Julio Alves','1997-07-25','11122233344','lucasjulio','123',1,0),(7,'M','Felipe','2000-08-23','4443332221100','felipe@teste.com','123',1,0),(8,'M','Fabio','1996-08-01','55544433322','fabio@teste.com','123',1,0),(9,'','admin','1997-07-23','11122233344','admin','123',1,1);
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +169,7 @@ CREATE TABLE `cupom_pedido` (
   PRIMARY KEY (`id`),
   KEY `fk_pedido` (`fk_pedido`),
   KEY `fk_cupom` (`fk_cupom`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +178,7 @@ CREATE TABLE `cupom_pedido` (
 
 LOCK TABLES `cupom_pedido` WRITE;
 /*!40000 ALTER TABLE `cupom_pedido` DISABLE KEYS */;
-INSERT INTO `cupom_pedido` VALUES (1,1,6),(2,1,17);
+INSERT INTO `cupom_pedido` VALUES (1,1,6),(2,1,12),(3,1,36),(4,1,37);
 /*!40000 ALTER TABLE `cupom_pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,13 +192,13 @@ DROP TABLE IF EXISTS `cupom_troca_cliente`;
 CREATE TABLE `cupom_troca_cliente` (
   `id_cupom_troca` int(11) NOT NULL AUTO_INCREMENT,
   `codigo_cupom_troca` varchar(6) DEFAULT NULL,
-  `desconto_cupom_troca` double(5,2) DEFAULT NULL,
+  `desconto_cupom_troca` double(6,2) DEFAULT NULL,
   `dtCriacao` date DEFAULT NULL,
   `dtExpiracao` date DEFAULT NULL,
   `fk_cliente` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_cupom_troca`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,7 +207,7 @@ CREATE TABLE `cupom_troca_cliente` (
 
 LOCK TABLES `cupom_troca_cliente` WRITE;
 /*!40000 ALTER TABLE `cupom_troca_cliente` DISABLE KEYS */;
-INSERT INTO `cupom_troca_cliente` VALUES (8,'1372af',50.80,'2017-12-09','2018-01-09',9,1),(9,'e7c365',101.60,'2017-12-09','2018-01-09',9,1);
+INSERT INTO `cupom_troca_cliente` VALUES (160,'53B1D0',0.60,'2017-12-11','2018-01-11',9,1),(161,'FFB3C6',51.50,'2017-12-11','2018-01-11',9,1);
 /*!40000 ALTER TABLE `cupom_troca_cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +233,7 @@ CREATE TABLE `endereco` (
   `nome_id` varchar(100) NOT NULL,
   PRIMARY KEY (`id_endereco`),
   KEY `fk_endereco` (`pk_cliente`)
-) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `endereco` (
 
 LOCK TABLES `endereco` WRITE;
 /*!40000 ALTER TABLE `endereco` DISABLE KEYS */;
-INSERT INTO `endereco` VALUES (6,'TEste','Teste','Teste','123','Morte','0114687','Suzano','SP','Brasil',5,'Teste'),(20,'Apartamento','Avenida','R. Teste','123','Jardim Teste','08676250','Suzano','SP','Brasil',9,'Casa 123'),(8,'Casa','Teste','Teste','801','Teste','12345520','Suzno','SP','Brasil',7,'Casa'),(9,'Apartamento','Avenida','R. Teste','100','Jardim Teste','08676250','Suzano','SP','Brasil',6,'Trabalho'),(16,'Apartamento','Avenida','R. Teste','1234','Jardim Teste','06676250','Mogi','SP','Brasil',6,'Casa'),(12,'Casa','Rua','Teste','801','Bairro','08676250','Ferraz','SP','Brasil',8,'Casa');
+INSERT INTO `endereco` VALUES (6,'TEste','Teste','Teste','123','Morte','0114687','Suzano','SP','Brasil',5,'Teste'),(20,'Apartamento','Avenida','R. Teste','123','Jardim Teste','08676250','Suzano','SP','Brasil',9,'Casa 123'),(8,'Casa','Teste','Teste','801','Teste','12345520','Suzno','SP','Brasil',7,'Casa'),(9,'Apartamento','Avenida','R. Teste','100','Jardim Teste','08676250','Suzano','SP','Brasil',6,'Trabalho'),(16,'Apartamento','Avenida','R. Teste','1234','Jardim Teste','06676250','Mogi','SP','Brasil',6,'Casa'),(19,'Casa','Rua','Teste','801','Bairro','08676250','Ferraz','SP','Brasil',9,'Casa'),(12,'Casa','Rua','Teste','801','Bairro','08676250','Ferraz','SP','Brasil',8,'Casa'),(21,'Teste','Teste','Teste','Teste','Teste','06676250','São Paulo','Sp','Brasil',9,'Teste');
 /*!40000 ALTER TABLE `endereco` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +287,7 @@ CREATE TABLE `item_pedido` (
   PRIMARY KEY (`id_item_pedido`),
   KEY `fk_livro` (`fk_livro`),
   KEY `PK_PEDIDO` (`PK_PEDIDO`)
-) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +296,7 @@ CREATE TABLE `item_pedido` (
 
 LOCK TABLES `item_pedido` WRITE;
 /*!40000 ALTER TABLE `item_pedido` DISABLE KEYS */;
-INSERT INTO `item_pedido` VALUES (47,12,2,50.60,37),(46,16,2,50.70,36),(45,13,2,50.80,35),(44,13,2,50.80,34),(43,13,2,50.80,33);
+INSERT INTO `item_pedido` VALUES (56,12,1,0.60,50),(55,12,1,0.60,49),(54,12,1,0.60,48),(53,12,1,0.60,47),(52,12,1,0.60,46),(51,12,1,0.60,45),(50,16,1,51.50,44),(49,12,1,0.60,43),(48,12,1,0.60,42);
 /*!40000 ALTER TABLE `item_pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -336,7 +336,7 @@ CREATE TABLE `livros` (
 
 LOCK TABLES `livros` WRITE;
 /*!40000 ALTER TABLE `livros` DISABLE KEYS */;
-INSERT INTO `livros` VALUES (12,'Nudge','Richard Thaler','2009',1,'Nudge','Penguin Books UK','1','9780141040011','100','Sinopse',19,13,2,2,2,50.60,'14.00'),(13,'Building Resilience','Sandberg, Sheryl / Grant, Adam','2017',1,'Building Resilience','Knopf','1','9781524711214','240','Livro',24.1,0.44,2.5,1,2,50.80,'15.00'),(14,'The Founder\'s Mentality','Allen, James / Zook, Chris','2016',1,'The Founder\'s Mentality','Harvard Business Review Press','1','9781633691162','224','Sinopse',23.62,0.41,2.29,2,2,50.50,'16.00'),(16,'Facing Adversity','Sandberg, Sheryl / Grant, Adam','2017',1,'Facing Adversity','Knopf','1','9781524711214','240','Livro',24.1,0.44,2.5,1,2,50.70,'17.00');
+INSERT INTO `livros` VALUES (12,'Nudge','Richard Thaler','2009',1,'Nudge','Penguin Books UK','1','9780141040011','100','Sinopse',19,13,2,2,2,0.60,'14.00'),(13,'Building Resilience','Sandberg, Sheryl / Grant, Adam','2017',1,'Building Resilience','Knopf','1','9781524711214','240','Livro',24.1,0.44,2.5,1,2,28.70,'15.00'),(14,'The Founder\'s Mentality','Allen, James / Zook, Chris','2016',1,'The Founder\'s Mentality','Harvard Business Review Press','1','9781633691162','224','Sinopse',23.62,0.41,2.29,2,2,9.90,'16.00'),(16,'Facing Adversity','Sandberg, Sheryl / Grant, Adam','2017',1,'Facing Adversity','Knopf','1','9781524711214','240','Livro',24.1,0.44,2.5,1,2,51.50,'17.00');
 /*!40000 ALTER TABLE `livros` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,7 +355,7 @@ CREATE TABLE `pagamento_cartao` (
   PRIMARY KEY (`id_pagamento_cartao`),
   KEY `fk_cartao` (`fk_cartao`),
   KEY `fk_pedido` (`fk_pedido`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -364,7 +364,6 @@ CREATE TABLE `pagamento_cartao` (
 
 LOCK TABLES `pagamento_cartao` WRITE;
 /*!40000 ALTER TABLE `pagamento_cartao` DISABLE KEYS */;
-INSERT INTO `pagamento_cartao` VALUES (28,17,33,60.42),(27,15,33,60.42);
 /*!40000 ALTER TABLE `pagamento_cartao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -385,7 +384,7 @@ CREATE TABLE `pedido` (
   `fk_endereco` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_endereco` (`fk_endereco`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -394,7 +393,7 @@ CREATE TABLE `pedido` (
 
 LOCK TABLES `pedido` WRITE;
 /*!40000 ALTER TABLE `pedido` DISABLE KEYS */;
-INSERT INTO `pedido` VALUES (37,'2017-12-09','ENTREGUE\n',9,116.72,15.52,20),(36,'2017-12-09','ENTREGUE\n',9,121.84,20.44,20),(35,'2017-12-09','ENTREGUE\n',9,120.84,19.24,20),(33,'2017-12-09','ENTREGUE\n',9,120.84,19.24,20),(34,'2017-12-09','ENTREGUE\n',9,120.84,19.24,20);
+INSERT INTO `pedido` VALUES (48,'2017-12-11','ENTREGUE\n',9,16.12,15.52,20),(49,'2017-12-11','ENTREGUE\n',9,16.12,15.52,20),(47,'2017-12-11','ENTREGUE\n',9,16.12,15.52,20),(46,'2017-12-11','ENTREGUE\n',9,16.12,15.52,20),(45,'2017-12-11','ENTREGUE\n',9,16.12,15.52,20),(43,'2017-12-11','ENTREGUE\n',9,16.12,15.52,20),(44,'2017-12-11','ENTREGUE\n',9,71.94,20.44,20),(42,'2017-12-11','ENTREGUE\n',9,16.12,15.52,20),(50,'2017-12-11','ENTREGUE\n',9,16.12,15.52,20);
 /*!40000 ALTER TABLE `pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -414,7 +413,7 @@ CREATE TABLE `pedido_troca` (
   PRIMARY KEY (`id`),
   KEY `fk_pedido` (`fk_pedido`),
   KEY `fk_usuario` (`fk_usuario`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -423,7 +422,7 @@ CREATE TABLE `pedido_troca` (
 
 LOCK TABLES `pedido_troca` WRITE;
 /*!40000 ALTER TABLE `pedido_troca` DISABLE KEYS */;
-INSERT INTO `pedido_troca` VALUES (24,33,9,'2017-12-09','TROCADO\n'),(23,33,9,'2017-12-09','TROCADO\n');
+INSERT INTO `pedido_troca` VALUES (21,44,9,'2017-12-11','TROCADO\n'),(20,46,9,'2017-12-11','TROCADO\n');
 /*!40000 ALTER TABLE `pedido_troca` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,7 +442,7 @@ CREATE TABLE `pedido_troca_itens` (
   PRIMARY KEY (`id_pedido_troca_itens`),
   KEY `fk_pedido_troca` (`fk_pedido_troca`),
   KEY `fk_livro` (`fk_livro`)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -452,7 +451,7 @@ CREATE TABLE `pedido_troca_itens` (
 
 LOCK TABLES `pedido_troca_itens` WRITE;
 /*!40000 ALTER TABLE `pedido_troca_itens` DISABLE KEYS */;
-INSERT INTO `pedido_troca_itens` VALUES (22,24,13,2,50.80),(21,23,13,1,50.80);
+INSERT INTO `pedido_troca_itens` VALUES (20,21,16,1,51.50),(19,20,12,1,0.60);
 /*!40000 ALTER TABLE `pedido_troca_itens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -518,4 +517,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-09 17:05:03
+-- Dump completed on 2017-12-11 16:00:35

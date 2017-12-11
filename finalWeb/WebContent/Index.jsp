@@ -15,12 +15,10 @@
 </head>
 <body>
 	<%
-		Resultado resultado = (Resultado) session.getAttribute("resultado");
-		String msg = null;
-		if(request.getParameter("operacao") != null)
-		{
-			msg = "Você deve logar primeiro!";
-		}
+		String op = request.getParameter("deslogar");
+		if(op != null)
+			request.getSession().invalidate();	
+		
 	%>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #3B3738; height: 75px;">
@@ -90,17 +88,7 @@
 			</div>
 		</div>
 		<%
-			if(resultado != null)
-			{
-				if(resultado.getMsg() != null)
-				{
-					out.print(resultado.getMsg());
-				}
-			}
-			if(msg != null)
-			{
-				out.print("<p style='color: red'>Você deve estar logado</p>");
-			}
+
 		%>
 	
 

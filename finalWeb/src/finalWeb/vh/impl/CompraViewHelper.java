@@ -35,6 +35,7 @@ public class CompraViewHelper implements IViewHelper{
 		String operacao = request.getParameter("operacao");
 		
 		String local = request.getParameter("local");
+		System.out.println(local);
 		if(operacao.equals("SALVAR"))
 		{
 			String precoTotalTxt = request.getParameter("txtValor");
@@ -159,28 +160,66 @@ public class CompraViewHelper implements IViewHelper{
 		
 		if(operacao.equals("CONSULTAR"))
 		{	
-			request.getSession().removeAttribute("pedidoUser");
+
 			if(local == null)
-				d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR&status="+resultado.getMsg());
+			{
+				if(resultado.getMsg() != null)
+				{
+
+					if(resultado.getMsg().trim().equals("APROVADOO valor mínimo de compra para cada cartão é de 10R$"))
+					{
+						d = request.getRequestDispatcher("Compra.jsp");
+						request.getSession().setAttribute("resultadoMsg", resultado.getMsg());
+						
+					}
+					else
+						d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR&status="+resultado.getMsg());
+				
+				}
+				else
+					d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR&status="+resultado.getMsg());
+			}
+				
 			else
 			{
 				String idTxt = request.getParameter("id");
-				d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR"
-						+ "&local=local&status="+resultado.getMsg()+"&id="+idTxt+"&local="+local);				
+				if(resultado.getMsg() != null)
+				{
+					if(resultado.getMsg().trim().equals("APROVADO O valor mínimo de compra para cada cartão é de 10R$"))
+					{
+						d = request.getRequestDispatcher("Compra.jsp");
+						request.getSession().setAttribute("resultadoMsg", resultado.getMsg());
+						
+					}
+					else
+					{
+						d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR"
+								+ "&status="+resultado.getMsg()+"&id="+idTxt+"&local="+local);	
+						request.getSession().removeAttribute("pedidoUser");
+					}
+				}
+				else
+				{
+					d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR"
+							+ "&status="+resultado.getMsg()+"&id="+idTxt+"&local="+local);	
+					request.getSession().removeAttribute("pedidoUser");
+				}
+			
 			}
 	
 			d.forward(request, response);
 		}
 		if(operacao.equals("ALTERAR"))
 		{	
-			
+			if(local == null)
+				local = "Conta.jsp";
 			Resultado r = (Resultado)request.getSession().getAttribute("resultadoLogin");
 			List<EntidadeDominio> e = r.getEntidades();
 			PessoaFisica pf = (PessoaFisica)e.get(0);
 			String email = pf.getEmail();
 			String senha = pf.getSenha();
 			String url = "SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha+"&local="+local;
-		
+			
 			d = request.getRequestDispatcher(url);
 			d.forward(request, response);
 		}

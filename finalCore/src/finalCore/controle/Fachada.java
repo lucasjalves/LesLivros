@@ -105,8 +105,8 @@ public class Fachada implements IFachada{
 		rnsAprovarCompra.add(aCompraCartao);
 		rnsAprovarCompra.add(aStatusPedidoTransporte);
 		rnsAprovarCompra.add(aStatusPedidoEntregue);
+		rnsAprovarCompra.add(vPagamentoCartao);
 		
-		rnsValidarPedido.add(vPagamentoCartao);
 		rnsValidarPedido.add(vQtdeEstoqueLivro);
 		rnsValidarPedido.add(vSolicitarTroca);
 		

@@ -40,7 +40,8 @@ public class CategoriaViewHelper implements IViewHelper{
 			String peso = request.getParameter("txtPeso");
 			String profundidade = request.getParameter("txtProfundidade");
 			String largura = request.getParameter("txtLargura");
-			
+			String precoTxt = request.getParameter("txtPreco");
+			String qtdeEstoqueTxt = request.getParameter("txtQtde");
 			
 			Livro l = new Livro();
 			
@@ -58,6 +59,15 @@ public class CategoriaViewHelper implements IViewHelper{
 			l.setLargura(largura);
 			l.setSinopse(sinopse);
 			
+			Integer qtde = Integer.parseInt(qtdeEstoqueTxt);
+			Double preco = Double.parseDouble(precoTxt);
+			
+			l.setQtdeEstoque(qtde);
+			l.setPreco(preco);
+			
+			
+			
+			
 			request.getSession().setAttribute("formLivro", l);
 			
 			
@@ -67,7 +77,10 @@ public class CategoriaViewHelper implements IViewHelper{
 			String idCategoriaTxt = request.getParameter("idCategoria");
 			int idCategoria = Integer.parseInt(idCategoriaTxt);
 			
+			
+			
 			c.setId(idCategoria);
+			
 			return c;
 		}
 		return null;

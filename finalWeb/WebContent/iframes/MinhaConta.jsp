@@ -39,7 +39,7 @@
 								<p>Nome: <%out.print(p.getNome()); %></p>
 								<p>Data de Nascimento: <%out.print(ConverteDate.converteDateString(p.getDtNascimento())); %></p>
 								<p>CPF: <%out.print(p.getCpf()); %></p>
-								<p><a href="">Alterar</a></p>
+								<p><a href="alterarDados.jsp">Alterar</a></p>
 			              </div>
 			    	</div>
 			   </div>

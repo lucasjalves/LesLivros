@@ -33,7 +33,11 @@
 			pageContext.forward("Index.jsp");
 			return;
 		}
-		
+		if(resultado.getEntidades().size() == 0)
+		{
+			pageContext.forward("Index.jsp?msg=true");
+			return;
+		}
 		List<EntidadeDominio> entidades = resultado.getEntidades();
 		PessoaFisica p = (PessoaFisica) entidades.get(0);
 		
@@ -48,7 +52,7 @@
 			return;
 		}	
 		request.getSession().setAttribute("redirecionar", null);
-
+		
 
 	%>
      <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #3B3738; height: 75px;">
@@ -90,6 +94,13 @@
             <li class="nav-item">
               <a class="nav-link" href="Carrinho.jsp" style="color: white;">Meu Carrinho</a>
             </li>  
+            <%
+            	if(resultado != null){
+            		out.print("<li class='nav-item'>");
+            		out.print("<a class='nav-link' href='Index.jsp?deslogar=true' style='color: white;'>Deslogar</a>");
+            		out.print("</li>");
+            	}
+            %> 
                        
           </ul>
  

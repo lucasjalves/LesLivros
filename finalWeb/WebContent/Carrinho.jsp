@@ -280,8 +280,14 @@
 							out.print("<td>Não há itens no seu carrinho</td>");									
 						}
 				
-						
-						%>																																				
+							String msg = (String)request.getSession().getAttribute("resultadoMsg");
+							if(msg != null)
+							{
+								out.print("<tr><p style='color: red;'>Não foi possível adicionar esta quantidade ao carrinho(Fora de estoque!)</p></tr>");
+								request.getSession().removeAttribute("resultadoMsg");
+							}
+						%>			
+																																								
 							</tbody>
 						</table>
 						</form>

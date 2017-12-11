@@ -1,6 +1,8 @@
 package finalWeb.vh.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,14 +29,14 @@ public class LivroViewHelper implements IViewHelper{
 	public EntidadeDominio getEntidade(HttpServletRequest request) {
 		String operacao = request.getParameter("operacao");
 		Livro l;
-		/*
+		
 		if(operacao.equals("SALVAR"))
 		{
 			
 			String nome = request.getParameter("txtNome");
 			String autor = request.getParameter("txtAutor");
 			String categoria = request.getParameter("ddlCategoria");
-			String subcategoria = request.getParameter("ddlsCategoria");
+			String subcategoria = request.getParameter("ddlsSubCategoria");
 			String grupo = request.getParameter("ddlGrupoPrecificacao");
 			String ano = request.getParameter("txtAno");
 			String titulo = request.getParameter("txtTitulo");
@@ -46,19 +48,32 @@ public class LivroViewHelper implements IViewHelper{
 			String altura = request.getParameter("txtAltura");
 			String peso = request.getParameter("txtPeso");
 			String profundidade = request.getParameter("txtProfundidade");
+			String largura = request.getParameter("txtLargura");
+			String precoTxt = request.getParameter("txtPreco");
+			String qtdeEstoqueTxt = request.getParameter("txtQtde");
 			
 			
 			Categoria c = new Categoria();
 			SubCategoria subc = new SubCategoria();
 			GrupoPrecificacao gp = new GrupoPrecificacao();
+			List<SubCategoria> listsub = new ArrayList<SubCategoria>();
+			List<Categoria> listc = new ArrayList<Categoria>();
+			
+			
+			
 			
 			l = new Livro();
 			c.setId(Integer.parseInt(categoria));
 			subc.setId(Integer.parseInt(subcategoria));
 			gp.setId(Integer.parseInt(grupo));
+			listsub.add(subc);
+			c.setSubcategorias(listsub);
+			listc.add(c);
 			
 			
-			l.setNome(nome);
+			
+			
+			l.setNome(titulo);
 			l.setAutor(autor);
 			l.setAno(ano);
 			l.setTitulo(titulo);
@@ -72,13 +87,20 @@ public class LivroViewHelper implements IViewHelper{
 			l.setProfundidade(profundidade);
 			l.setStatus("1");
 			
-			l.setCategoria(c);
-			l.setSubcategoria(subc);
+			
+			l.setCategoria(listc);
+			
 			l.setGp(gp);
 	
+			Integer qtde = Integer.parseInt(qtdeEstoqueTxt);
+			Double preco = Double.parseDouble(precoTxt);
+			
+			l.setQtdeEstoque(qtde);
+			l.setPreco(preco);
+			l.setLargura(largura);
 			return l;
 		}
-		*/
+		
 		if(operacao.equals("CONSULTARLIVRO") || operacao.equals("INFORMACOESLIVRO"))
 		{
 			l = new Livro();
@@ -131,24 +153,14 @@ public class LivroViewHelper implements IViewHelper{
 			request.getSession().setAttribute("resultadoConsultaLivroCompra", resultado);
 			d= request.getRequestDispatcher("Livro.jsp");  
 		}		
-		if(resultado.getMsg() == null && operacao.equals("VISUALIZAR")){
-			
-			request.setAttribute("livro", resultado.getEntidades().get(0));
-			d= request.getRequestDispatcher("FormLivro.jsp");  			
-		}
 		
-		if(resultado.getMsg() == null && operacao.equals("EXCLUIR")){
+		if(resultado.getMsg() == null && operacao.equals("SALVAR")){
 			
-			request.getSession().setAttribute("resultado", null);
-			d= request.getRequestDispatcher("FormConsultaLivro.jsp");  
+			d= request.getRequestDispatcher("Home.jsp");  
 		}
-		
-		if(resultado.getMsg() != null){
-			if(operacao.equals("SALVAR") || operacao.equals("ALTERAR")){
-				request.getSession().setAttribute("resultado", resultado);
-				d= request.getRequestDispatcher("FormLivro.jsp");  	
-			}
-		}
+		System.out.println(resultado.getMsg());
+		System.out.println(operacao);
 		d.forward(request,response);
+		
 	}
 }

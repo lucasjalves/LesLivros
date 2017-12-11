@@ -60,16 +60,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 				pst.setDouble(3, l.getPreco());
 				pst.setInt(4, idPedido);				
 				pst.executeUpdate();
-				
-				ResultSet queryQtde = pst.getGeneratedKeys();
-				int idItemPedido = 0;
-				while(queryQtde.next())
-					idItemPedido = queryQtde.getInt(1);
-				queryQtde.close();
-				pst = connection.prepareStatement("INSERT INTO qtde_item_pedido (fk_pedido, qtde) VALUES (?,?)");
-				pst.setInt(1, idItemPedido);
-				pst.setInt(2, pedido.getItem().get(i).getQtde());
-				pst.executeUpdate();
+
 				
 			}
 			
@@ -182,6 +173,7 @@ public class PedidoDAO extends AbstractJdbcDAO{
 						+ "(ITEM_PEDIDO.FK_LIVRO = LIVROS.ID) WHERE PK_PEDIDO = " + pedido.getId());
 				ResultSet itensPedido = pst.executeQuery();
 				List<Item> itens = new ArrayList<Item>();
+				
 				while(itensPedido.next())
 				{
 					Livro l = new Livro();
@@ -190,14 +182,9 @@ public class PedidoDAO extends AbstractJdbcDAO{
 					i.setQtde(itensPedido.getInt("quantidade"));
 					l.setNome(itensPedido.getString("nome"));
 					i.setPrecoLivro(itensPedido.getDouble("preco"));
-					int idItemPedido = itensPedido.getInt("id_item_pedido");
-					
-					pst = connection.prepareStatement("SELECT * FROM qtde_item_pedido WHERE fk_pedido =" + idItemPedido);
-					ResultSet qtdeItem = pst.executeQuery();
-					while(qtdeItem.next())
-						i.setQtdeLivroPedido(qtdeItem.getInt("qtde"));
 					i.setLivro(l);
 					itens.add(i);
+
 				}
 				itensPedido.close();
 				pedido.setItem(itens);

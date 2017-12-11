@@ -21,7 +21,9 @@
 			if(request.getSession().getAttribute("resultadoTodosClientes") == null)
 			{
 				pageContext.forward("/SalvarCliente?operacao=CONSULTAR&local=listapedidos");
+				return;
 			}
+			request.getSession().setAttribute("redirecionar", null);
 			Resultado resultado = (Resultado)request.getSession().getAttribute("resultadoTodosClientes");
 		%>
 	</head>
@@ -83,7 +85,7 @@
 										{
 											sb.append("<td>");
 											sb.append("<a href='../ComprarItens?operacao=CONSULTAR" +
-													"&local=iframes/listapedidos.jsp&id=" + pe.getId()+"&status="+pe.getStatus());
+													"&local=/iframes/listapedidos.jsp&id=" + pe.getId()+"&status="+pe.getStatus());
 											sb.append("' class='btn btn-success'>Confirmar Transporte</a>");
 											sb.append("</td>");
 										}
@@ -91,7 +93,7 @@
 										{
 											sb.append("<td>");
 											sb.append("<a href='../ComprarItens?operacao=CONSULTAR&" +
-													"local=iframes/listapedidos.jsp&id=" + pe.getId() + "&status="+pe.getStatus());
+													"local=/iframes/listapedidos.jsp&id=" + pe.getId() + "&status="+pe.getStatus());
 											sb.append("' class='btn btn-success' >Confirmar Entrega</a>");
 											sb.append("</td>");											
 										}

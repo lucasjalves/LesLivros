@@ -267,6 +267,7 @@
 			     <p class="h5" style="text-align: center;">Cartão de Crédito</p>
 			     <table class="table">
 			     	<%
+			     		
 			     		for(int i = 0; i < cartoes.size(); i++)
 			     		{
 							Cartao c = cartoes.get(i);
@@ -356,10 +357,11 @@
 						
 						out.print(modals.toString());
 					}
-					if(request.getSession().getAttribute("resultadoCompra") != null)
+					if(request.getSession().getAttribute("resultadoMsg") != null)
 					{
-						Resultado r = (Resultado)request.getSession().getAttribute("resultadoCompra");
-						out.print(r.getMsg());
+						String msg = (String)request.getSession().getAttribute("resultadoMsg");
+						out.print("<p style='color: red;'>" + msg + "</p>");
+						request.getSession().removeAttribute("resultadoMsg");
 					}
 			     %>	
 			     
@@ -370,9 +372,11 @@
 			 				{
 			 					out.print("<input type='hidden' name='indicePedido' value='" + indicePedido + "'/>");
 			 					out.print("<input type='hidden' name='id' value='" + pedido.getId() + "'/>");
-			 					out.print("<input type='hidden' name='status' value='" + pedido.getStatus() + "'/>"); 	
-			 					out.print("<input type='hidden' name='local' value='Conta.jsp'/>"); 	
+			 					out.print("<input type='hidden' name='status' value='" + pedido.getStatus() + "'/>"); 		
+			 					out.print("<input type='hidden' name='local' value='Conta.jsp'/>"); 
+		
 			 				}
+	 						
 			 			%>
 			 			
 			 			<button type='submit' name='operacao' value='CONSULTAR' class ="btn btn-primary">
@@ -406,7 +410,7 @@
 					<tr><td>Data de Vencimento: </td><td><input type='text' id='txtDtVencimento' name='txtDtVencimento' /></td></tr>
 					<tr><td>Código de Segurança: </td><td><input type='text' id='txtCodSeg' name='txtCodSeg' /></td></tr>
 					<tr><td><input type="hidden" name="txtIdCartaoFk" value="<% out.print(id); %>" />	</td></tr>
-					<tr><td><input type="hidden" name="local" value="compra" />	</td></tr>																				
+					<tr><td><input type="hidden" name="local" value="Compra.jsp" />	</td></tr>																				
 			</table>
 		      </div>
 		      <div class="modal-footer">

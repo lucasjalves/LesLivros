@@ -27,6 +27,7 @@
 			
 			int index = Integer.parseInt(indicePedido);
 			Pedido p = pedidos.get(index);
+			/*
 			Map<Integer, Integer> mapIds = new HashMap<Integer, Integer>();
 			for(int i = 0; i < p.getItem().size(); i ++)
 			{
@@ -38,14 +39,14 @@
 					mapIds.put(item.getId(), item.getQtde());
 				
 			}
-			
+			*/
 		%>
 	</head>
 <body>
 	<div class="container">
 		<div class="card-body">
 			<h4 class="card-title">
-				Informações do pedido para troca
+				Informações do pedido 
 			</h4>
 			
 				<table class="table table-hover table-bordered">
@@ -53,9 +54,15 @@
 						<th>Livro</th>
 						<th>Preço</th>
 						<th>Quantidade</th>						
-						<th>Quantidade restante</th>
-						<th>Quantiade para troca</th>
-						<th>Operação</th>
+						<% 
+							if(p.getStatus().trim().equals("ENTREGUE"))
+							{
+								out.print("<th>Quantiade para troca</th>");
+								out.print("<th>Operação</th>");
+							}
+						%>
+						
+						
 					</thead>
 					<%
 						for(int i = 0; i < p.getItem().size(); i ++)
@@ -68,9 +75,8 @@
 							out.print("<td><p>" + l.getNome() + "</p></td>");
 							out.print("<td><p>" + String.format("%.2f", item.getPrecoLivro()) + "R$ </p></td>");
 							out.print("<td><p>" + item.getQtde() + "<p></td>");
-							//out.print("<td><p>" + item.getQtdeRestanteTroca() + "</p></td>");
 
-							if(item.getQtdeLivroPedido() > 0)
+							if(p.getStatus().trim().equals("ENTREGUE"))
 							{
 								out.print("<input type='hidden' name='idPedido' value='" + p.getId() + "'/>");
 								out.print("<input type='hidden' name='idLivro' value='" + l.getId() + "'/>");
@@ -79,10 +85,12 @@
 								out.print("<input type='hidden' name='preco' value='"+item.getPrecoLivro()+"'/>");
 								out.print("<td><input type='number' name='qtdeLivrosTroca' /></td>");
 								out.print("<td><button type='submit' class='btn btn-success' name='operacao' value='SALVAR'>" + 
-										"<span>Trocar</span></button></td>");								
+											"<span>Trocar</span></button></td>");	
+								out.print("</tr>");
 							}
-							out.print("</tr>");
-
+							else
+								out.print("</tr>");
+							
 							out.print("</form>");
 						}
 				%>

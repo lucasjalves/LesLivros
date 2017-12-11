@@ -55,10 +55,10 @@
 											out.print("<td><a href='../Compra.jsp?pedido=" + i + "' " +
 											"class='btn btn-danger' style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F' target='_parent'>Realizar Pagamento</a></td>");
 										}
-										if(pe.getStatus().trim().equals("ENTREGUE"))
+										else
 										{
 											out.print("<td><a href='pedidoTroca.jsp?indicepedido=" + i + "' " +
-													"class='btn btn-danger' style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F'>Solicitar Troca</a></td>");											
+													"class='btn btn-danger' style='background-color: #C63D0F; hover: #C63D0F;border: #C63D0F'>Detalhes</a></td>");											
 										}
 										out.print("</tr>");
 									}									

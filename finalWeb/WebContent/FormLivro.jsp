@@ -62,7 +62,6 @@
 			id.value = idval;
 	
 			
-			alert(idval);
 			form.appendChild(id);
 			form.appendChild(submit);
 			form.submit();
@@ -87,7 +86,7 @@
 		        <div class="dropdown-menu">
 		          <a class="dropdown-item" href="#">Autor</a>
 		          <a class="dropdown-item" href="#">Edição</a>
-		          <a class="dropdown-item" href="#">Título</a>
+		          <a class="dropdown-item" href="#">Título</a>f
 		        </div>		    	
 		    </div>
 		      <input type="text" class="form-control" style="width: 500px;">
@@ -258,11 +257,19 @@
 							}
 						}				
 						%>			
-						</select>
-																			
+						</select></td>
+						</tr>
+						
+					<tr><td>Quantidade: </td>
+					<td><input type="text"class="form-control" id="txtLargura" name="txtQtde"  maxlength="5" 
+					value="<%{Integer a = (l != null) ? l.getQtdeEstoque(): 0 ; out.print(a); } %>" required/></td></tr>	
+									
+					<tr><td>Preco: </td>
+					<td><input type="text"class="form-control" id="txtLargura" name="txtPreco"  maxlength="5" 
+					value="<%{Double a = (l != null) ? l.getPreco(): 0 ; out.print(a); } %>" required/></td></tr>																			
 				</table>
 					<br>
-  						<button type="submit" id="operacao" name="operacao" value="LOGIN" class="btn btn-lg btn-primary btn-block" 
+  						<button type="submit" id="operacao" name="operacao" value="SALVAR" class="btn btn-lg btn-primary btn-block" 
 						style='background-color: #C63D0F; hover:#C63D0F; border: #C63D0F; ' >
 							<span>Cadastrar Livro</span>
 						</button>

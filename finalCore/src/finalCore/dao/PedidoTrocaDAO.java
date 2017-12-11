@@ -112,20 +112,7 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 				id = rs.getInt("fk_pedido");
 			}
 			rs.close();
-			
-			Pedido pedido = new Pedido();
-			pedido.setId(id);
-			pedido.setItem(new ArrayList<Item>());
-			
-			Item i = new Item();
-			i.setQtde(p.getItensTroca().get(0).getQtde());
-			i.setId(it.getId());
-			pedido.getItem().add(i);
-			
-			
-			ItemPedidoDAO pDao = new ItemPedidoDAO();
-			pDao.alterar(pedido);
-			
+						
 			connection.commit();
 			
 		} catch (SQLException e) {

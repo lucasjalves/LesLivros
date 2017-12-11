@@ -196,6 +196,9 @@ public class CarrinhoViewHelper implements IViewHelper {
 					
 			
 		}
+		if(resultado.getMsg() != null)
+			request.getSession().setAttribute("resultadoMsg", "erro");
+		
 		d = request.getRequestDispatcher("Carrinho.jsp");
 		d.forward(request,response);
 	}

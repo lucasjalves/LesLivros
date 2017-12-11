@@ -24,6 +24,7 @@
 			pageContext.forward("/RealizarTroca?operacao=CONSULTAR");
 			return;
 		}
+
 	Resultado resultado = (Resultado)request.getSession().getAttribute("resultadoTrocas");
 		List<EntidadeDominio> trocas = resultado.getEntidades();
 		
@@ -68,6 +69,7 @@
 								out.print("<input type='hidden' name='fk_cliente' value='" + p.getIdCliente()+ "'/>");
 								out.print("<input type='hidden' name='status' value='EM TROCA'/>");
 								out.print("<input type='hidden' name='qtde' value='" + it.getQtde() +"'/>");
+								out.print("<input type='hidden' local='/iframes/listatrocas.jsp'/>");
 								out.print("<td><button type='submit' class='btn btn-success'" + 
 										" name='operacao' value='ALTERAR'><span>Confirmar</span></button></td>") ;									
 								out.print("</form>");
