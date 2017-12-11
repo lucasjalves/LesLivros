@@ -86,7 +86,7 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 		openConnection();
 		PreparedStatement pst = null;
 		PedidoTroca p = (PedidoTroca)entidade;
-		
+		ItemTroca it = p.getItensTroca().get(0);
 		try {
 			connection.setAutoCommit(false);
 			StringBuilder sql = new StringBuilder();
@@ -103,6 +103,28 @@ public class PedidoTrocaDAO extends AbstractJdbcDAO {
 			CupomTrocaClienteDAO cupTrocaDAO = new CupomTrocaClienteDAO();
 			CupomTroca c = GerarCupomTroca.gerarCupomTroca(p);
 			cupTrocaDAO.salvar(c);
+			
+			int id = 0;
+			pst = connection.prepareStatement("SELECT * FROM pedido_troca where id = " + p.getIdPedido());
+			ResultSet rs = pst.executeQuery();
+			while(rs.next())
+			{
+				id = rs.getInt("fk_pedido");
+			}
+			rs.close();
+			
+			Pedido pedido = new Pedido();
+			pedido.setId(id);
+			pedido.setItem(new ArrayList<Item>());
+			
+			Item i = new Item();
+			i.setQtde(p.getItensTroca().get(0).getQtde());
+			i.setId(it.getId());
+			pedido.getItem().add(i);
+			
+			
+			ItemPedidoDAO pDao = new ItemPedidoDAO();
+			pDao.alterar(pedido);
 			
 			connection.commit();
 			

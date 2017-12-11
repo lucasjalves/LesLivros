@@ -30,7 +30,7 @@
 			<h4 class="card-title">
 				Meus cupons de Troca
 			</h4>
-			<table class="table table-hover table-striped">
+			<table class="table table-hover table-bordered">
 				<thead>
 					<th>Código Cupom</th>
 					<th>Data de geração</th>
@@ -49,7 +49,7 @@
 								out.print("<td><p> " + c.getCodigo() + "</p></td>");
 								out.print("<td><p> " + ConverteDate.converteDateString(c.getDtCriacao()) + "</p></td>");
 								out.print("<td><p> " + ConverteDate.converteDateString(c.getDtValidade()) + "</p></td>");
-								out.print("<td><p> " + String.format("%.2f", c.getDesconto()) + "</p></td>");
+								out.print("<td><p> " + String.format("%.2f", c.getDesconto()) + "R$</p></td>");
 								if(c.getStatus() == 1)
 									out.print("<td><p>DISPONÍVEL PARA USO</p></td>");
 								else

@@ -165,19 +165,21 @@ public class CompraViewHelper implements IViewHelper{
 			else
 			{
 				String idTxt = request.getParameter("id");
-				d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR&local=local&status="+resultado.getMsg()+"&id="+idTxt);				
+				d = request.getRequestDispatcher("ComprarItens?operacao=ALTERAR"
+						+ "&local=local&status="+resultado.getMsg()+"&id="+idTxt+"&local="+local);				
 			}
 	
 			d.forward(request, response);
 		}
 		if(operacao.equals("ALTERAR"))
-		{
+		{	
+			
 			Resultado r = (Resultado)request.getSession().getAttribute("resultadoLogin");
 			List<EntidadeDominio> e = r.getEntidades();
 			PessoaFisica pf = (PessoaFisica)e.get(0);
 			String email = pf.getEmail();
 			String senha = pf.getSenha();
-			String url = "SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha;
+			String url = "SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha+"&local="+local;
 		
 			d = request.getRequestDispatcher(url);
 			d.forward(request, response);

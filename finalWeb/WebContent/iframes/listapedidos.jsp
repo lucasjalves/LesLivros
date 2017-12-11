@@ -32,7 +32,7 @@
 				<h4 class="card-tyle">
 					Todos os Pedidos
 				</h4>
-				<table class="table-striped" width="50%" cellpadding="10" cellspacing="4">
+				<table class="table table-hover table-bordered" width="50%" cellpadding="10" cellspacing="4">
 				<thead class="thead-inverse">
 					<th style="text-align: center;">ID</th>
 					<th style="text-align: center;">Data</th>
@@ -83,16 +83,16 @@
 										{
 											sb.append("<td>");
 											sb.append("<a href='../ComprarItens?operacao=CONSULTAR" +
-													"&local=listapedidos&id=" + pe.getId()+"&status="+pe.getStatus());
-											sb.append("' class='btn btn-success' target='_parent'>Confirmar Transporte</a>");
+													"&local=iframes/listapedidos.jsp&id=" + pe.getId()+"&status="+pe.getStatus());
+											sb.append("' class='btn btn-success'>Confirmar Transporte</a>");
 											sb.append("</td>");
 										}
 										if(pe.getStatus().trim().equals("EM TRANSPORTE"))
 										{
 											sb.append("<td>");
 											sb.append("<a href='../ComprarItens?operacao=CONSULTAR&" +
-													"local=listapedidos&id=" + pe.getId() + "&status="+pe.getStatus());
-											sb.append("' class='btn btn-success' target='_parent'>Confirmar Entrega</a>");
+													"local=iframes/listapedidos.jsp&id=" + pe.getId() + "&status="+pe.getStatus());
+											sb.append("' class='btn btn-success' >Confirmar Entrega</a>");
 											sb.append("</td>");											
 										}
 										sb.append("</tr>");

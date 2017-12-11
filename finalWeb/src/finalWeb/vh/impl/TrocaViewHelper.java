@@ -96,16 +96,18 @@ public class TrocaViewHelper implements IViewHelper{
 			String fkClienteTxt = request.getParameter("fk_cliente");
 			String qtdeTxt = request.getParameter("qtde");
 			String status = request.getParameter("status");
+			String idItemPedidotxt = request.getParameter("idItemPedido");
 			
 			int id = Integer.parseInt(idPedidoTroca);
 			double valor = Double.parseDouble(descontoTxt);
 			int idCliente = Integer.parseInt(fkClienteTxt);
 			int qtde = Integer.parseInt(qtdeTxt);
+			int IdItemPedido = Integer.parseInt(idItemPedidotxt);
 			
 			ItemTroca i  = new ItemTroca();
 			i.setPrecoLivro(valor);
 			i.setQtde(qtde);
-			
+			i.setId(IdItemPedido);
 			
 			List<ItemTroca> lista = new ArrayList<ItemTroca>();
 			lista.add(i);
@@ -139,7 +141,7 @@ public class TrocaViewHelper implements IViewHelper{
 				PessoaFisica pf = (PessoaFisica)e.get(0);
 				String email = pf.getEmail();
 				String senha = pf.getSenha();
-				String url = "SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha;
+				String url = "SalvarCliente?operacao=LOGIN&txtEmail="+email+"&txtPwd="+senha+"&local=/iframes/pedidos.jsp";
 				d = request.getRequestDispatcher(url);
 			}
 				

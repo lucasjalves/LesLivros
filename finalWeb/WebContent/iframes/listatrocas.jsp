@@ -61,8 +61,9 @@
 							out.print("<td><p>" + p.getStatus() + "</p></td>");
 							if(p.getStatus().trim().equals("EM TROCA"))
 							{
-								out.print("<form action='../RealizarTroca' method='POST' target='_parent'>");	
-								out.print("<input type='hidden' name='idPedidoTroca' value='" + p.getId() +"'/>");
+								out.print("<form action='../RealizarTroca' method='POST'>");	
+								out.print("<input type='hidden' name='idLivro' value='"+l.getId()+"'/>");
+								out.print("<input type='hidden' name='idPedidoTroca' value='"+p.getId()+"'/>");
 								out.print("<input type='hidden' name='desconto' value='" + it.getPrecoLivro()+ "'/>");
 								out.print("<input type='hidden' name='fk_cliente' value='" + p.getIdCliente()+ "'/>");
 								out.print("<input type='hidden' name='status' value='EM TROCA'/>");

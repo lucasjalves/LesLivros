@@ -1,3 +1,4 @@
+<%@page import="finalCore.util.ConverteDate"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page
@@ -70,7 +71,7 @@
 
 		
 		List<Cartao> cartoes = pf.getCartao();
-		
+		List<CupomTroca> cuponsTroca = pf.getCuponsTroca();
 
 
 	%>
@@ -289,6 +290,38 @@
 						</td>
 					</tr>
 			     </table>
+			     <p class="h5" style="text-align: center;">Cupons de Troca</p>
+			     <table class="table">
+				     	<thead>
+				     		<th>Código Cupom</th>
+				     		<th>Validade</th>
+				     		<th>Valor</th>
+				     	</thead>
+				     	<tbody>
+				     	<%
+				     		if(cuponsTroca != null)
+				     		{
+				     			if(cuponsTroca.size() > 0)
+				     			{
+				     				for(int i = 0; i < cuponsTroca.size(); i ++)
+				     				{
+				     					CupomTroca c = cuponsTroca.get(i);
+					     				out.print("<tr>");
+					     				out.print("<td><p>" + c.getCodigo() + "</p></td>");
+					     				out.print("<td><p>" + ConverteDate.converteDateString(c.getDtValidade()) + "</p></td>");
+					     				out.print("<td><p>" + String.format("%.2f", c.getDesconto()) + "</p></td>");
+					     				out.print("</tr>");				     					
+				     				}
+
+				     			}
+				     		}
+				     		else
+				     		{
+				     			out.print("<tr><td><p>Você ainda não possui cupons de troca</p></td></tr>");
+				     		}
+				     	%>
+				     </tbody>
+			     </table>
 			     <%
 			     	StringBuilder modals = new StringBuilder();
 					for(int i = 0; i < cartoes.size(); i++)
@@ -338,7 +371,7 @@
 			 					out.print("<input type='hidden' name='indicePedido' value='" + indicePedido + "'/>");
 			 					out.print("<input type='hidden' name='id' value='" + pedido.getId() + "'/>");
 			 					out.print("<input type='hidden' name='status' value='" + pedido.getStatus() + "'/>"); 	
-			 					out.print("<input type='hidden' name='local' value='Compra.jsp'/>"); 	
+			 					out.print("<input type='hidden' name='local' value='Conta.jsp'/>"); 	
 			 				}
 			 			%>
 			 			

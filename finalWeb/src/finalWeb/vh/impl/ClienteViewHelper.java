@@ -209,21 +209,14 @@ public class ClienteViewHelper implements IViewHelper{
 			
 			String local = request.getParameter("local");		
 			if(local == null)
-			{
-				d = request.getRequestDispatcher("Conta.jsp");
-				local = "a";
-			}
-			if(local.trim().equals("carrinho"))
-				d = request.getRequestDispatcher("Carrinho.jsp");  	
-			
-			if(local.trim().equals("compra"))
-				d = request.getRequestDispatcher("Compra.jsp");
-				
-			if(local.trim().equals("local"))	
-				d = request.getRequestDispatcher("Conta.jsp");
+				local = "Conta.jsp";
 			
 			
 			request.getSession().setAttribute("resultadoLogin", resultado);  
+			d = request.getRequestDispatcher(local);
+			
+			
+			
 			d.forward(request, response);
 		}
 		
